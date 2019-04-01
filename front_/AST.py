@@ -2,6 +2,12 @@
 from util import *
 
 
+class CallNode:
+    def __init__(self):
+        self.function = None
+        self.param = None
+
+
 # kind: number
 class Symbol:
     def __init__(self):

@@ -92,7 +92,4 @@ class TokenKind(Enum):
     ELLIPSIS = auto()
     POUND = auto()
     NEWLINE = auto()
-    END = auto()
-
-
-
+    EOF = auto()

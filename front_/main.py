@@ -13,8 +13,11 @@ def _main_():
     code = '{printf("value");}'
 
     code = '''
-        
+        int func() {
+            printf("func\n");
+        }
         int main() {
+            func();
             printf("value\n");
         }
 

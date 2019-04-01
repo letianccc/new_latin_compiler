@@ -89,6 +89,9 @@ class Lexer:
         while self.not_eof():
             t = self.scan_tok()
             self.tokens.append(t)
+        t = Token()
+        t.kind = TokenKind.EOF
+        self.tokens.append(t)
 
 
     def skip_space(self):

@@ -504,7 +504,6 @@ class Generator_as1:
         self.assign_gentor = Assign_Gentor(self)
 
     def gen(self, node):
-
         if type(node) is FunctionNode:
             ir = f'.text\n.global _{node.name.name}\n_{node.name.name}:\n'
             ir +=   'pushl %ebp\n'\
@@ -528,7 +527,9 @@ class Generator_as1:
                     'ret\n'
 
             self.gen_ir(ir)
-
+        elif type(node) is CallNode:
+            ir = f'call _{node.function.name}\n'
+            self.gen_ir(ir)
 
         if is_node_type(node, 'Seq'):
             self.gen(node.stmt)
@@ -575,13 +576,20 @@ class Generator_as1:
             self.array_end()
 
     def gen_executable_ir(self):
+        funcs = self.ast
+        for f in funcs:
+            if self.has_array:
+                self.gen_array_start()
+            self.gen(f)
+            if self.has_array:
+                self.array_end()
         # self.init_ir()
         # self.symbol_manager.gen_reserve_memory()
-        if self.has_array:
-            self.gen_array_start()
-        self.gen(self.ast)
-        if self.has_array:
-            self.array_end()
+        # if self.has_array:
+        #     self.gen_array_start()
+        # self.gen(self.ast)
+        # if self.has_array:
+        #     self.array_end()
         # self.gen_end()
 
     def init_ir(self):

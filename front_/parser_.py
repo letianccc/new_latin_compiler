@@ -12,11 +12,16 @@ class Parser:
         self.symbol_count = 0
         self.ident_count = 0
         self.has_array = False
-        self.AST = self.parse_function()
+        self.AST = self.parse_functions()
 
 
     def parse_functions(self):
-        ...
+        fs = []
+        while not self.match(TokenKind.EOF):
+            f = self.parse_function()
+            fs.append(f)
+        self.expect(TokenKind.EOF)
+        return fs
 
     def parse_function(self, type=None, name=None):
         self.match(TokenKind.INT)
@@ -38,6 +43,9 @@ class Parser:
     def block_(self):
         if self.match(TokenKind.LBRACE):
             self.expect('{')
+            if self.match(TokenKind.RBRACE):
+                self.expect('}')
+                return None
             if self.is_type('number'):
                 block = self.parse_array_data()
             else:
@@ -190,6 +198,14 @@ class Parser:
 
     def assign(self):
         variable = self.factor()
+        if self.match(TokenKind.LPAREN):
+            self.expect(TokenKind.LPAREN)
+            # TODO: 需要解析参数
+            self.expect(TokenKind.RPAREN)
+            self.expect(TokenKind.SEMICOLON)
+            n = CallNode()
+            n.function = variable
+            return n
         self.expect('=')
         value = self.bool_()
         self.expect(';')
@@ -339,3 +355,7 @@ class Parser:
             print('last:  ', self.tokens[self.index-1].name)
             print('expect: ', word)
             raise Exception
+
+    def match(self, token_kind):
+        t = self.cur_token()
+        return t.kind is token_kind
