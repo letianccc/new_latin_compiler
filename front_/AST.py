@@ -8,6 +8,7 @@ class CallNode:
         self.param = None
 
 
+
 # kind: number
 class Symbol:
     def __init__(self):
@@ -20,6 +21,7 @@ class Symbol:
             return '$' + self.token.name
         else:
             return emiter.address(self.index)
+
 
 
 class FunctionNode:
