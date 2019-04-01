@@ -4,7 +4,7 @@ from myenum import TokenKind
 
 class Parser:
     def __init__(self, tokens):
-        
+
         self.tokens = tokens
         self.index = 0
         self.symbols = list()
@@ -12,9 +12,17 @@ class Parser:
         self.symbol_count = 0
         self.ident_count = 0
         self.has_array = False
-        self.AST = self.block_()
+        self.AST = self.parse_function()
 
-    def parse_function(self, type, name):
+
+    def parse_functions(self):
+        ...
+
+    def parse_function(self, type=None, name=None):
+        self.match(TokenKind.INT)
+        type = self.next_token()
+        self.match(TokenKind.ID)
+        name = self.next_token()
         param = self.parse_parameter()
         stmts = self.block_()
         return FunctionNode(type, name, param, stmts)
@@ -23,9 +31,9 @@ class Parser:
         self.expect(TokenKind.LPAREN)
         self.expect(TokenKind.RPAREN)
         return None
-    
-    
-    
+
+
+
 
     def block_(self):
         if self.match(TokenKind.LBRACE):
@@ -134,7 +142,7 @@ class Parser:
             self.expect(';')
         else:
             decl_ = self.decl_single_variable(type_)
-        
+
         return decl_
 
     def is_array(self):
@@ -325,11 +333,9 @@ class Parser:
                 print('match:  ', t.name)
                 print('expect: ', word)
                 raise Exception
-            
+
         else:
             print('index out of range!')
             print('last:  ', self.tokens[self.index-1].name)
             print('expect: ', word)
             raise Exception
-
-

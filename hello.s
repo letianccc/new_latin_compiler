@@ -3,7 +3,7 @@
 	.def	___main;	.scl	2;	.type	32;	.endef
 	.section .rdata,"dr"
 LC0:
-	.ascii "hello\n\0"
+	.ascii "hello\0"
 	.text
 	.globl	_main
 	.def	_main;	.scl	2;	.type	32;	.endef
@@ -14,7 +14,7 @@ _main:
 	subl	$16, %esp
 	call	___main
 	movl	$LC0, (%esp)
-	call	_printf
+	call	_puts
 	call	_getchar
 	nop
 	leave

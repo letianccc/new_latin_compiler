@@ -13,9 +13,11 @@ def _main_():
     code = '{printf("value");}'
 
     code = '''
+        
         int main() {
             printf("value\n");
         }
+
     '''
 
     lexer = Lexer(code)

@@ -504,19 +504,32 @@ class Generator_as1:
         self.assign_gentor = Assign_Gentor(self)
 
     def gen(self, node):
+
         if type(node) is FunctionNode:
             ir = f'.text\n.global _{node.name.name}\n_{node.name.name}:\n'
-            ir += '''	
-                    pushl %ebp
-                    pushl %ebx
-                    pushl %esi
-                    pushl %edi
-                    movl %esp, %ebp
-                '''
+            ir +=   'pushl %ebp\n'\
+                    'pushl %ebx\n'\
+                    'pushl %esi\n'\
+                    'pushl %edi\n'\
+                    'movl %esp, %ebp\n'
+
             if node.param is not None:
                 raise Exception
             self.gen_ir(ir)
             self.gen(node.stmts)
+            ir = ''
+            if node.name.name == 'main':
+                ir += 'call _getchar\n'
+            ir +=   'movl %ebp, %esp\n'\
+                    'popl %edi\n'\
+                	'popl %esi\n'\
+                	'popl %ebx\n'\
+                	'popl %ebp\n'\
+                    'ret\n'
+
+            self.gen_ir(ir)
+
+
         if is_node_type(node, 'Seq'):
             self.gen(node.stmt)
             self.gen(node.next_stmt)
@@ -569,7 +582,7 @@ class Generator_as1:
         self.gen(self.ast)
         if self.has_array:
             self.array_end()
-        self.gen_end()
+        # self.gen_end()
 
     def init_ir(self):
         ir = '.text\n'\
