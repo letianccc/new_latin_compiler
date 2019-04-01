@@ -15,6 +15,14 @@ class Symbol:
         else:
             return emiter.address(self.index)
 
+
+class FunctionNode:
+    def __init__(self, type, name, parameters, stmts):
+        self.type = None
+        self.name = None
+        self.stmts = None
+
+
 class Block:
     id_pool = 0
     def __init__(self):

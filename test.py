@@ -4,4 +4,5 @@ class TokenKind(Enum):
     AUTO = auto()
     EXTERN = auto()
 
-print(TokenKind.AUTO is TokenKind.AUTO)
+t = TokenKind.AUTO
+print(type(t) is TokenKind)

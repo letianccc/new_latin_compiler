@@ -19,7 +19,7 @@ class Parser:
         return_type = self.next_token()
         self.match(TokenKind.ID)
         func_name = self.next_token()
-        param = self.parse_parameter()
+        param = self.parse_parameter
         stmts = self.block_()
 
     def parse_parameter(self):
