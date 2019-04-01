@@ -14,13 +14,10 @@ class Parser:
         self.has_array = False
         self.AST = self.block_()
 
-    def parse_function(self):
-        self.match(TokenKind.INT)
-        return_type = self.next_token()
-        self.match(TokenKind.ID)
-        func_name = self.next_token()
+    def parse_function(self, type, name):
         param = self.parse_parameter()
         stmts = self.block_()
+        return FunctionNode(type, name, param, stmts)
 
     def parse_parameter(self):
         self.expect(TokenKind.LPAREN)
@@ -84,6 +81,7 @@ class Parser:
     def printf_stmt(self):
         self.expect('printf')
         self.expect('(')
+        val = None
         format_ = self.parse_format()
         if self.match(TokenKind.COMMA):
             self.expect(',')
@@ -133,9 +131,10 @@ class Parser:
         if self.is_array():
             self.has_array = True
             decl_ = self.decl_array(type_)
+            self.expect(';')
         else:
             decl_ = self.decl_single_variable(type_)
-        self.expect(';')
+        
         return decl_
 
     def is_array(self):
@@ -168,8 +167,12 @@ class Parser:
 
     def decl_single_variable(self, type_):
         var = self.next_token()
+        if self.match(TokenKind.LPAREN):
+            return self.parse_function(type_, var)
+
         amount = 1
         self.add_symbol(var, amount)
+        self.expect(';')
         return Decl(type_, var)
 
     def add_symbol(self, symbol, amount):
@@ -219,7 +222,7 @@ class Parser:
     def expr_(self):
         expr = self.term()
 
-        while self.match(TokenKind.ADD) or self.match(TokenKind.SUB):
+        while self.match(TokenKind.ADD) or self.match(TokenKind.subl):
             self.symbol_count += 1
             operator = self.next_token().name
             # expr = Arith(expr, self.term(), operator)
@@ -239,7 +242,7 @@ class Parser:
         return expr
 
     def unary(self):
-        if self.match(TokenKind.NOT) or self.match(TokenKind.SUB):
+        if self.match(TokenKind.NOT) or self.match(TokenKind.subl):
             operator = self.next_token().name
             expr = Unary(operator, self.factor())
         else:
@@ -300,6 +303,8 @@ class Parser:
 
     def increase_index(self):
         self.index += 1
+        if self.index < len(self.tokens):
+            self.debug_token = self.cur_token()
 
     def return_token(self):
         self.index += 1

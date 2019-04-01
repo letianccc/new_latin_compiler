@@ -153,38 +153,38 @@ def test_gen():
 
 def test_as():
     code = '{int a;a=2;}'
-    test_ir = 'movq $2, %rax\n' \
-              'movq %rax, -4(%rbp)\n'
+    test_ir = 'movl $2, %eax\n' \
+              'movl %eax, -4(%ebp)\n'
     test1(code, test_ir)
 
     code = '{int a;a=2;int b; b=4;}'
-    test_ir = 'movq $2, %rax\n' \
-              'movq %rax, -8(%rbp)\n' \
-              'movq $4, %rax\n' \
-              'movq %rax, -4(%rbp)\n'
+    test_ir = 'movl $2, %eax\n' \
+              'movl %eax, -8(%ebp)\n' \
+              'movl $4, %eax\n' \
+              'movl %eax, -4(%ebp)\n'
     test1(code, test_ir)
 
     code = '{int b;b=2;int a[5];a[b]=4;printf("%d\\n",a[2]);}'
     test_ir = '.section .rodata\n' \
               '.LC0:\n'\
               '.string "%d\\n"\n'\
-              'sub $32, %rsp\n'\
-              'movq %fs:40, %rax\n'\
-              'movq %rax, -8(%rbp)\n'\
-              'xorl %rax, %rax\n'\
-              'movq $2, %rax\n'\
-              'movq %rax, -32(%rbp)\n'\
-              'movq -32(%rbp), %rcx\n'\
+              'subl $32, %esp\n'\
+              'movl %fs:40, %eax\n'\
+              'movl %eax, -8(%ebp)\n'\
+              'xorl %eax, %eax\n'\
+              'movl $2, %eax\n'\
+              'movl %eax, -32(%ebp)\n'\
+              'movl -32(%ebp), %ecx\n'\
               'cltq\n'\
-              'movq $4, %rax\n'\
-              'movq %rax, -28(%rbp, %rdx, 4)\n'\
-              'movq -20(%rbp), %rsi\n'\
-              'movq $.LC0, %rdi\n'\
-              'movq $0, %rax\n'\
+              'movl $4, %eax\n'\
+              'movl %eax, -28(%ebp, %edx, 4)\n'\
+              'movl -20(%ebp), %esi\n'\
+              'movl $.LC0, %edi\n'\
+              'movl $0, %eax\n'\
               'call printf\n'\
-              'movq $0, %rax\n'\
-              'movq -8(%rbp), %rdx\n'\
-              'xorq %fs:40, %rdx\n'\
+              'movl $0, %eax\n'\
+              'movl -8(%ebp), %edx\n'\
+              'xorq %fs:40, %edx\n'\
               'je	.L1\n'\
               'call __stack_chk_fail\n'\
               '.L1:\n'
@@ -194,27 +194,27 @@ def test_as():
     test_ir = '.section .rodata\n' \
               '.LC0:\n'\
               '.string "%d\\n"\n'\
-              'sub $36, %rsp\n'\
-              'movq %fs:40, %rax\n'\
-              'movq %rax, -8(%rbp)\n'\
-              'xorl %rax, %rax\n'\
-              'movq $2, %rax\n'\
-              'movq %rax, -36(%rbp)\n'\
-              'movq -36(%rbp), %rax\n'\
-              'movq $1, %rcx\n'\
-              'addl %rcx, %rax\n'\
-              'movq %rax, -12(%rbp)\n'\
-              'movq -12(%rbp), %rcx\n'\
+              'subl $36, %esp\n'\
+              'movl %fs:40, %eax\n'\
+              'movl %eax, -8(%ebp)\n'\
+              'xorl %eax, %eax\n'\
+              'movl $2, %eax\n'\
+              'movl %eax, -36(%ebp)\n'\
+              'movl -36(%ebp), %eax\n'\
+              'movl $1, %ecx\n'\
+              'addl %ecx, %eax\n'\
+              'movl %eax, -12(%ebp)\n'\
+              'movl -12(%ebp), %ecx\n'\
               'cltq\n'\
-              'movq $4, %rax\n'\
-              'movq %rax, -32(%rbp, %rdx, 4)\n'\
-              'movq -20(%rbp), %rsi\n'\
-              'movq $.LC0, %rdi\n'\
-              'movq $0, %rax\n'\
+              'movl $4, %eax\n'\
+              'movl %eax, -32(%ebp, %edx, 4)\n'\
+              'movl -20(%ebp), %esi\n'\
+              'movl $.LC0, %edi\n'\
+              'movl $0, %eax\n'\
               'call printf\n'\
-              'movq $0, %rax\n'\
-              'movq -8(%rbp), %rdx\n'\
-              'xorq %fs:40, %rdx\n'\
+              'movl $0, %eax\n'\
+              'movl -8(%ebp), %edx\n'\
+              'xorq %fs:40, %edx\n'\
               'je	.L1\n'\
               'call __stack_chk_fail\n'\
               '.L1:\n'
@@ -230,152 +230,152 @@ def test_as():
     test_ir = '.section .rodata\n' \
               '.LC0:\n'\
               '.string "%d\\n"\n'\
-              'sub $28, %rsp\n'\
-              'movq %fs:40, %rax\n'\
-              'movq %rax, -8(%rbp)\n'\
-              'xorl %rax, %rax\n'\
-              'movq $1, -28(%rbp)\n'\
-              'movq $2, -24(%rbp)\n'\
-              'movq $0, -20(%rbp)\n'\
-              'movq $0, -16(%rbp)\n'\
-              'movq $0, -12(%rbp)\n'\
-              'movq -28(%rbp), %rsi\n'\
-              'movq $.LC0, %rdi\n'\
-              'movq $0, %rax\n'\
+              'subl $28, %esp\n'\
+              'movl %fs:40, %eax\n'\
+              'movl %eax, -8(%ebp)\n'\
+              'xorl %eax, %eax\n'\
+              'movl $1, -28(%ebp)\n'\
+              'movl $2, -24(%ebp)\n'\
+              'movl $0, -20(%ebp)\n'\
+              'movl $0, -16(%ebp)\n'\
+              'movl $0, -12(%ebp)\n'\
+              'movl -28(%ebp), %esi\n'\
+              'movl $.LC0, %edi\n'\
+              'movl $0, %eax\n'\
               'call printf\n'\
-              'movq $0, %rax\n'\
-              'movq -24(%rbp), %rsi\n'\
-              'movq $.LC0, %rdi\n'\
-              'movq $0, %rax\n'\
+              'movl $0, %eax\n'\
+              'movl -24(%ebp), %esi\n'\
+              'movl $.LC0, %edi\n'\
+              'movl $0, %eax\n'\
               'call printf\n'\
-              'movq $0, %rax\n'\
-              'movq -20(%rbp), %rsi\n'\
-              'movq $.LC0, %rdi\n'\
-              'movq $0, %rax\n'\
+              'movl $0, %eax\n'\
+              'movl -20(%ebp), %esi\n'\
+              'movl $.LC0, %edi\n'\
+              'movl $0, %eax\n'\
               'call printf\n'\
-              'movq $0, %rax\n'\
-              'movq -16(%rbp), %rsi\n'\
-              'movq $.LC0, %rdi\n'\
-              'movq $0, %rax\n'\
+              'movl $0, %eax\n'\
+              'movl -16(%ebp), %esi\n'\
+              'movl $.LC0, %edi\n'\
+              'movl $0, %eax\n'\
               'call printf\n'\
-              'movq $0, %rax\n'\
-              'movq -12(%rbp), %rsi\n'\
-              'movq $.LC0, %rdi\n'\
-              'movq $0, %rax\n'\
+              'movl $0, %eax\n'\
+              'movl -12(%ebp), %esi\n'\
+              'movl $.LC0, %edi\n'\
+              'movl $0, %eax\n'\
               'call printf\n'\
-              'movq $0, %rax\n'\
-              'movq -8(%rbp), %rdx\n'\
-              'xorq %fs:40, %rdx\n'\
+              'movl $0, %eax\n'\
+              'movl -8(%ebp), %edx\n'\
+              'xorq %fs:40, %edx\n'\
               'je	.L1\n'\
               'call __stack_chk_fail\n'\
               '.L1:\n'
     test1(code, test_ir)
 
     code = '{int a;a=1+2;}'
-    test_ir = 'movq $1, %rax\n'\
-              'movq $2, %rcx\n'\
-              'addl %rcx, %rax\n'\
-              'movq %rax, -4(%rbp)\n'\
-              'movq -4(%rbp), %rax\n'\
-              'movq %rax, -8(%rbp)\n'
+    test_ir = 'movl $1, %eax\n'\
+              'movl $2, %ecx\n'\
+              'addl %ecx, %eax\n'\
+              'movl %eax, -4(%ebp)\n'\
+              'movl -4(%ebp), %eax\n'\
+              'movl %eax, -8(%ebp)\n'
     test1(code, test_ir)
 
     code = '{int a;a=1*2;}'
-    test_ir = 'movq $1, %rax\n'\
-              'movq $2, %rcx\n'\
-              'imull %rcx, %rax\n'\
-              'movq %rax, -4(%rbp)\n'\
-              'movq -4(%rbp), %rax\n'\
-              'movq %rax, -8(%rbp)\n'
+    test_ir = 'movl $1, %eax\n'\
+              'movl $2, %ecx\n'\
+              'imull %ecx, %eax\n'\
+              'movl %eax, -4(%ebp)\n'\
+              'movl -4(%ebp), %eax\n'\
+              'movl %eax, -8(%ebp)\n'
     test1(code, test_ir)
 
     code = '{int a;a=1+2*3;}'
-    test_ir = 'movq $2, %rax\n'\
-              'movq $3, %rcx\n'\
-              'imull %rcx, %rax\n'\
-              'movq %rax, -8(%rbp)\n'\
-              'movq $1, %rax\n'\
-              'movq -8(%rbp), %rcx\n'\
-              'addl %rcx, %rax\n'\
-              'movq %rax, -4(%rbp)\n'\
-              'movq -4(%rbp), %rax\n'\
-              'movq %rax, -12(%rbp)\n'
+    test_ir = 'movl $2, %eax\n'\
+              'movl $3, %ecx\n'\
+              'imull %ecx, %eax\n'\
+              'movl %eax, -8(%ebp)\n'\
+              'movl $1, %eax\n'\
+              'movl -8(%ebp), %ecx\n'\
+              'addl %ecx, %eax\n'\
+              'movl %eax, -4(%ebp)\n'\
+              'movl -4(%ebp), %eax\n'\
+              'movl %eax, -12(%ebp)\n'
     test1(code, test_ir)
 
     code = '{int a;a=1+2*3;}'
-    test_ir = 'movq $2, %rax\n'\
-              'movq $3, %rcx\n'\
-              'imull %rcx, %rax\n'\
-              'movq %rax, -8(%rbp)\n'\
-              'movq $1, %rax\n'\
-              'movq -8(%rbp), %rcx\n'\
-              'addl %rcx, %rax\n'\
-              'movq %rax, -4(%rbp)\n'\
-              'movq -4(%rbp), %rax\n'\
-              'movq %rax, -12(%rbp)\n'
+    test_ir = 'movl $2, %eax\n'\
+              'movl $3, %ecx\n'\
+              'imull %ecx, %eax\n'\
+              'movl %eax, -8(%ebp)\n'\
+              'movl $1, %eax\n'\
+              'movl -8(%ebp), %ecx\n'\
+              'addl %ecx, %eax\n'\
+              'movl %eax, -4(%ebp)\n'\
+              'movl -4(%ebp), %eax\n'\
+              'movl %eax, -12(%ebp)\n'
     test1(code, test_ir)
 
     # code = '{int a;a=1+2*3-4*2+4*(1+2)+1-2;}'
 
     code = '{int a;a=1;if(a==1)a=2;}'
-    test_ir = 'movq $1, %rax\n'\
-              'movq %rax, -4(%rbp)\n' \
-              'movq -4(%rbp), %rax\n' \
-              'cmpl $1, %rax\n'\
+    test_ir = 'movl $1, %eax\n'\
+              'movl %eax, -4(%ebp)\n' \
+              'movl -4(%ebp), %eax\n' \
+              'cmpl $1, %eax\n'\
               'jne .L1\n'\
-              'movq $2, %rax\n'\
-              'movq %rax, -4(%rbp)\n'\
+              'movl $2, %eax\n'\
+              'movl %eax, -4(%ebp)\n'\
               '.L1:\n'
     test1(code, test_ir)
 
     code = '{int a;a=1;if(a==1)a=2;else a=3;}'
-    test_ir = 'movq $1, %rax\n'\
-              'movq %rax, -4(%rbp)\n' \
-              'movq -4(%rbp), %rax\n' \
-              'cmpl $1, %rax\n'\
+    test_ir = 'movl $1, %eax\n'\
+              'movl %eax, -4(%ebp)\n' \
+              'movl -4(%ebp), %eax\n' \
+              'cmpl $1, %eax\n'\
               'jne .L1\n'\
-              'movq $2, %rax\n'\
-              'movq %rax, -4(%rbp)\n'\
+              'movl $2, %eax\n'\
+              'movl %eax, -4(%ebp)\n'\
               'jmp .L2\n'\
               '.L1:\n'\
-              'movq $3, %rax\n'\
-              'movq %rax, -4(%rbp)\n'\
+              'movl $3, %eax\n'\
+              'movl %eax, -4(%ebp)\n'\
               '.L2:\n'
     test1(code, test_ir)
 
     code = '{int a; a=2; int b; b=4; int c; ' \
            'if(a < 1 || b > 2 && a <= 3 || (a >= 2 || b != 3) && b == 2)c=2;else c=3;}'
-    test_ir =   'movq $2, %rax\n'\
-                'movq %rax, -12(%rbp)\n'\
-                'movq $4, %rax\n'\
-                'movq %rax, -8(%rbp)\n' \
-                'movq -12(%rbp), %rax\n' \
-                'cmpl $1, %rax\n'\
+    test_ir =   'movl $2, %eax\n'\
+                'movl %eax, -12(%ebp)\n'\
+                'movl $4, %eax\n'\
+                'movl %eax, -8(%ebp)\n' \
+                'movl -12(%ebp), %eax\n' \
+                'cmpl $1, %eax\n'\
                 'jl .L1\n'\
-                'movq -8(%rbp), %rax\n'\
-                'cmpl $2, %rax\n'\
+                'movl -8(%ebp), %eax\n'\
+                'cmpl $2, %eax\n'\
                 'jle .L4\n' \
-                'movq -12(%rbp), %rax\n' \
-                'cmpl $3, %rax\n'\
+                'movl -12(%ebp), %eax\n' \
+                'cmpl $3, %eax\n'\
                 'jle .L1\n'\
                 '.L4:\n'\
-                'movq -12(%rbp), %rax\n' \
-                'cmpl $2, %rax\n' \
+                'movl -12(%ebp), %eax\n' \
+                'cmpl $2, %eax\n' \
                 'jge .L5\n'\
-                'movq -8(%rbp), %rax\n' \
-                'cmpl $3, %rax\n' \
+                'movl -8(%ebp), %eax\n' \
+                'cmpl $3, %eax\n' \
                 'je .L2\n'\
                 '.L5:\n'\
-                'movq -8(%rbp), %rax\n' \
-                'cmpl $2, %rax\n' \
+                'movl -8(%ebp), %eax\n' \
+                'cmpl $2, %eax\n' \
                 'jne .L2\n'\
                 '.L1:\n'\
-                'movq $2, %rax\n'\
-                'movq %rax, -4(%rbp)\n'\
+                'movl $2, %eax\n'\
+                'movl %eax, -4(%ebp)\n'\
                 'jmp .L3\n'\
                 '.L2:\n'\
-                'movq $3, %rax\n'\
-                'movq %rax, -4(%rbp)\n'\
+                'movl $3, %eax\n'\
+                'movl %eax, -4(%ebp)\n'\
                 '.L3:\n'
     test1(code, test_ir)
 
@@ -383,13 +383,13 @@ def test_as():
     test_ir = '.section .rodata\n' \
               '.LC0:\n'\
               '.string "%d\\n"\n'\
-              'movq $2, %rax\n'\
-              'movq %rax, -4(%rbp)\n'\
-              'movq -4(%rbp), %rsi\n'\
-              'movq $.LC0, %rdi\n'\
-              'movq $0, %rax\n'\
+              'movl $2, %eax\n'\
+              'movl %eax, -4(%ebp)\n'\
+              'movl -4(%ebp), %esi\n'\
+              'movl $.LC0, %edi\n'\
+              'movl $0, %eax\n'\
               'call printf\n'\
-              'movq $0, %rax\n'
+              'movl $0, %eax\n'
     test1(code, test_ir)
 
     code = '{int x[5]; x[0]=2; x[1]=4;' \
@@ -398,49 +398,49 @@ def test_as():
     test_ir = '.section .rodata\n' \
               '.LC0:\n'\
               '.string "%d\\n"\n'\
-              'sub $28, %rsp\n'\
-              'movq %fs:40, %rax\n'\
-              'movq %rax, -8(%rbp)\n'\
-              'xorl %rax, %rax\n'\
-              'movq $2, %rax\n'\
-              'movq %rax, -28(%rbp)\n'\
-              'movq $4, %rax\n'\
-              'movq %rax, -24(%rbp)\n'\
-              'movq -28(%rbp), %rax\n' \
-              'cmpl $1, %rax\n' \
+              'subl $28, %esp\n'\
+              'movl %fs:40, %eax\n'\
+              'movl %eax, -8(%ebp)\n'\
+              'xorl %eax, %eax\n'\
+              'movl $2, %eax\n'\
+              'movl %eax, -28(%ebp)\n'\
+              'movl $4, %eax\n'\
+              'movl %eax, -24(%ebp)\n'\
+              'movl -28(%ebp), %eax\n' \
+              'cmpl $1, %eax\n' \
               'jl .L1\n'\
-              'movq -24(%rbp), %rax\n' \
-              'cmpl $2, %rax\n' \
+              'movl -24(%ebp), %eax\n' \
+              'cmpl $2, %eax\n' \
               'jle .L4\n'\
-              'movq -28(%rbp), %rax\n' \
-              'cmpl $3, %rax\n' \
+              'movl -28(%ebp), %eax\n' \
+              'cmpl $3, %eax\n' \
               'jle .L1\n'\
               '.L4:\n'\
-              'movq -28(%rbp), %rax\n' \
-              'cmpl $2, %rax\n' \
+              'movl -28(%ebp), %eax\n' \
+              'cmpl $2, %eax\n' \
               'jge .L5\n'\
-              'movq -24(%rbp), %rax\n' \
-              'cmpl $3, %rax\n' \
+              'movl -24(%ebp), %eax\n' \
+              'cmpl $3, %eax\n' \
               'je .L2\n'\
               '.L5:\n'\
-              'movq -24(%rbp), %rax\n' \
-              'cmpl $2, %rax\n' \
+              'movl -24(%ebp), %eax\n' \
+              'cmpl $2, %eax\n' \
               'jne .L2\n'\
               '.L1:\n'\
-              'movq $2, %rax\n'\
-              'movq %rax, -20(%rbp)\n'\
+              'movl $2, %eax\n'\
+              'movl %eax, -20(%ebp)\n'\
               'jmp .L3\n'\
               '.L2:\n'\
-              'movq $3, %rax\n'\
-              'movq %rax, -20(%rbp)\n'\
+              'movl $3, %eax\n'\
+              'movl %eax, -20(%ebp)\n'\
               '.L3:\n'\
-              'movq -20(%rbp), %rsi\n'\
-              'movq $.LC0, %rdi\n'\
-              'movq $0, %rax\n'\
+              'movl -20(%ebp), %esi\n'\
+              'movl $.LC0, %edi\n'\
+              'movl $0, %eax\n'\
               'call printf\n'\
-              'movq $0, %rax\n'\
-              'movq -8(%rbp), %rdx\n'\
-              'xorq %fs:40, %rdx\n'\
+              'movl $0, %eax\n'\
+              'movl -8(%ebp), %edx\n'\
+              'xorq %fs:40, %edx\n'\
               'je	.L6\n'\
               'call __stack_chk_fail\n'\
               '.L6:\n'
@@ -452,33 +452,33 @@ def test_as():
     test_ir = '.section .rodata\n' \
               '.LC0:\n'\
               '.string "%d\\n"\n'\
-              'movq $1, %rax\n'\
-              'movq %rax, -16(%rbp)\n'\
-              'movq $1, %rax\n'\
-              'movq %rax, -12(%rbp)\n'\
+              'movl $1, %eax\n'\
+              'movl %eax, -16(%ebp)\n'\
+              'movl $1, %eax\n'\
+              'movl %eax, -12(%ebp)\n'\
               '.L1:\n'\
-              'movq -16(%rbp), %rax\n' \
-              'cmpl $5, %rax\n' \
+              'movl -16(%ebp), %eax\n' \
+              'cmpl $5, %eax\n' \
               'jge .L2\n'\
-              'movq -12(%rbp), %rax\n'\
-              'movq $2, %rcx\n'\
-              'addl %rcx, %rax\n'\
-              'movq %rax, -8(%rbp)\n'\
-              'movq -8(%rbp), %rax\n'\
-              'movq %rax, -12(%rbp)\n'\
-              'movq -16(%rbp), %rax\n'\
-              'movq $1, %rcx\n'\
-              'addl %rcx, %rax\n'\
-              'movq %rax, -4(%rbp)\n'\
-              'movq -4(%rbp), %rax\n'\
-              'movq %rax, -16(%rbp)\n'\
+              'movl -12(%ebp), %eax\n'\
+              'movl $2, %ecx\n'\
+              'addl %ecx, %eax\n'\
+              'movl %eax, -8(%ebp)\n'\
+              'movl -8(%ebp), %eax\n'\
+              'movl %eax, -12(%ebp)\n'\
+              'movl -16(%ebp), %eax\n'\
+              'movl $1, %ecx\n'\
+              'addl %ecx, %eax\n'\
+              'movl %eax, -4(%ebp)\n'\
+              'movl -4(%ebp), %eax\n'\
+              'movl %eax, -16(%ebp)\n'\
               'jmp .L1\n'\
               '.L2:\n' \
-              'movq -12(%rbp), %rsi\n' \
-              'movq $.LC0, %rdi\n' \
-              'movq $0, %rax\n' \
+              'movl -12(%ebp), %esi\n' \
+              'movl $.LC0, %edi\n' \
+              'movl $0, %eax\n' \
               'call printf\n' \
-              'movq $0, %rax\n'
+              'movl $0, %eax\n'
     test1(code, test_ir)
 
     code = '{int a;a=0;int b;b=0;int c;c=0;' \
@@ -494,49 +494,49 @@ def test_as():
     test_ir =   '.section .rodata\n'\
                 '.LC0:\n'\
                 '.string "%d\\n"\n'\
-                'movq $0, %rax\n'\
-                'movq %rax, -24(%rbp)\n'\
-                'movq $0, %rax\n'\
-                'movq %rax, -20(%rbp)\n'\
-                'movq $0, %rax\n'\
-                'movq %rax, -16(%rbp)\n'\
+                'movl $0, %eax\n'\
+                'movl %eax, -24(%ebp)\n'\
+                'movl $0, %eax\n'\
+                'movl %eax, -20(%ebp)\n'\
+                'movl $0, %eax\n'\
+                'movl %eax, -16(%ebp)\n'\
                 '.L1:\n'\
-                'movq -24(%rbp), %rax\n' \
-                'cmpl $5, %rax\n' \
+                'movl -24(%ebp), %eax\n' \
+                'cmpl $5, %eax\n' \
                 'jge .L2\n'\
                 '.L3:\n'\
-                'movq -20(%rbp), %rax\n' \
-                'cmpl $5, %rax\n' \
+                'movl -20(%ebp), %eax\n' \
+                'cmpl $5, %eax\n' \
                 'jge .L4\n'\
-                'movq -16(%rbp), %rax\n'\
-                'movq $1, %rcx\n'\
-                'addl %rcx, %rax\n'\
-                'movq %rax, -12(%rbp)\n'\
-                'movq -12(%rbp), %rax\n'\
-                'movq %rax, -16(%rbp)\n'\
-                'movq -20(%rbp), %rax\n'\
-                'movq $1, %rcx\n'\
-                'addl %rcx, %rax\n'\
-                'movq %rax, -8(%rbp)\n'\
-                'movq -8(%rbp), %rax\n'\
-                'movq %rax, -20(%rbp)\n'\
+                'movl -16(%ebp), %eax\n'\
+                'movl $1, %ecx\n'\
+                'addl %ecx, %eax\n'\
+                'movl %eax, -12(%ebp)\n'\
+                'movl -12(%ebp), %eax\n'\
+                'movl %eax, -16(%ebp)\n'\
+                'movl -20(%ebp), %eax\n'\
+                'movl $1, %ecx\n'\
+                'addl %ecx, %eax\n'\
+                'movl %eax, -8(%ebp)\n'\
+                'movl -8(%ebp), %eax\n'\
+                'movl %eax, -20(%ebp)\n'\
                 'jmp .L3\n'\
                 '.L4:\n'\
-                'movq -24(%rbp), %rax\n'\
-                'movq $1, %rcx\n'\
-                'addl %rcx, %rax\n'\
-                'movq %rax, -4(%rbp)\n'\
-                'movq -4(%rbp), %rax\n'\
-                'movq %rax, -24(%rbp)\n'\
-                'movq $0, %rax\n'\
-                'movq %rax, -20(%rbp)\n'\
+                'movl -24(%ebp), %eax\n'\
+                'movl $1, %ecx\n'\
+                'addl %ecx, %eax\n'\
+                'movl %eax, -4(%ebp)\n'\
+                'movl -4(%ebp), %eax\n'\
+                'movl %eax, -24(%ebp)\n'\
+                'movl $0, %eax\n'\
+                'movl %eax, -20(%ebp)\n'\
                 'jmp .L1\n'\
                 '.L2:\n'\
-                'movq -16(%rbp), %rsi\n'\
-                'movq $.LC0, %rdi\n'\
-                'movq $0, %rax\n'\
+                'movl -16(%ebp), %esi\n'\
+                'movl $.LC0, %edi\n'\
+                'movl $0, %eax\n'\
                 'call printf\n'\
-                'movq $0, %rax\n'
+                'movl $0, %eax\n'
     test1(code, test_ir)
 
 

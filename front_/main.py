@@ -7,12 +7,13 @@ import os
 
 def _main_():
 
-    # code = '{int a;a=1;' \
-    #        'printf("%d\\n", a);}'
+    code = '{int a;a=1;' \
+           'printf("value");}'
+
+    code = '{printf("value");}'
 
     code = '''
         int main() {
-            int a = 1;
             printf("value\n");
         }
     '''

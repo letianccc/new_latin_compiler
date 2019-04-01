@@ -1,4 +1,4 @@
-import subprocess
+import sublprocess
 from lexer_ import Lexer
 from parser_ import Parser
 from generator import Generator, Generator_as
@@ -210,8 +210,8 @@ def write_as_to_file(code):
     f.write(ir)
 
 def exec_as_file():
-    subprocess.run("gcc -o test test.s", shell = True, check=True)
-    x = subprocess.run("./test", stdout=subprocess.PIPE,shell = True)
+    sublprocess.run("gcc -o test test.s", shell = True, check=True)
+    x = sublprocess.run("./test", stdout=sublprocess.PIPE,shell = True)
     result = x.stdout.decode()
     return result
 

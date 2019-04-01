@@ -5,16 +5,16 @@
 .globl main
 .type	main, @function
 main:
-push %rbp
-movq	%rsp, %rbp
-sub $4, %rsp
-movq $1, %rcx
-movq %rcx, -4(%rbp)
-movq -4(%rbp), %rsi
-movq $.LC0, %rdi
-movq $0, %rax
+push %ebp
+movl	%esp, %ebp
+subl $4, %esp
+movl $1, %ecx
+movl %ecx, -4(%ebp)
+movl -4(%ebp), %esi
+movl $.LC0, %edi
+movl $0, %eax
 call printf
-movq $0, %rax
+movl $0, %eax
 leave
 ret
 .size	main, .-main

@@ -1,5 +1,5 @@
 from util import *
-
+from AST import *
 
 
 as_map = {'==' : 'je',
@@ -17,7 +17,8 @@ as_reverse_map = {'==' : 'jne',
                   '<': 'jge',
                   }
 
-
+class Function_Gentor:
+    ...
 
 class Printf_Gentor:
     def __init__(self, manager, printf_formats):
@@ -42,20 +43,23 @@ class Printf_Gentor:
             for format_ in self.printf_formats:
                 LC_tag = self.LC_tag(format_)
                 ir +=  LC_tag + ':\n'\
-                    '.string ' + '\"' + format_ + '\"' + '\n'
+                    '.string ' + '\"' + \
+                    format_.encode("unicode_escape").decode(
+                        "utf-8") + '\"' + '\n'
             self.gen_ir(ir)
 
     def gen_printf(self, node):
         format_ = node.format_
         val = node.value
+        ir = ''
         if val:
             addr = self.address(val)
-            ir = 'movq ' + addr + ', ' + '%rsi' + '\n'
+            ir = 'movl ' + addr + ', ' + '%esi' + '\n'
         LC_tag = '$' + self.LC_tag(format_)
-        ir += 'movq ' + LC_tag + ', %rdi\n'\
-                   'movq $0, %rax\n'\
-                   'call printf\n'\
-                   'movq $0, %rax\n'
+        ir += 'movl ' + LC_tag + ', (%esp)\n'\
+                   'movl $0, %eax\n'\
+                   'call _printf\n'\
+                   'movl $0, %eax\n'
         self.gen_ir(ir)
 
     def address(self, node):
@@ -187,11 +191,11 @@ class Logic_Gentor:
 
     def gen_cmp_stmt(self, node):
         left = self.gen_expr(node.left)
-        ir = 'movq ' + left + ', ' + '%rcx' + '\n'
+        ir = 'movl ' + left + ', ' + '%ecx' + '\n'
         self.gen_ir(ir)
 
         right = self.gen_expr(node.right)
-        ir = 'cmpl ' + right + ', ' + '%rcx\n'
+        ir = 'cmpl ' + right + ', ' + '%ecx\n'
         self.gen_ir(ir)
 
     def gen_jump(self, cmp_operator, target_block, jump_style):
@@ -278,11 +282,11 @@ class Assign_Gentor:
         var = assign_node.variable
         val = assign_node.value
         val = self.gen_expr(val)
-        # 加减乘除返回%rax
-        ir = 'movq ' + val + ', ' + '%rcx' + '\n'
+        # 加减乘除返回%eax
+        ir = 'movl ' + val + ', ' + '%ecx' + '\n'
         self.gen_ir(ir)
         var_addr = self.address(var)
-        ir = 'movq ' + '%rcx' + ', ' + var_addr + '\n'
+        ir = 'movl ' + '%ecx' + ', ' + var_addr + '\n'
         self.gen_ir(ir)
 
     def init_array(self, assign_node):
@@ -298,7 +302,7 @@ class Assign_Gentor:
                 value = '$' + list_[index]
             else:
                 value = '$0'
-            ir = 'movq ' + value + ', ' + addr + '\n'
+            ir = 'movl ' + value + ', ' + addr + '\n'
             self.gen_ir(ir)
 
     def array_address(self, array_name, array_index):
@@ -333,8 +337,8 @@ class Expr_Gentor:
     def gen_arith(self, node):
         left = self.gen_expr(node.left)
         right = self.gen_expr(node.right)
-        ir1 = 'movq ' + left + ', ' + '%rax\n'
-        # ir2 = 'movq ' + right + ', ' + '%rcx\n'
+        ir1 = 'movl ' + left + ', ' + '%eax\n'
+        # ir2 = 'movl ' + right + ', ' + '%ecx\n'
 
         op = node.operator
         if op == '+':
@@ -347,15 +351,15 @@ class Expr_Gentor:
             op_as = 'idivl'
         # 除法暂时未实现
         # if op == '/':
-        #     ir1 = 'movq ' + left + ', ' + '%rax\n'
+        #     ir1 = 'movl ' + left + ', ' + '%eax\n'
         #     ir2 = 'cltd\n'
         #     ir3 = 'idivl ' + right + '\n'
         # else:
-        ir3 = op_as + ' ' + right + ', %rax\n'
+        ir3 = op_as + ' ' + right + ', %eax\n'
 
 
         addr = self.next_tmp_addr()
-        ir4 = 'movq %rax, ' + addr + '\n'
+        ir4 = 'movl %eax, ' + addr + '\n'
         ir = ir1  + ir3 + ir4
         self.gen_ir(ir)
         return addr
@@ -402,7 +406,7 @@ class Symbol_Manager:
         else:
             c = self.symbol_count
         space = '$' + str(c * 4)
-        ir = 'sub ' + space + ', %rsp' + '\n'
+        ir = 'subl ' + space + ', %esp' + '\n'
         self.gen_ir(ir)
 
     def tmp_symbol_start_index(self):
@@ -424,7 +428,7 @@ class Symbol_Manager:
         return self.address_by_index(index)
 
     def address_by_index(self, index):
-        return '-' + str(index * 4) + '(%rbp)'
+        return '-' + str(index * 4) + '(%ebp)'
 
     def address(self, identifier):
         ident = identifier
@@ -437,11 +441,11 @@ class Symbol_Manager:
                 # var_index = self.symbol_map[index]
                 # var_addr = self.address_by_index(var_index)
                 var_addr = self.gen_expr(index)
-                ir = 'movq ' + var_addr + ', %rcx\n'
+                ir = 'movl ' + var_addr + ', %ecx\n'
                 ir += 'cltq\n'
                 self.gen_ir(ir)
                 array = self.symbol_map[name]
-                addr = '-' + str(array*4) + '(%rbp, %rcx, 4)'
+                addr = '-' + str(array*4) + '(%ebp, %ecx, 4)'
                 return addr
             array_sym_id = self.symbol_map[name]
             ident_id = array_sym_id - index
@@ -500,6 +504,19 @@ class Generator_as1:
         self.assign_gentor = Assign_Gentor(self)
 
     def gen(self, node):
+        if type(node) is FunctionNode:
+            ir = f'.text\n.global _{node.name.name}\n_{node.name.name}:\n'
+            ir += '''	
+                    pushl %ebp
+                    pushl %ebx
+                    pushl %esi
+                    pushl %edi
+                    movl %esp, %ebp
+                '''
+            if node.param is not None:
+                raise Exception
+            self.gen_ir(ir)
+            self.gen(node.stmts)
         if is_node_type(node, 'Seq'):
             self.gen(node.stmt)
             self.gen(node.next_stmt)
@@ -545,8 +562,8 @@ class Generator_as1:
             self.array_end()
 
     def gen_executable_ir(self):
-        self.init_ir()
-        self.symbol_manager.gen_reserve_memory()
+        # self.init_ir()
+        # self.symbol_manager.gen_reserve_memory()
         if self.has_array:
             self.gen_array_start()
         self.gen(self.ast)
@@ -556,35 +573,39 @@ class Generator_as1:
 
     def init_ir(self):
         ir = '.text\n'\
-                  '.globl main\n'\
-                  '.type	main, @function\n'\
-                  'main:\n'\
-                  'push %rbp\n'\
-                  'movq	%rsp, %rbp\n'
+                  '.globl _main\n'\
+                  ''\
+                  '_main:\n'\
+                  'push %ebp\n'\
+                  'movl	%esp, %ebp\n'
+        ir = '.text\n'\
+            '.globl _main\n'\
+            ''\
+            '_main:\n'\
+            'push %ebp\n'\
+            'movl	%esp, %ebp\n'
         self.gen_ir(ir)
 
     def gen_array_start(self):
-        ir = 'movq %fs:40, %rax\n'\
-        	 'movq %rax, -8(%rbp)\n'\
-        	 'xorl %rax, %rax\n'
+        ir = 'movl %fs:40, %eax\n'\
+        	 'movl %eax, -8(%ebp)\n'\
+        	 'xorl %eax, %eax\n'
         self.gen_ir(ir)
 
     def array_end(self):
         block = self.new_block()
         flag = self.block_flag(block)
-        ir = 'movq -8(%rbp), %rdx\n'\
-        	 'xorq %fs:40, %rdx\n'\
+        ir = 'movl -8(%ebp), %edx\n'\
+        	 'xorq %fs:40, %edx\n'\
          	 'je	' + block + '\n'\
         	 'call __stack_chk_fail\n' + \
              flag
         self.gen_ir(ir)
 
     def gen_end(self):
-        ir = 'leave\n'\
+        ir = 'call _getchar\nleave\n'\
            'ret\n'\
-           '.size	main, .-main\n'\
-           '.ident	"GCC: (Ubuntu 5.4.0-6ubuntu1~16.04.6) 5.4.0 20160609"\n'\
-           '.section	.note.GNU-stack,"",@progbits\n'
+
         self.gen_ir(ir)
 
     def gen_block_flag(self, block_tag):

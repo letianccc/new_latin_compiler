@@ -23,30 +23,30 @@ ir = '''.section .rodata
 .globl main
 .type	main, @function
 main:
-push %rbp
-movq	%rsp, %rbp
-sub $4, %rsp
+push %ebp
+movl	%esp, %ebp
+subl $4, %esp
 
 
 .B0:
-movq $1, %rax
-movq %rax, -4(%rbp)
-movq -4(%rbp), %rax
-cmpl $1, %rax
+movl $1, %eax
+movl %eax, -4(%ebp)
+movl -4(%ebp), %eax
+cmpl $1, %eax
 je .B2
 .B1:
-movq $2, %rax
-movq %rax, -4(%rbp)
+movl $2, %eax
+movl %eax, -4(%ebp)
 jmp .B3
 .B2:
-movq $3, %rax
-movq %rax, -4(%rbp)
+movl $3, %eax
+movl %eax, -4(%ebp)
 .B3:
-movq -4(%rbp), %rsi
-movq $.LC0, %rdi
-movq $0, %rax
+movl -4(%ebp), %esi
+movl $.LC0, %edi
+movl $0, %eax
 call printf
-movq $0, %rax
+movl $0, %eax
 
 
 leave

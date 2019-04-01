@@ -1,12 +1,10 @@
 #include<stdio.h>
-int main() {
-    int a = 1;
-    func();
-    printf("%d\n", a);
+
+
+
+void main() {
+    printf("hello\n");
     getchar();
-    return 3;
 }
 
-int func() {
-    int a = 1;
-}
+

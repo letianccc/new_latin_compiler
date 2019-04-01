@@ -18,9 +18,10 @@ class Symbol:
 
 class FunctionNode:
     def __init__(self, type, name, parameters, stmts):
-        self.type = None
-        self.name = None
-        self.stmts = None
+        self.type = type
+        self.name = name
+        self.stmts = stmts
+        self.param = parameters
 
 
 class Block:
@@ -73,20 +74,20 @@ class PrintIR(IR):
                 addr = emiter.address(self.value.index)
             else:
                 addr = '$' + self.value.name
-            emiter.movq(addr, '%rsi')
+            emiter.movl(addr, '%esi')
         LC_tag = '$' + emiter.LC_tag(self.format)
-        ir = 'movq ' + LC_tag + ', %rdi\n'\
-                   'movq $0, %rax\n'\
+        ir = 'movl ' + LC_tag + ', %edi\n'\
+                   'movl $0, %eax\n'\
                    'call printf\n'\
-                   'movq $0, %rax\n'
+                   'movl $0, %eax\n'
         emiter.emit_as(ir)
 
 class AssignIR(IR):
     def emit(self, emiter):
         left = self.operands[0]
         right = self.operands[1]
-        emiter.movq(right.emit(emiter), '%rax')
-        emiter.movq('%rax', emiter.address(left.index))
+        emiter.movl(right.emit(emiter), '%eax')
+        emiter.movl('%eax', emiter.address(left.index))
 
 class ExprIR(IR):
     def __init__(self):

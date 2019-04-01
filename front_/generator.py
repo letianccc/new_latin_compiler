@@ -80,7 +80,7 @@ class Generator_as:
         else:
             c = self.symbol_count
         space = '$' + str(c * 4)
-        ir = 'sub ' + space + ', %rsp' + '\n'
+        ir = 'subl ' + space + ', %esp' + '\n'
         self.gen_ir(ir)
 
     def gen_test_ir(self):
@@ -119,23 +119,23 @@ class Generator_as:
     def init_ir(self):
         ir = '.text\n'\
                   '.globl main\n'\
-                  '.type	main, @function\n'\
+                  ''\
                   'main:\n'\
-                  'push %rbp\n'\
-                  'movq	%rsp, %rbp\n'
+                  'push %ebp\n'\
+                  'movl	%esp, %ebp\n'
         self.gen_ir(ir)
 
     def gen_array_start(self):
-        ir = 'movq %fs:40, %rax\n'\
-        	 'movq %rax, -8(%rbp)\n'\
-        	 'xorl %rax, %rax\n'
+        ir = 'movl %fs:40, %eax\n'\
+        	 'movl %eax, -8(%ebp)\n'\
+        	 'xorl %eax, %eax\n'
         self.gen_ir(ir)
 
     def array_end(self):
         block = self.new_block()
         flag = self.block_flag(block)
-        ir = 'movq -8(%rbp), %rdx\n'\
-        	 'xorq %fs:40, %rdx\n'\
+        ir = 'movl -8(%ebp), %edx\n'\
+        	 'xorq %fs:40, %edx\n'\
          	 'je	' + block + '\n'\
         	 'call __stack_chk_fail\n' + \
              flag
@@ -202,12 +202,12 @@ class Generator_as:
         val = node.value
         if val:
             addr = self.address(val)
-            ir = 'movq ' + addr + ', ' + '%rsi' + '\n'
+            ir = 'movl ' + addr + ', ' + '%esi' + '\n'
         LC_tag = '$' + self.LC_tag(format_)
-        ir += 'movq ' + LC_tag + ', %rdi\n'\
-                   'movq $0, %rax\n'\
+        ir += 'movl ' + LC_tag + ', %edi\n'\
+                   'movl $0, %eax\n'\
                    'call printf\n'\
-                   'movq $0, %rax\n'
+                   'movl $0, %eax\n'
         self.gen_ir(ir)
 
     def gen_decl(self, node):
@@ -231,11 +231,11 @@ class Generator_as:
         var = assign_node.variable
         val = assign_node.value
         val = self.gen_expr(val)
-        # 加减乘除返回%rax
-        ir = 'movq ' + val + ', ' + '%rcx' + '\n'
+        # 加减乘除返回%eax
+        ir = 'movl ' + val + ', ' + '%ecx' + '\n'
         self.gen_ir(ir)
         var_addr = self.address(var)
-        ir = 'movq ' + '%rcx' + ', ' + var_addr + '\n'
+        ir = 'movl ' + '%ecx' + ', ' + var_addr + '\n'
         self.gen_ir(ir)
 
     def init_array(self, assign_node):
@@ -251,7 +251,7 @@ class Generator_as:
                 value = '$' + list_[index]
             else:
                 value = '$0'
-            ir = 'movq ' + value + ', ' + addr + '\n'
+            ir = 'movl ' + value + ', ' + addr + '\n'
             self.gen_ir(ir)
 
     def array_address(self, array_name, array_index):
@@ -275,8 +275,8 @@ class Generator_as:
     def gen_arith(self, node):
         left = self.gen_expr(node.left)
         right = self.gen_expr(node.right)
-        ir1 = 'movq ' + left + ', ' + '%rax\n'
-        # ir2 = 'movq ' + right + ', ' + '%rcx\n'
+        ir1 = 'movl ' + left + ', ' + '%eax\n'
+        # ir2 = 'movl ' + right + ', ' + '%ecx\n'
 
         op = node.operator
         if op == '+':
@@ -289,15 +289,15 @@ class Generator_as:
             op_as = 'idivl'
         # 除法暂时未实现
         # if op == '/':
-        #     ir1 = 'movq ' + left + ', ' + '%rax\n'
+        #     ir1 = 'movl ' + left + ', ' + '%eax\n'
         #     ir2 = 'cltd\n'
         #     ir3 = 'idivl ' + right + '\n'
         # else:
-        ir3 = op_as + ' ' + right + ', %rax\n'
+        ir3 = op_as + ' ' + right + ', %eax\n'
 
 
         addr = self.next_tmp_addr()
-        ir4 = 'movq %rax, ' + addr + '\n'
+        ir4 = 'movl %eax, ' + addr + '\n'
         ir = ir1  + ir3 + ir4
         self.gen_ir(ir)
         return addr
@@ -309,7 +309,7 @@ class Generator_as:
         return addr
 
     def address_by_index(self, index):
-        return '-' + str(index * 4) + '(%rbp)'
+        return '-' + str(index * 4) + '(%ebp)'
 
     def address(self, identifier):
         ident = identifier
@@ -322,11 +322,11 @@ class Generator_as:
                 # var_index = self.symbol_map[index]
                 # var_addr = self.address_by_index(var_index)
                 var_addr = self.gen_expr(index)
-                ir = 'movq ' + var_addr + ', %rcx\n'
+                ir = 'movl ' + var_addr + ', %ecx\n'
                 ir += 'cltq\n'
                 self.gen_ir(ir)
                 array = self.symbol_map[name]
-                addr = '-' + str(array*4) + '(%rbp, %rcx, 4)'
+                addr = '-' + str(array*4) + '(%ebp, %ecx, 4)'
                 return addr
             array_sym_id = self.symbol_map[name]
             ident_id = array_sym_id - index
@@ -434,11 +434,11 @@ class Generator_as:
 
     def gen_cmp_stmt(self, node):
         left = self.gen_expr(node.left)
-        ir = 'movq ' + left + ', ' + '%rcx' + '\n'
+        ir = 'movl ' + left + ', ' + '%ecx' + '\n'
         self.gen_ir(ir)
 
         right = self.gen_expr(node.right)
-        ir = 'cmpl ' + right + ', ' + '%rcx\n'
+        ir = 'cmpl ' + right + ', ' + '%ecx\n'
         self.gen_ir(ir)
 
     def gen_jump(self, cmp_operator, target_block, jump_style):

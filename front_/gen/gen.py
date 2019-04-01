@@ -230,8 +230,8 @@ class Emit:
         self.emit_end()
 
     def emit_cmp(self, target, other):
-        self.movq(self.address(target.index), '%rax')
-        code = 'cmp {other}, {target}\n'.format(other=other.emit(self), target='%rax')
+        self.movl(self.address(target.index), '%eax')
+        code = 'cmp {other}, {target}\n'.format(other=other.emit(self), target='%eax')
         self.emit_as(code)
 
     def emit_jmp(self, operator, target):
@@ -240,12 +240,12 @@ class Emit:
         self.emit_as(code)
 
     def emit_expr(self, operator, left, right, result):
-        self.movq(self.address(left), '%rax')
+        self.movl(self.address(left), '%eax')
         op = expr_map[operator]
 
-        code = '{op} {right}, %rax\n'.format(op=op, right=right.emit(self))
+        code = '{op} {right}, %eax\n'.format(op=op, right=right.emit(self))
         self.emit_as(code)
-        self.movq('%rax', self.address(result))
+        self.movl('%eax', self.address(result))
 
     def emit_end(self):
         ir = 'leave\n'\
@@ -262,7 +262,7 @@ class Emit:
         #     c = self.symbol_count
         c = self.symbol_count
         space = '$' + str(c * 4)
-        ir = 'sub ' + space + ', %rsp' + '\n'
+        ir = 'subl ' + space + ', %esp' + '\n'
         self.emit_as(ir)
 
     def init_printf(self):
@@ -287,10 +287,10 @@ class Emit:
     def init_as(self):
         ir = '.text\n'\
                   '.globl main\n'\
-                  '.type	main, @function\n'\
+                  ''\
                   'main:\n'\
-                  'push %rbp\n'\
-                  'movq	%rsp, %rbp\n'
+                  'push %ebp\n'\
+                  'movl	%esp, %ebp\n'
         self.emit_as(ir)
 
     def emit_blocks(self):
@@ -302,8 +302,8 @@ class Emit:
                 # log(ir)
                 ir.emit(self)
 
-    def movq(self, src, dst):
-        code = 'movq {src}, {dst}\n'.format(src=src, dst=dst)
+    def movl(self, src, dst):
+        code = 'movl {src}, {dst}\n'.format(src=src, dst=dst)
         self.emit_as(code)
 
     def emit_as(self, code):
@@ -318,7 +318,7 @@ class Emit:
             index = symbol.index
 
         o = self.sp_offset + index * 4
-        a = '{offset}(%rbp)'.format(offset=o)
+        a = '{offset}(%ebp)'.format(offset=o)
         return a
 
 

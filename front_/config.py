@@ -29,6 +29,6 @@ jmp_map = {
 
 expr_map = {
     '+': 'add',
-    '-': 'sub',
+    '-': 'subl',
     '*': 'mul',
 }
