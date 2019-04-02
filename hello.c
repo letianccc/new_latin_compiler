@@ -1,14 +1,10 @@
 #include<stdio.h>
 
-int func() {
-    printf("aaa");
-    printf("bb");
+void func() {
+
 }
 
 void main() {
     func();
-    printf("hello\n");
     getchar();
 }
-
-

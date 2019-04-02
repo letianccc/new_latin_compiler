@@ -2,6 +2,7 @@ from lexer_ import Lexer
 from AST import *
 from myenum import *
 from type_system import TypeSystem
+from mysymbol import *
 
 class Parser:
 
@@ -34,7 +35,12 @@ class Parser:
         name = self.next_token()
         param = self.parse_parameter()
         stmts = self.block_()
-        return FunctionNode(type, name, param, stmts)
+        s = FunctionSymbol()
+        s.param = param
+        s.type = type
+        s.name = name.name
+        SymbolSystem.add(s)
+        return FunctionNode(s, stmts)
 
     def parse_parameter(self):
         self.expect(TokenKind.LPAREN)
@@ -210,7 +216,7 @@ class Parser:
             self.expect(TokenKind.RPAREN)
             self.expect(TokenKind.SEMICOLON)
             n = CallNode()
-            n.function = variable
+            n.name = variable
             return n
         self.expect('=')
         value = self.bool_()

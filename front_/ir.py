@@ -1,5 +1,6 @@
 
 
+from myenum import *
 
 
 
@@ -10,6 +11,12 @@ class Block:
         self.id = Block.id_pool
         Block.id_pool += 1
         self.irs = []
+        self.kind = None
+        self.symbol = None
+        self.index = None
+
+    def add_ir(self, ir):
+        self.irs.append(ir)
 
 # class IfBlock:
 #     def __init__(self, stmts):
@@ -77,3 +84,12 @@ class ExprIR(IR):
 
     def emit(self, emiter):
         emiter.emit_expr(self.op, self.left, self.right, self.result)
+
+class CallIR(object):
+    """docstring for CallIR."""
+
+    def __init__(self):
+        super(CallIR, self).__init__()
+        self.function = None
+        self.param = None
+        self.kind = IRKind.CALL

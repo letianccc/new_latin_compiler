@@ -1,42 +1,46 @@
 
 from util import *
+from myenum import *
 
 
 class CallNode:
     def __init__(self):
+        self.name = None
         self.function = None
         self.param = None
+        self.kind = NodeKind.CALL
 
 
 
 
 # kind: number
-class Symbol:
-    def __init__(self):
-        self.kind = None
-        self.index = 0
-        self.token = None
-
-    def emit(self, emiter):
-        if self.kind == 'number':
-            return '$' + self.token.name
-        else:
-            return emiter.address(self.index)
-
+# class Symbol:
+#     def __init__(self):
+#         self.kind = None
+#         self.index = 0
+#         self.token = None
+#
+#     def emit(self, emiter):
+#         if self.kind == 'number':
+#             return '$' + self.token.name
+#         else:
+#             return emiter.address(self.index)
+#
 
 
 class FunctionNode:
-    def __init__(self, type, name, parameters, stmts):
+    def __init__(self, symbol, stmts):
+        self.kind = NodeKind.FUNCTION
         self.type = type
-        self.name = name
+        self.symbol = symbol
         self.stmts = stmts
-        self.param = parameters
 
 
 class Seq:
     def __init__(self, stmt, next_stmt):
         self.stmt = stmt
         self.next_stmt = next_stmt
+        self.kind = NodeKind.SEQ
 
 class Stmt:
     def __init__(self, stmt):
@@ -46,6 +50,7 @@ class Printf:
     def __init__(self, format_, value):
         self.format_ = format_
         self.value = value
+        self.kind = NodeKind.PRINTF
 
 class If:
     def __init__(self, cond, then_stmts, else_stmts):

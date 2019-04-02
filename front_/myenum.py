@@ -101,3 +101,23 @@ class TypeKind(Enum):
     FLOAT = auto()
     DOUBLE = auto()
     VOID = auto()
+
+class NodeKind(Enum):
+    CALL = auto()
+    FUNCTION = auto()
+    SEQ = auto()
+    STMT = auto()
+    PRINTF = auto()
+
+class BlockKind(Enum):
+    FUNCTION = auto()
+    STRING = auto()
+    GENERAL = auto()
+
+class SymbolKind(Enum):
+    FUNCTION = auto()
+    STRING = auto()
+    ID = auto()
+
+class IRKind(Enum):
+    CALL = auto()

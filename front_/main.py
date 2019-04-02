@@ -1,12 +1,12 @@
 from lexer_ import Lexer
 from parser_ import Parser
-from generator import Generator_as1
+from generator import *
 # import type_system
 from type_system import TypeSystem
 from util import *
 import os
-
-
+from check import CheckSystem
+from emit import Emit
 
 
 
@@ -34,22 +34,27 @@ def _main_():
     lexer.scan()
     tokens = lexer.tokens
     parser = Parser(tokens)
-    # ir = Generator(ast)
-    # gen = Generator_as(parser)
-    gen = Generator_as1(parser)
-    gen.gen_executable_ir()
-    # gen.gen_test_ir()
-    ir = gen.ir
-    # ir = insert_(ir)
-    # print(ir)
+
+    # gen = Generator_as1(parser)
+    # gen.gen_executable_ir()
+    cs = CheckSystem(parser.AST)
+    cs.execute()
+
+    gentor = Gentor(parser.AST)
+    gentor.execute()
+    symbols = gentor.symbols
+    e = Emit(symbols)
+    e.execute()
+    code = e.code
+    # print(code)
     path = r'C:\code\new_latin_compiler\test.s'
-    f = open(path, 'r')
-    expect_ir = f.read()
-    assert expect_ir == ir
+    # f = open(path, 'r')
+    # expect_ir = f.read()
+    # assert expect_ir == ir
 
     # print(path)
-    # f = open(path, 'w')
-    # f.write(ir)
+    f = open(path, 'w')
+    f.write(code)
 
 
 
