@@ -1,10 +1,11 @@
 from lexer_ import Lexer
 from AST import *
-from myenum import TokenKind
+from myenum import *
+from type_system import TypeSystem
 
 class Parser:
-    def __init__(self, tokens):
 
+    def __init__(self, tokens):
         self.tokens = tokens
         self.index = 0
         self.symbols = list()
@@ -23,9 +24,11 @@ class Parser:
         self.expect(TokenKind.EOF)
         return fs
 
+
     def parse_function(self, type=None, name=None):
         self.match(TokenKind.INT)
-        type = self.next_token()
+        t = self.next_token()
+        type = TypeSystem.type(t.kind)
         self.match(TokenKind.ID)
         name = self.next_token()
         param = self.parse_parameter()
@@ -172,6 +175,7 @@ class Parser:
         self.expect('[')
         expr = self.expr_()
         self.expect(']')
+
         return expr
 
     def is_num(self, array_node):
@@ -191,6 +195,7 @@ class Parser:
         self.expect(';')
         return Decl(type_, var)
 
+
     def add_symbol(self, symbol, amount):
         self.symbols.append(symbol)
         self.ident_count += amount
@@ -208,6 +213,7 @@ class Parser:
             return n
         self.expect('=')
         value = self.bool_()
+
         self.expect(';')
         return Assign(variable, value)
 

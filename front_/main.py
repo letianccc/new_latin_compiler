@@ -1,9 +1,14 @@
-from front_.lexer_ import Lexer
-from front_.parser_ import Parser
-from front_.generator import Generator, Generator_as
-from front_.generator_dir.generator import Generator_as1
+from lexer_ import Lexer
+from parser_ import Parser
+from generator import Generator_as1
+# import type_system
+from type_system import TypeSystem
 from util import *
 import os
+
+
+
+
 
 def _main_():
 
@@ -23,6 +28,8 @@ def _main_():
 
     '''
 
+    TypeSystem.init()
+
     lexer = Lexer(code)
     lexer.scan()
     tokens = lexer.tokens
@@ -36,9 +43,15 @@ def _main_():
     # ir = insert_(ir)
     # print(ir)
     path = r'C:\code\new_latin_compiler\test.s'
-    print(path)
-    f = open(path, 'w')
-    f.write(ir)
+    f = open(path, 'r')
+    expect_ir = f.read()
+    assert expect_ir == ir
+
+    # print(path)
+    # f = open(path, 'w')
+    # f.write(ir)
+
+
 
 
 _main_()

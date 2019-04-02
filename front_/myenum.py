@@ -93,3 +93,11 @@ class TokenKind(Enum):
     POUND = auto()
     NEWLINE = auto()
     EOF = auto()
+
+
+
+class TypeKind(Enum):
+    INT = auto()
+    FLOAT = auto()
+    DOUBLE = auto()
+    VOID = auto()
