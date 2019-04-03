@@ -554,28 +554,28 @@ def test1(code, test_ir):
         try:
             assert(ir == test_ir)
         except:
-            print(code)
+            log(code)
             min_ = min(len(ir), len(test_ir))
             for x in range(min_):
                 if ir[x] != test_ir[x]:
-                    print("differed!  ", ir[x], "expect  ", test_ir[x])
+                    log("differed!  ", ir[x], "expect  ", test_ir[x])
                     for y in range(30):
                         index = x + y
                         if index < len(ir):
-                            print(ir[index], end='')
+                            log(ir[index], end='')
                         else:
                             break
-                    print("\n")
-                    print("expect: ")
+                    log("\n")
+                    log("expect: ")
                     for y in range(30):
                         index = x + y
                         if index < len(ir):
-                            print(test_ir[index], end='')
+                            log(test_ir[index], end='')
                         else:
                             break
                     break
-            print("\n")
-            print(ir)
+            log("\n")
+            log(ir)
         # assert (gen.ir == test_ir)
     else:
         global i

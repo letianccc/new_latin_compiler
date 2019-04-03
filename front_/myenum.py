@@ -1,6 +1,6 @@
-from enum import Enum, auto
+from enum import IntEnum, auto
 
-class TokenKind(Enum):
+class TokenKind(IntEnum):
     AUTO = auto()
     EXTERN = auto()
     REGISTER = auto()
@@ -96,13 +96,13 @@ class TokenKind(Enum):
 
 
 
-class TypeKind(Enum):
+class TypeKind(IntEnum):
     INT = auto()
     FLOAT = auto()
     DOUBLE = auto()
     VOID = auto()
 
-class NodeKind(Enum):
+class NodeKind(IntEnum):
     CALL = auto()
     FUNCTION = auto()
     SEQ = auto()
@@ -110,16 +110,16 @@ class NodeKind(Enum):
     PRINTF = auto()
     PARAMETER = auto()
 
-class BlockKind(Enum):
+class BlockKind(IntEnum):
     FUNCTION = auto()
     STRING = auto()
     GENERAL = auto()
 
-class SymbolKind(Enum):
+class SymbolKind(IntEnum):
     FUNCTION = auto()
     STRING = auto()
     ID = auto()
     CONST = auto()
 
-class IRKind(Enum):
+class IRKind(IntEnum):
     CALL = auto()

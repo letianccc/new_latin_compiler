@@ -39,7 +39,7 @@ class Parser:
         s = FunctionSymbol()
         s.param = param
         s.type = type
-        s.name = name.name
+        s.name = name.value
         SymbolSystem.add(s)
         self.function = s
         stmts = self.block_()
@@ -109,7 +109,8 @@ class Parser:
             if self.match(TokenKind.RBRACE):
                 self.expect('}')
                 return None
-            if self.is_type('number'):
+            # 数组初始化
+            if self.match(TokenKind.INTCONST) or self.match(TokenKind.FLOATCONST):
                 block = self.parse_array_data()
             else:
                 block = self.stmts_()
@@ -130,7 +131,6 @@ class Parser:
 
     def stmt_(self):
         t = self.cur_token()
-        name = t.name
         if self.match(TokenKind.IF):
             return self.if_stmt()
         elif self.match(TokenKind.INT) or self.match(TokenKind.FLOAT):
@@ -220,7 +220,7 @@ class Parser:
 
     def is_array(self):
         t = self.tokens[self.index + 1]
-        if t.name == '[':
+        if t.value == '[':
             return True
         else:
             return False
@@ -282,7 +282,7 @@ class Parser:
         s = SymbolSystem.find_symbol(variable)
         if s is None:
             s = FunctionSymbol()
-            s.name = variable.name
+            s.name = variable.value
             SymbolSystem.add(s)
         n.function = s
         n.param = param
@@ -367,14 +367,14 @@ class Parser:
             return Array(name, index)
         elif self.match(TokenKind.STRING):
             t = self.next_token()
-            s = StringSymbol(t.name)
+            s = StringSymbol(t.value)
             SymbolSystem.add(s)
             self.function.strings.append(s)
             return s
         elif self.match(TokenKind.INTCONST):
             t = self.next_token()
             type = TypeSystem.type(TokenKind.INT)
-            s = ConstantSymbol(type, t.name)
+            s = ConstantSymbol(type, t.value)
             return s
         elif self.match(TokenKind.ID):
             # 标识符
@@ -432,21 +432,21 @@ class Parser:
             if type(word) is TokenKind and word is t.kind:
                 self.increase_index()
                 return
-            if t.name == word:
+            if t.value == word:
                 self.increase_index()
             else:
-                print('not match!')
-                print('last:  ', self.tokens[self.index-4].name, self.tokens[self.index-3   ].name,
+                log('not match!')
+                log('last:  ', self.tokens[self.index-4].name, self.tokens[self.index-3   ].name,
                       self.tokens[self.index-2].name, self.tokens[self.index-1].name)
-                print('index: ', self.index, 'len:  ', len(self.tokens))
-                print('match:  ', t.name)
-                print('expect: ', word)
+                log('index: ', self.index, 'len:  ', len(self.tokens))
+                log('match:  ', t.name)
+                log('expect: ', word)
                 raise Exception
 
         else:
-            print('index out of range!')
-            print('last:  ', self.tokens[self.index-1].name)
-            print('expect: ', word)
+            log('index out of range!')
+            log('last:  ', self.tokens[self.index-1].name)
+            log('expect: ', word)
             raise Exception
 
     def match(self, token_kind):

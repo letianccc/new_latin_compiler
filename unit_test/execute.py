@@ -205,7 +205,7 @@ def write_as_to_file(code):
     # gen.gen_test_ir()
     ir = gen.ir
     # ir = insert_(ir)
-    # print(ir)
+    # log(ir)
     f = open('/home/latin/code/python/latin_compiler/test.s', 'w')
     f.write(ir)
 
@@ -222,9 +222,9 @@ def check_results(test_case, exec_results):
         try:
             assert(r == test_result)
         except:
-            print(code)
-            print('exec_result: ', r)
-            print('test_result: ', test_result)
-            print()
+            log(code)
+            log('exec_result: ', r)
+            log('test_result: ', test_result)
+            log()
 
 test_exec()

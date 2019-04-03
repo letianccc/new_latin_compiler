@@ -2,7 +2,7 @@
 
 def print_token_names(tokens):
     token_names = [t.name for t in tokens]
-    print(token_names)
+    log(token_names)
 
 
 def is_node_type(node, type_):

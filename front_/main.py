@@ -49,16 +49,20 @@ def _main_():
     e = Emit(symbols)
     e.execute()
     code = e.code
-    # print(code)
+    # log(code)
     path = r'C:\code\new_latin_compiler\test.s'
-    # f = open(path, 'r')
-    # expect_ir = f.read()
-    # assert expect_ir == ir
 
-    # print(path)
+    assert_code(path, code)
+    # write_code(path, code)
+
+def write_code(path, code):
     f = open(path, 'w')
     f.write(code)
 
+def assert_code(path, code):
+    f = open(path, 'r')
+    expect_code = f.read()
+    assert expect_code == code
 
 
 

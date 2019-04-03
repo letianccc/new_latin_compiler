@@ -12,9 +12,9 @@ class SymbolSystem(object):
     def find_symbol(cls, token):
         for s in cls.symbols:
             if s.kind is SymbolKind.STRING:
-                if s.value == token.name:
+                if s.value == token.value:
                     return s
-            elif s.name == token.name:
+            elif s.name == token.value:
                 return s
         return None
 
@@ -48,7 +48,7 @@ class StringSymbol(object):
     def __init__(self, string):
         super(StringSymbol, self).__init__()
         self.kind = SymbolKind.STRING
-        self.value = f'\"{string}\"'
+        self.value = string
         self.tag = None
         self.index = StringSymbol.index
         StringSymbol.index += 1

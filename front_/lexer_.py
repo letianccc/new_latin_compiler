@@ -7,12 +7,10 @@ symbols = [ '+', '-', '*', '/', '!', '=',
             '<', '<=', '>', '>=', '==', '!=',
             '&&', '||', '&', '|',
             '{', '}', '(', ')', '[', ']',
-            ',', '.', '\'', '\"', ';', '%', '\\'
+            ',', '.', ';', '%',
             ]
-reserved_word = ['int', 'float', 'if', 'else', 'break', 'return',
-'for', 'continue', 'while', 'do', 'printf', ]
 
-reserved_word_map = {
+word_map = {
     'int': TokenKind.INT,
     'float': TokenKind.FLOAT,
     'void': TokenKind.VOID,
@@ -24,9 +22,6 @@ reserved_word_map = {
     'continue': TokenKind.CONTINUE,
     'while': TokenKind.WHILE,
     'do': TokenKind.DO,
-}
-
-symbol_map = {
     ',': TokenKind.COMMA,
     '?': TokenKind.QUESTION,
     ':': TokenKind.COLON,
@@ -74,70 +69,27 @@ symbol_map = {
     ';': TokenKind.SEMICOLON,
     '...': TokenKind.ELLIPSIS,
     '#': TokenKind.POUND,
+
 }
+
 
 class Lexer:
     def __init__(self, code):
         self.tokens = list()
         self.index = 0
         self.code = code + ' '
-        self.len_ = len(code)
-        self.setup()
-
-    def setup(self):
-        self.skip_space()
+        self.length = len(code)
 
     def scan(self):
-        while self.not_eof():
-            t = self.scan_tok()
+        self.skip_space()
+        while not self.is_eof():
+            t = self.scan_token()
             self.tokens.append(t)
-        t = Token()
-        t.kind = TokenKind.EOF
+            self.skip_space()
+        t = Token(TokenKind.EOF)
         self.tokens.append(t)
 
-
-    def skip_space(self):
-        while self.not_eof():
-            c = self.cur_char()
-            if c.isspace():
-                self.next_index()
-            else:
-                return
-
-    def not_eof(self):
-        return self.index < self.len_
-
-    def cur_char(self):
-        return self.code[self.index]
-
-    def next_char(self):
-        self.next_index()
-        c = self.cur_char()
-
-        return c
-
-    def next_index(self):
-        self.index += 1
-
-    def expect(self, char):
-        if self.index < len(self.code):
-            c = self.cur_char()
-            if c != char:
-                print('not match!')
-                print('last:  ', self.code[self.index-2], self.code[self.index-1])
-                print('index: ', self.index, 'len:  ', len(self.code))
-                print('match:  ', c)
-                print('expect: ', char)
-                raise Exception
-            self.next_index()
-        else:
-            print('index out of range!')
-            print('last:  ', self.code[self.index-1])
-            print('expect: ', char)
-            raise Exception
-
-    def scan_tok(self):
-        word = ''
+    def scan_token(self):
         c = self.cur_char()
         if c.isalpha():
             t = self.scan_identifier()
@@ -149,53 +101,45 @@ class Lexer:
             t = self.scan_symbol()
         else:
             raise Exception(c)
-
-        self.skip_space()
         return t
 
     def scan_string(self):
-        word = ''
-        self.expect('\"')
-        c = self.cur_char()
+        word = self.cur_char()
+        c = self.next_char()
         while c != '"':
             word += c
             c = self.next_char()
-        self.expect('\"')
+        word += c
+        self.next_char()
         kind = TokenKind.STRING
-        type_ = 'string'
-        t = Token(word, type_)
-        t.kind = kind
+        t = Token(kind, word)
         return t
 
     def scan_symbol(self):
-        type_ = 'symbol'
         word = self.symbol_word()
-        kind = symbol_map.get(word)
-        if kind is None:
-            raise Exception(word)
-        t = Token(word, type_)
-        t.kind = kind
+        kind = word_map[word]
+        t = Token(kind, word)
         return t
 
     def symbol_word(self):
         c = self.cur_char()
         word = c
         if c == '%' or c == '<' or c == '>' or c == '!':
-            next_c = self.next_char()
-            if next_c == '=':
-                word += next_c
+            next = self.next_char()
+            if next == '=':
+                word += next
                 self.next_char()
         elif c == '&' or c == '|' or c == '=':
-            next_c = self.next_char()
-            if c == next_c:
-                word += next_c
+            next = self.next_char()
+            if c == next:
+                word += next
                 self.next_char()
         # elif c == '\\':
-        #     next_c = self.next_char()
-        #     if next_c == 'n':
+        #     next = self.next_char()
+        #     if next == 'n':
         #         word = '\\n'
         #         self.next_char()
-        #     elif next_c == '\\':
+        #     elif next == '\\':
         #         word = '\\\\'
         #         self.next_char()
         else:
@@ -205,23 +149,34 @@ class Lexer:
     def scan_identifier(self):
         word = ''
         c = self.cur_char()
-
-
         while c.isalnum() or c == '_':
             word += c
-            self.next_char()
-            c = self.cur_char()
-        kind = reserved_word_map.get(word)
+            c = self.next_char()
+        kind = word_map.get(word)
         if kind is None:
             kind = TokenKind.ID
-        if word in reserved_word:
-            type_ = 'reserved'
-        else:
-            type_ = 'identifier'
-        t = Token(word, type_)
-        t.kind = kind
+        t = Token(kind, word)
         return t
 
+    def scan_number(self):
+        kind = TokenKind.INTCONST
+        digits = self.scan_digits()
+        c = self.cur_char()
+        if c == '.':
+            kind = TokenKind.FLOATCONST
+            digits += c
+            self.next_char()
+            digits += self.scan_digits()
+        t = Token(kind, digits)
+        return t
+
+    def scan_digits(self):
+        digits = ''
+        c = self.cur_char()
+        while c.isdigit():
+            digits += c
+            c = self.next_char()
+        return digits
 
     # def is_array(self):
     #     c = self.cur_char()
@@ -237,26 +192,38 @@ class Lexer:
     #     self.expect(']')
     #     return index
 
+    def skip_space(self):
+        while not self.is_eof():
+            c = self.cur_char()
+            if c.isspace():
+                self.next_char()
+            else:
+                return
 
-    def scan_number(self):
-        kind = TokenKind.INTCONST
-        digits = self.scan_digits()
+    def is_eof(self):
+        return self.index >= self.length
+
+    def cur_char(self):
+        return self.code[self.index]
+
+    def next_char(self):
+        self.index += 1
         c = self.cur_char()
-        if c == '.':
-            kind = TokenKind.FLOATCONST
-            digits += c
+        return c
+
+    def expect(self, char):
+        if self.index < len(self.code):
+            c = self.cur_char()
+            if c != char:
+                log('not match!')
+                log('last:  ', self.code[self.index-2], self.code[self.index-1])
+                log('index: ', self.index, 'len:  ', len(self.code))
+                log('match:  ', c)
+                log('expect: ', char)
+                raise Exception
             self.next_char()
-            digits += self.scan_digits()
-
-        type_ = 'number'
-        t = Token(digits, type_)
-        t.kind = kind
-        return t
-
-    def scan_digits(self):
-        digits = ''
-        c = self.cur_char()
-        while c.isdigit():
-            digits += c
-            c = self.next_char()
-        return digits
+        else:
+            log('index out of range!')
+            log('last:  ', self.code[self.index-1])
+            log('expect: ', char)
+            raise Exception
