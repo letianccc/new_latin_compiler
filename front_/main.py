@@ -28,6 +28,9 @@ def _main_():
 
     '''
 
+    path = r'C:\code\new_latin_compiler\test.c'
+    f = open(path, 'r')
+    code = f.read()
     TypeSystem.init()
 
     lexer = Lexer(code)

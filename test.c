@@ -1,15 +1,11 @@
-#include<stdio.h>
-int func(int a, int b) {
-    int c = 1;
+
+
+void func(int a) {
+
 }
 
-int main(int arg) {
-    int a;
-    a = 1;
-    if (a >= 1) {
-        a = 3;
-    }
-    func(3, 4);
-    printf("%d\n", a);
-    // getchar();
+void main() {
+    func(1);
+    printf("hello\n");
+    getchar();
 }

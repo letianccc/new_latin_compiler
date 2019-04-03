@@ -108,6 +108,7 @@ class NodeKind(Enum):
     SEQ = auto()
     STMT = auto()
     PRINTF = auto()
+    PARAMETER = auto()
 
 class BlockKind(Enum):
     FUNCTION = auto()

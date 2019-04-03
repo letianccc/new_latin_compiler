@@ -1,18 +1,7 @@
-	.text
-	.globl	_func
-_func:
-	pushl	%ebp
-	pushl	%ebx
-	pushl	%esi
-	pushl	%edi
-	movl	%esp, %ebp
-	andl	$-16, %esp
-	movl	%ebp, %esp
-	popl	%edi
-	popl	%esi
-	popl	%ebx
-	popl	%ebp
-	ret
+	//by latin
+
+LC0:
+	.string	"hello\n"
 	.text
 	.globl	_main
 _main:
@@ -22,7 +11,8 @@ _main:
 	pushl	%edi
 	movl	%esp, %ebp
 	andl	$-16, %esp
-	call	_func
+	movl	$LC0, (%esp)
+	call	_printf
 	call	_getchar
 	movl	%ebp, %esp
 	popl	%edi

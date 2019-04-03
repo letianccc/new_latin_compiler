@@ -15,6 +15,7 @@ reserved_word = ['int', 'float', 'if', 'else', 'break', 'return',
 reserved_word_map = {
     'int': TokenKind.INT,
     'float': TokenKind.FLOAT,
+    'void': TokenKind.VOID,
     'if': TokenKind.IF,
     'else': TokenKind.ELSE,
     'break': TokenKind.BREAK,

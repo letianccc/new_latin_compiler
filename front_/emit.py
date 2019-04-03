@@ -12,10 +12,16 @@ class Emit(object):
         self.code = ''
 
     def execute(self):
+        self.start()
         for f in self.symbols:
             fe = FunctionEmit(f)
             fe.execute()
             self.code += fe.code
+
+    def start(self):
+        code = '\t//by latin\n\n'
+        self.code += code
+
 
 class FunctionEmit(object):
     """docstring for FunctionEmit."""
@@ -27,22 +33,56 @@ class FunctionEmit(object):
         self.code = ''
 
     def execute(self):
+        self.emit_string()
+        self.emit_function_header()
+        self.push_stack()
+
+
+        for b in self.function.blocks:
+            for ir in b.irs:
+                self.emit(ir)
+        self.pop_stack()
+
+    def reserve_space(self):
+        # TODO: 局部变量的空间
+        count = self.function.max_actual_param
+        size = 4
+        space = size * count
+        code = f'\tsubl\t${space}, %esp\n'
+        self.emit_code(code)
+
+
+    def emit_string(self):
+        strings = []
+        for s in self.function.strings:
+            if s.allocate is False:
+                strings.append(s)
+        code = ''
+        for s in strings:
+            s.allocate = True
+            code += f'{s.access_name()[1:]}:\n'\
+                    f'\t.string\t{s.value}\n'
+        self.emit_code(code)
+
+    def emit_function_header(self):
         code = '\t.text\n'\
         	   f'\t.globl\t{self.func_tag}\n'\
                f'{self.func_tag}:\n'
-        code +=   '\tpushl\t%ebp\n'\
+        self.emit_code(code)
+
+    def push_stack(self):
+        code =   '\tpushl\t%ebp\n'\
                 '\tpushl\t%ebx\n'\
                 '\tpushl\t%esi\n'\
                 '\tpushl\t%edi\n'\
                 '\tmovl\t%esp, %ebp\n'\
                 '\tandl\t$-16, %esp\n'
         self.emit_code(code)
-        for b in self.function.blocks:
-            for ir in b.irs:
-                self.emit(ir)
+
+    def pop_stack(self):
         code = ''
-        if self.func_tag == '_main':
-            code += '\tcall\t_getchar\n'
+        # if self.func_tag == '_main':
+        #     code += '\tcall\t_getchar\n'
         code +=  '\tmovl\t%ebp, %esp\n'\
                 '\tpopl\t%edi\n'\
                 '\tpopl\t%esi\n'\
@@ -51,12 +91,22 @@ class FunctionEmit(object):
                 '\tret\n'
         self.emit_code(code)
 
+
     def emit(self, ir):
         if self.match(ir, IRKind.CALL):
-            # TODO: 处理参数
-            function_tag = f'_{ir.function.name}'
-            code = f'\tcall\t{function_tag}\n'
+            self.emit_call(ir)
+
+    def emit_call(self, ir):
+        param = ir.param
+        size = 4
+        for decl in param.decls:
+            name = decl.access_name()
+            code = f'\tmovl\t{name}, (%esp)\n'
             self.emit_code(code)
+
+        function_tag = f'_{ir.function.name}'
+        code = f'\tcall\t{function_tag}\n'
+        self.emit_code(code)
 
     def emit_code(self, code):
         self.code += code

@@ -14,7 +14,9 @@ class Parser:
         self.symbol_count = 0
         self.ident_count = 0
         self.has_array = False
+        self.function = None
         self.AST = self.parse_functions()
+
 
 
     def parse_functions(self):
@@ -34,20 +36,71 @@ class Parser:
         self.match(TokenKind.ID)
         name = self.next_token()
         param = self.parse_parameter()
-        stmts = self.block_()
         s = FunctionSymbol()
         s.param = param
         s.type = type
         s.name = name.name
         SymbolSystem.add(s)
+        self.function = s
+        stmts = self.block_()
+
         return FunctionNode(s, stmts)
 
     def parse_parameter(self):
         self.expect(TokenKind.LPAREN)
+        param = self.parse_decl_parameter()
         self.expect(TokenKind.RPAREN)
-        return None
+        return param
 
+    def parse_decl_parameter(self):
 
+        n = ParameterNode()
+        if self.match(TokenKind.RPAREN):
+            return n
+        if not self.match(TokenKind.INT):
+            raise Exception
+
+        t = self.next_token()
+        type = TypeSystem.type(t.kind)
+        var = self.next_token()
+        d = Decl(type, var)
+        index = 0
+        d.index = index
+        index += 1
+        n.add(d)
+        while self.match(TokenKind.COMMA):
+            self.next_token()
+            if not self.match(TokenKind.INT):
+                raise Exception
+            t = self.next_token()
+            type = TypeSystem.type(t.kind)
+            var = self.next_token()
+            d = Decl(type, var)
+            d.index = index
+            index += 1
+            n.add(d)
+        return n
+
+    def parse_call_parameter(self):
+
+        n = ParameterNode()
+        if self.match(TokenKind.RPAREN):
+            return n
+        index = 0
+        param = self.factor()
+        d = Decl(None, param)
+        d.index = index
+        index += 1
+        n.add(d)
+
+        while self.match(TokenKind.COMMA):
+            self.next_token()
+            param = self.factor()
+            d = Decl(None, param)
+            d.index = index
+            index += 1
+            n.add(d)
+        return n
 
 
     def block_(self):
@@ -84,8 +137,8 @@ class Parser:
             return self.decl()
         elif self.match(TokenKind.WHILE):
             return self.while_stmt()
-        elif self.is_word('printf'):
-            return self.printf_stmt()
+        # elif self.is_word('printf'):
+        #     return self.printf_stmt()
         elif self.match(TokenKind.LBRACE):
             return self.block_()
         else:
@@ -153,13 +206,15 @@ class Parser:
         return If(cond, then_stmts, else_stmts)
 
     def decl(self):
-        type_ = self.next_token().name
+        t = self.next_token()
+
+        type = TypeSystem.type(t.kind)
         if self.is_array():
             self.has_array = True
-            decl_ = self.decl_array(type_)
+            decl_ = self.decl_array(type)
             self.expect(';')
         else:
-            decl_ = self.decl_single_variable(type_)
+            decl_ = self.decl_single_variable(type)
 
         return decl_
 
@@ -192,15 +247,15 @@ class Parser:
                 return True
         return False
 
-    def decl_single_variable(self, type_):
+    def decl_single_variable(self, type):
         var = self.next_token()
         if self.match(TokenKind.LPAREN):
-            return self.parse_function(type_, var)
+            raise Exception
 
         amount = 1
         self.add_symbol(var, amount)
         self.expect(';')
-        return Decl(type_, var)
+        return Decl(type, var)
 
 
     def add_symbol(self, symbol, amount):
@@ -211,18 +266,29 @@ class Parser:
     def assign(self):
         variable = self.factor()
         if self.match(TokenKind.LPAREN):
-            self.expect(TokenKind.LPAREN)
-            # TODO: 需要解析参数
-            self.expect(TokenKind.RPAREN)
-            self.expect(TokenKind.SEMICOLON)
-            n = CallNode()
-            n.name = variable
-            return n
+            return self.parse_call(variable)
         self.expect('=')
         value = self.bool_()
 
         self.expect(';')
         return Assign(variable, value)
+
+    def parse_call(self, variable):
+        self.expect(TokenKind.LPAREN)
+        param = self.parse_call_parameter()
+        self.expect(TokenKind.RPAREN)
+        self.expect(TokenKind.SEMICOLON)
+        n = CallNode()
+        s = SymbolSystem.find_symbol(variable)
+        if s is None:
+            s = FunctionSymbol()
+            s.name = variable.name
+            SymbolSystem.add(s)
+        n.function = s
+        n.param = param
+        if param.count > self.function.max_actual_param:
+            self.function.max_actual_param = param.count
+        return n
 
     def bool_(self):
         expr = self.join()
@@ -287,6 +353,7 @@ class Parser:
         return expr
 
     def factor(self):
+        t = self.cur_token()
         if self.match(TokenKind.LPAREN):
             self.expect('(')
             expr = self.bool_()
@@ -298,9 +365,19 @@ class Parser:
             name = self.next_token()
             index = self.parse_array_element()
             return Array(name, index)
-        else:
+        elif self.match(TokenKind.STRING):
+            t = self.next_token()
+            s = StringSymbol(t.name)
+            SymbolSystem.add(s)
+            self.function.strings.append(s)
+            return s
+        elif self.match(TokenKind.INTCONST):
+            return t
+        elif self.match(TokenKind.ID):
             # 标识符
             return self.next_token()
+        else:
+            raise Exception
 
     def parse_array_element(self):
         array_index = self.parse_array_postfix()

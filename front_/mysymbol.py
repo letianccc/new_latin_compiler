@@ -11,7 +11,10 @@ class SymbolSystem(object):
     @classmethod
     def find_symbol(cls, token):
         for s in cls.symbols:
-            if s.name == token.name:
+            if s.kind is SymbolKind.STRING:
+                if s.value == token.name:
+                    return s
+            elif s.name == token.name:
                 return s
         return None
 
@@ -34,3 +37,22 @@ class FunctionSymbol(Symbol):
         self.type = None
         self.name = None
         self.blocks = None
+        self.max_actual_param = 0
+        self.strings = []
+        self.locals = []
+
+class StringSymbol(object):
+    index = 0
+    """docstring for StringSymbol."""
+
+    def __init__(self, string):
+        super(StringSymbol, self).__init__()
+        self.kind = SymbolKind.STRING
+        self.value = f'\"{string}\"'
+        self.tag = None
+        self.index = StringSymbol.index
+        StringSymbol.index += 1
+        self.allocate = False
+
+    def access_name(self):
+        return f'$LC{self.index}'

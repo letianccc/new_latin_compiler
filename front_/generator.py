@@ -697,14 +697,16 @@ class FucntionGentor(object):
 
 
     def gen(self, node):
+        if node is None:
+            return
         if self.match(node, NodeKind.SEQ):
-            return self.gen(node.stmt)
+            self.gen(node.stmt)
+            self.gen(node.next_stmt)
         elif self.match(node, NodeKind.CALL):
             return self.gen_call(node)
 
     def gen_call(self, node):
         ir = CallIR()
-
         ir.function = node.function
         ir.param = node.param
         self.gen_ir(ir)

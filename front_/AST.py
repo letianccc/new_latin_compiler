@@ -35,6 +35,15 @@ class FunctionNode:
         self.symbol = symbol
         self.stmts = stmts
 
+class ParameterNode:
+    def __init__(self):
+        self.decls = []
+        self.kind = NodeKind.PARAMETER
+        self.count = 0
+
+    def add(self, parameter):
+        self.decls.append(parameter)
+        self.count += 1
 
 class Seq:
     def __init__(self, stmt, next_stmt):
@@ -106,10 +115,18 @@ class Unary:
         self.operand = operand
 
 class Decl:
-    def __init__(self, type_, variable, extra_data=None):
-        self.type_ = type_
+    def __init__(self, type, variable, extra_data=None):
+        self.type = type
         self.variable = variable
         self.extra_data = extra_data
+        self.index = None
+
+    def access_name(self):
+        if self.variable.kind is SymbolKind.STRING:
+            return self.variable.access_name()
+        size = 4
+        offset = decl.index * size
+
 
 class Assign:
     def __init__(self, variable, value):
