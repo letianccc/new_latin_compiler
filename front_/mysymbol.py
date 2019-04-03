@@ -56,3 +56,16 @@ class StringSymbol(object):
 
     def access_name(self):
         return f'$LC{self.index}'
+
+class ConstantSymbol(object):
+    """docstring for ConstantSymbol."""
+
+    def __init__(self, type, value):
+        super(ConstantSymbol, self).__init__()
+        self.kind = SymbolKind.CONST
+        self.value = value
+        self.type = type
+
+
+    def access_name(self):
+        return f'${self.value}'

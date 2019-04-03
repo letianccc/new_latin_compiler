@@ -122,10 +122,12 @@ class Decl:
         self.index = None
 
     def access_name(self):
-        if self.variable.kind is SymbolKind.STRING:
-            return self.variable.access_name()
-        size = 4
-        offset = decl.index * size
+        return self.variable.access_name()
+        # if self.variable.kind is SymbolKind.STRING:
+        #     return self.variable.access_name()
+        # raise Exception
+        # size = 4
+        # offset = decl.index * size
 
 
 class Assign:

@@ -119,6 +119,7 @@ class SymbolKind(Enum):
     FUNCTION = auto()
     STRING = auto()
     ID = auto()
+    CONST = auto()
 
 class IRKind(Enum):
     CALL = auto()

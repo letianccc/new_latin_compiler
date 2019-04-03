@@ -372,7 +372,10 @@ class Parser:
             self.function.strings.append(s)
             return s
         elif self.match(TokenKind.INTCONST):
-            return t
+            t = self.next_token()
+            type = TypeSystem.type(TokenKind.INT)
+            s = ConstantSymbol(type, t.name)
+            return s
         elif self.match(TokenKind.ID):
             # 标识符
             return self.next_token()
