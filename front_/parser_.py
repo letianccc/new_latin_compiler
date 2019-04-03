@@ -2,18 +2,18 @@ from lexer_ import Lexer
 from AST import *
 from myenum import *
 from type_system import TypeSystem
-from mysymbol import *
+# from mysymbol import *
 
 class Parser:
 
     def __init__(self, tokens):
         self.tokens = tokens
         self.index = 0
-        self.symbols = list()
-        self.printf_formats = list()
-        self.symbol_count = 0
-        self.ident_count = 0
-        self.has_array = False
+        # self.symbols = list()
+        # self.printf_formats = list()
+        # self.symbol_count = 0
+        # self.ident_count = 0
+        # self.has_array = False
         self.function = None
         self.AST = self.parse_functions()
 
@@ -30,18 +30,20 @@ class Parser:
 
 
     def parse_function(self, type=None, name=None):
+        s = FunctionSymbol()
+        self.function = s
         self.match(TokenKind.INT)
         t = self.next_token()
         type = TypeSystem.type(t.kind)
         self.match(TokenKind.ID)
         name = self.next_token()
         param = self.parse_parameter()
-        s = FunctionSymbol()
+
         s.param = param
         s.type = type
         s.name = name.value
         SymbolSystem.add(s)
-        self.function = s
+
         stmts = self.block_()
 
         return FunctionNode(s, stmts)
@@ -53,8 +55,7 @@ class Parser:
         return param
 
     def parse_decl_parameter(self):
-
-        n = ParameterNode()
+        n = ParameterNode(self.function)
         if self.match(TokenKind.RPAREN):
             return n
         if not self.match(TokenKind.INT):
@@ -63,7 +64,7 @@ class Parser:
         t = self.next_token()
         type = TypeSystem.type(t.kind)
         var = self.next_token()
-        d = Decl(type, var)
+        d = Decl(self.function, type, var)
         index = 0
         d.index = index
         index += 1
@@ -75,7 +76,7 @@ class Parser:
             t = self.next_token()
             type = TypeSystem.type(t.kind)
             var = self.next_token()
-            d = Decl(type, var)
+            d = Decl(self.function, type, var)
             d.index = index
             index += 1
             n.add(d)
@@ -83,12 +84,12 @@ class Parser:
 
     def parse_call_parameter(self):
 
-        n = ParameterNode()
+        n = ParameterNode(self.function)
         if self.match(TokenKind.RPAREN):
             return n
         index = 0
         param = self.factor()
-        d = Decl(None, param)
+        d = Decl(self.function, None, param)
         d.index = index
         index += 1
         n.add(d)
@@ -96,7 +97,7 @@ class Parser:
         while self.match(TokenKind.COMMA):
             self.next_token()
             param = self.factor()
-            d = Decl(None, param)
+            d = Decl(self.function, None, param)
             d.index = index
             index += 1
             n.add(d)
@@ -123,7 +124,7 @@ class Parser:
         stmt = self.stmt_()
         if not self.match(TokenKind.RBRACE):
             next_stmt = self.stmts_()
-            stmt = Seq(stmt, next_stmt)
+            stmt = Seq(self.function, stmt, next_stmt)
         return stmt
 
     def single_stmt(self):
@@ -231,7 +232,7 @@ class Parser:
         array = Array(var, expr)
         array_size = int(expr.name)
         self.add_symbol(array, array_size)
-        return Decl(type_, array)
+        return Decl(self.function, type_, array)
 
     def parse_array_postfix(self):
         self.expect('[')
@@ -255,7 +256,7 @@ class Parser:
         amount = 1
         self.add_symbol(var, amount)
         self.expect(';')
-        return Decl(type, var)
+        return Decl(self.function, type, var)
 
 
     def add_symbol(self, symbol, amount):
@@ -278,13 +279,13 @@ class Parser:
         param = self.parse_call_parameter()
         self.expect(TokenKind.RPAREN)
         self.expect(TokenKind.SEMICOLON)
-        n = CallNode()
-        s = SymbolSystem.find_symbol(variable)
-        if s is None:
-            s = FunctionSymbol()
-            s.name = variable.value
-            SymbolSystem.add(s)
-        n.function = s
+        n = CallNode(self.function)
+        # s = SymbolSystem.find_symbol(variable)
+        # if s is None:
+        #     s = FunctionSymbol()
+        #     s.name = variable.value
+        #     SymbolSystem.add(s)
+        n.call_function = variable
         n.param = param
         if param.count > self.function.max_actual_param:
             self.function.max_actual_param = param.count
@@ -367,15 +368,10 @@ class Parser:
             return Array(name, index)
         elif self.match(TokenKind.STRING):
             t = self.next_token()
-            s = StringSymbol(t.value)
-            SymbolSystem.add(s)
-            self.function.strings.append(s)
-            return s
+            return t
         elif self.match(TokenKind.INTCONST):
             t = self.next_token()
-            type = TypeSystem.type(TokenKind.INT)
-            s = ConstantSymbol(type, t.value)
-            return s
+            return t
         elif self.match(TokenKind.ID):
             # 标识符
             return self.next_token()

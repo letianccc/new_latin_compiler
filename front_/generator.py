@@ -707,7 +707,7 @@ class FucntionGentor(object):
 
     def gen_call(self, node):
         ir = CallIR()
-        ir.function = node.function
+        ir.function = node.call_function
         ir.param = node.param
         self.gen_ir(ir)
 

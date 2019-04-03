@@ -108,6 +108,8 @@ class NodeKind(IntEnum):
     SEQ = auto()
     STMT = auto()
     PRINTF = auto()
+    ACTUAL_PARAMETER = auto()
+    FORMAL_PARAMETER = auto()
     PARAMETER = auto()
 
 class BlockKind(IntEnum):

@@ -40,8 +40,12 @@ def _main_():
 
     # gen = Generator_as1(parser)
     # gen.gen_executable_ir()
-    cs = CheckSystem(parser.AST)
-    cs.execute()
+    # cs = CheckSystem(parser.AST)
+    # cs.execute()
+
+    function_nodes = parser.AST
+    for f in function_nodes:
+        f.check()
 
     gentor = Gentor(parser.AST)
     gentor.execute()

@@ -1,15 +1,26 @@
 
 from util import *
 from myenum import *
+from type_system import TypeSystem
+from mysymbol import *
 
 
 class CallNode:
-    def __init__(self):
+    def __init__(self, function):
+        self.function = function
         self.name = None
-        self.function = None
+        self.call_function = None
         self.param = None
         self.kind = NodeKind.CALL
 
+    def check(self):
+        self.param.check()
+        s = SymbolSystem.find_symbol(self.call_function)
+        if s is None:
+            s = FunctionSymbol()
+            s.name = self.call_function.value
+            SymbolSystem.add(s)
+        self.call_function = s
 
 
 
@@ -35,8 +46,13 @@ class FunctionNode:
         self.symbol = symbol
         self.stmts = stmts
 
+    def check(self):
+        if self.stmts is not None:
+            self.stmts.check()
+
 class ParameterNode:
-    def __init__(self):
+    def __init__(self, function):
+        self.function = function
         self.decls = []
         self.kind = NodeKind.PARAMETER
         self.count = 0
@@ -45,11 +61,31 @@ class ParameterNode:
         self.decls.append(parameter)
         self.count += 1
 
+    def check(self):
+        for decl in self.decls:
+            decl.check()
+
+# class ParameterNode:
+#     def __init__(self, type, parameter):
+#         self.type = type
+#         self.parameter = parameter
+#         self.index = None
+#
+#     def access_name(self):
+#         return self.parameter.access_name()
+#
+
 class Seq:
-    def __init__(self, stmt, next_stmt):
+    def __init__(self, function, stmt, next_stmt):
+        self.function = function
         self.stmt = stmt
         self.next_stmt = next_stmt
         self.kind = NodeKind.SEQ
+
+    def check(self):
+        self.stmt.check()
+        if self.next_stmt is not None:
+            self.next_stmt.check()
 
 class Stmt:
     def __init__(self, stmt):
@@ -115,11 +151,23 @@ class Unary:
         self.operand = operand
 
 class Decl:
-    def __init__(self, type, variable, extra_data=None):
+    def __init__(self, function, type, variable, extra_data=None):
+        self.function = function
         self.type = type
         self.variable = variable
         self.extra_data = extra_data
         self.index = None
+
+    def check(self):
+        k = self.variable.kind
+        if k is TokenKind.INTCONST:
+            type = TypeSystem.type(TokenKind.INT)
+            s = ConstantSymbol(type, self.variable.value)
+        elif k is TokenKind.STRING:
+            s = StringSymbol(self.variable.value)
+            SymbolSystem.add(s)
+            self.function.strings.append(s)
+        self.variable = s
 
     def access_name(self):
         return self.variable.access_name()
