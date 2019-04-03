@@ -47,9 +47,15 @@ def _main_():
     for f in function_nodes:
         f.check()
 
-    gentor = Gentor(parser.AST)
-    gentor.execute()
-    symbols = gentor.symbols
+    # gentor = Gentor(parser.AST)
+    # gentor.execute()
+
+    for f in function_nodes:
+        f.gen()
+
+    symbols = [f.symbol for f in function_nodes]
+
+    # symbols = gentor.symbols
     e = Emit(symbols)
     e.execute()
     code = e.code

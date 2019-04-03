@@ -3,6 +3,7 @@ from util import *
 from myenum import *
 from type_system import TypeSystem
 from mysymbol import *
+from ir import *
 
 
 class CallNode:
@@ -22,6 +23,12 @@ class CallNode:
             SymbolSystem.add(s)
         self.call_function = s
 
+    def gen(self):
+        ir = CallIR()
+        ir.function = self.call_function
+        ir.param = self.param
+        self.function.gen_ir(ir)
+
 
 
 # kind: number
@@ -40,15 +47,40 @@ class CallNode:
 
 
 class FunctionNode:
-    def __init__(self, symbol, stmts):
+    def __init__(self):
         self.kind = NodeKind.FUNCTION
-        self.type = type
-        self.symbol = symbol
-        self.stmts = stmts
+        self.type = None
+        self.symbol = None
+        self.stmts = None
+        self.cur_block = None
+        self.blocks = []
+        self.code = ''
 
     def check(self):
         if self.stmts is not None:
             self.stmts.check()
+
+    def gen(self):
+        self.symbol.blocks = self.blocks
+        if self.stmts is None:
+            return
+        b = Block()
+        b.kind = BlockKind.FUNCTION
+        self.cur_block = b
+        self.blocks.append(b)
+        self.stmts.gen()
+        index = 0
+        for b in self.blocks:
+            if b.kind is BlockKind.GENERAL:
+                b.index = index
+                index += 1
+
+    def gen_ir(self, ir):
+        self.cur_block.add_ir(ir)
+
+    def emit(self):
+        self.func_tag = f'_{function.name}'
+
 
 class ParameterNode:
     def __init__(self, function):
@@ -64,6 +96,8 @@ class ParameterNode:
     def check(self):
         for decl in self.decls:
             decl.check()
+
+
 
 # class ParameterNode:
 #     def __init__(self, type, parameter):
@@ -86,6 +120,11 @@ class Seq:
         self.stmt.check()
         if self.next_stmt is not None:
             self.next_stmt.check()
+
+    def gen(self):
+        self.stmt.gen()
+        if self.next_stmt is not None:
+            self.next_stmt.gen()
 
 class Stmt:
     def __init__(self, stmt):
@@ -150,7 +189,7 @@ class Unary:
         self.operator = operator
         self.operand = operand
 
-class Decl:
+class DeclNode:
     def __init__(self, function, type, variable, extra_data=None):
         self.function = function
         self.type = type
@@ -160,13 +199,15 @@ class Decl:
 
     def check(self):
         k = self.variable.kind
+        v = self.variable.value
         if k is TokenKind.INTCONST:
             type = TypeSystem.type(TokenKind.INT)
-            s = ConstantSymbol(type, self.variable.value)
+            s = ConstantSymbol(type, v)
         elif k is TokenKind.STRING:
-            s = StringSymbol(self.variable.value)
+            s = StringSymbol(v)
             SymbolSystem.add(s)
-            self.function.strings.append(s)
+            strings = self.function.symbol.strings
+            strings.append(s)
         self.variable = s
 
     def access_name(self):

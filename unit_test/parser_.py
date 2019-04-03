@@ -49,7 +49,7 @@ def case10(code):
 
     stmt = node.stmt
     assert(node.__class__.__name__ == 'Seq')
-    assert(stmt.__class__.__name__ == 'Decl')
+    assert(stmt.__class__.__name__ == 'DeclNode')
     assert(stmt.type_ == 'int')
     assert(stmt.variable.variable.name == 'a')
     assert(stmt.variable.index.name == '5')
@@ -88,7 +88,7 @@ def parser_case1(code):
 
     stmt = node.stmt
     assert(node.__class__.__name__ == 'Seq')
-    assert(stmt.__class__.__name__ == 'Decl')
+    assert(stmt.__class__.__name__ == 'DeclNode')
     assert(stmt.type_ == 'int')
     assert(stmt.variable.name == 'a')
     node = node.next_stmt
@@ -105,7 +105,7 @@ def parser_case2(code):
 
     stmt = node.stmt
     assert(node.__class__.__name__ == 'Seq')
-    assert(stmt.__class__.__name__ == 'Decl')
+    assert(stmt.__class__.__name__ == 'DeclNode')
     assert(stmt.type_ == 'int')
     assert(stmt.variable.name == 'a')
     node = node.next_stmt
@@ -119,7 +119,7 @@ def parser_case2(code):
 
     stmt = node.stmt
     assert(node.__class__.__name__ == 'Seq')
-    assert(stmt.__class__.__name__ == 'Decl')
+    assert(stmt.__class__.__name__ == 'DeclNode')
     assert(stmt.type_ == 'int')
     assert(stmt.variable.name == 'b')
     node = node.next_stmt
@@ -189,7 +189,7 @@ def parser_case5(code):
     node = if_.then
     stmt = node.stmt
     assert(node.__class__.__name__ == 'Seq')
-    assert(stmt.__class__.__name__ == 'Decl')
+    assert(stmt.__class__.__name__ == 'DeclNode')
     assert(stmt.type_ == 'int')
     assert(stmt.variable.name == 'd')
     node = node.next_stmt
@@ -225,7 +225,7 @@ def parser_case6(code):
 
     stmt = node.stmt
     assert(node.__class__.__name__ == 'Seq')
-    assert(stmt.__class__.__name__ == 'Decl')
+    assert(stmt.__class__.__name__ == 'DeclNode')
     assert(stmt.type_ == 'int')
     assert(stmt.variable.name == 'a')
     node = node.next_stmt
@@ -239,7 +239,7 @@ def parser_case6(code):
 
     stmt = node.stmt
     assert(node.__class__.__name__ == 'Seq')
-    assert(stmt.__class__.__name__ == 'Decl')
+    assert(stmt.__class__.__name__ == 'DeclNode')
     assert(stmt.type_ == 'int')
     assert(stmt.variable.name == 'b')
     node = node.next_stmt
@@ -280,7 +280,7 @@ def parser_case7(code):
 
     stmt = node.stmt
     assert_type(node, 'Seq')
-    assert_type(stmt, 'Decl')
+    assert_type(stmt, 'DeclNode')
     assert(stmt.type_ == 'int')
     assert(stmt.variable.name == 'a')
     node = node.next_stmt
@@ -316,7 +316,7 @@ def case8(code):
 
     stmt = node.stmt
     assert(node.__class__.__name__ == 'Seq')
-    assert(stmt.__class__.__name__ == 'Decl')
+    assert(stmt.__class__.__name__ == 'DeclNode')
     assert(stmt.type_ == 'int')
     assert(stmt.variable.name == 'a')
     node = node.next_stmt

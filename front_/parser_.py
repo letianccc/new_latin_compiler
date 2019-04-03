@@ -30,8 +30,10 @@ class Parser:
 
 
     def parse_function(self, type=None, name=None):
+        node = FunctionNode()
         s = FunctionSymbol()
-        self.function = s
+        node.symbol = s
+        self.function = node
         self.match(TokenKind.INT)
         t = self.next_token()
         type = TypeSystem.type(t.kind)
@@ -45,8 +47,9 @@ class Parser:
         SymbolSystem.add(s)
 
         stmts = self.block_()
+        node.stmts = stmts
 
-        return FunctionNode(s, stmts)
+        return node
 
     def parse_parameter(self):
         self.expect(TokenKind.LPAREN)
@@ -55,7 +58,7 @@ class Parser:
         return param
 
     def parse_decl_parameter(self):
-        n = ParameterNode(self.function)
+        n = ParameterNode(self)
         if self.match(TokenKind.RPAREN):
             return n
         if not self.match(TokenKind.INT):
@@ -64,7 +67,7 @@ class Parser:
         t = self.next_token()
         type = TypeSystem.type(t.kind)
         var = self.next_token()
-        d = Decl(self.function, type, var)
+        d = DeclNode(self.function, type, var)
         index = 0
         d.index = index
         index += 1
@@ -76,7 +79,7 @@ class Parser:
             t = self.next_token()
             type = TypeSystem.type(t.kind)
             var = self.next_token()
-            d = Decl(self.function, type, var)
+            d = DeclNode(self.function, type, var)
             d.index = index
             index += 1
             n.add(d)
@@ -84,12 +87,12 @@ class Parser:
 
     def parse_call_parameter(self):
 
-        n = ParameterNode(self.function)
+        n = ParameterNode(self)
         if self.match(TokenKind.RPAREN):
             return n
         index = 0
         param = self.factor()
-        d = Decl(self.function, None, param)
+        d = DeclNode(self.function, None, param)
         d.index = index
         index += 1
         n.add(d)
@@ -97,7 +100,7 @@ class Parser:
         while self.match(TokenKind.COMMA):
             self.next_token()
             param = self.factor()
-            d = Decl(self.function, None, param)
+            d = DeclNode(self.function, None, param)
             d.index = index
             index += 1
             n.add(d)
@@ -232,7 +235,7 @@ class Parser:
         array = Array(var, expr)
         array_size = int(expr.name)
         self.add_symbol(array, array_size)
-        return Decl(self.function, type_, array)
+        return DeclNode(self.function, type_, array)
 
     def parse_array_postfix(self):
         self.expect('[')
@@ -256,7 +259,7 @@ class Parser:
         amount = 1
         self.add_symbol(var, amount)
         self.expect(';')
-        return Decl(self.function, type, var)
+        return DeclNode(self.function, type, var)
 
 
     def add_symbol(self, symbol, amount):
@@ -287,8 +290,8 @@ class Parser:
         #     SymbolSystem.add(s)
         n.call_function = variable
         n.param = param
-        if param.count > self.function.max_actual_param:
-            self.function.max_actual_param = param.count
+        if param.count > self.function.symbol.max_actual_param:
+            self.function.symbol.max_actual_param = param.count
         return n
 
     def bool_(self):

@@ -19,7 +19,7 @@ class NewGen:
         if is_node_type(node, 'Seq'):
             self.gen(node.stmt)
             self.gen(node.next_stmt)
-        elif is_node_type(node, 'Decl'):
+        elif is_node_type(node, 'DeclNode'):
             self.gen_decl(node)
         elif is_node_type(node, 'Assign'):
             self.gen_assign(node)
