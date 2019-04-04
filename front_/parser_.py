@@ -55,40 +55,22 @@ class Parser:
         if self.match(TokenKind.RPAREN):
             self.next_token()
             return params
+        self.parse_param(params, parameter_kind)
+        while self.match(TokenKind.COMMA):
+            self.parse_param(params, parameter_kind)
+        self.expect(TokenKind.RPAREN)
+        for index, p in enumerate(params):
+            p.index = index
+        return params
 
+    def parse_param(self, parameters, parameter_kind):
         type = None
         if parameter_kind is NodeKind.FORMAL_PARAMETER:
             t = self.next_token()
             type = TypeSystem.type(t.kind)
         ident = self.next_token()
-        # plist.add(type, var)
         p = ParameterNode(self.function, type, ident)
-
-        index = 0
-        p.index = index
-        index += 1
-        params.append(p)
-        while self.match(TokenKind.COMMA):
-            self.next_token()
-            if not self.match(TokenKind.INT):
-                raise Exception
-            # t = self.next_token()
-            type = None
-            if parameter_kind is NodeKind.FORMAL_PARAMETER:
-                t = self.next_token()
-                type = TypeSystem.type(t.kind)
-            # type = TypeSystem.type(t.kind)
-            ident = self.next_token()
-            # plist.add(type, var)
-            p = ParameterNode(self.function, type, ident)
-            p.index = index
-            index += 1
-            params.add(p)
-        self.expect(TokenKind.RPAREN)
-        return params
-
-    def parse_param(self, parameter_kind):
-        ...
+        parameters.append(p)
 
     def parse_call(self, variable):
         params = self.parse_parameters(NodeKind.ACTUAL_PARAMETER)
