@@ -131,3 +131,8 @@ class IdentifierSymbol(Symbol):
         self.kind = SymbolKind.ID
         self.type = None
         self.value = None
+        self.index = 0
+
+
+    def access_name(self):
+        return f'${self.value}'

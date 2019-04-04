@@ -65,27 +65,10 @@ class FunctionNode:
     def emit(self):
         self.func_tag = f'_{function.value}'
 
-class ParameterListNode:
-    def __init__(self, function):
-        self.function = function
-        self.parameters = []
-        self.kind = NodeKind.PARAMETER
-        self.count = 0
-
-    def add(self, type, parameter):
-        p = ParameterNode(self.function, type, parameter)
-        p.index = self.count
-        self.count += 1
-        self.parameters.append(p)
-
-
-    def check(self):
-        for p in self.parameters:
-            p.check()
-
 class ParameterNode:
-    def __init__(self, function, type, parameter):
+    def __init__(self, function, kind, type, parameter):
         self.function = function
+        self.kind = kind
         self.type = type
         self.parameter = parameter
         self.index = None
@@ -102,6 +85,21 @@ class ParameterNode:
             SymbolSystem.add(s)
             strings = self.function.symbol.strings
             strings.append(s)
+        elif k is TokenKind.ID:
+            p = self.parameter
+            if self.kind is NodeKind.FORMAL_PARAMETER:
+                s = SymbolSystem.find_symbol(p, None, LevelKind.CURRENT)
+                if s is not None:
+                    raise Exception("重复定义")
+                s = IdentifierSymbol()
+                s.value = p.value
+                s.type = type
+                SymbolSystem.add(s)
+                self.function.symbol.locals.append(s)
+            else:
+                s = SymbolSystem.find_symbol(p)
+                if s is None:
+                    raise Exception("缺少声明")
         self.parameter = s
 
     def access_name(self):
@@ -122,6 +120,9 @@ class DeclarationNode:
         for d in self.declarators:
             d.check(type)
 
+    def gen(self):
+        return
+
 class DeclaratorNode:
     def __init__(self, function):
         self.function = function
@@ -136,6 +137,7 @@ class DeclaratorNode:
         s.value = self.identifier.value
         s.type = type
         SymbolSystem.add(s)
+        self.function.symbol.locals.append(s)
 
 
 class If:

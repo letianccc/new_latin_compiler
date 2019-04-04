@@ -11,7 +11,7 @@ _main:
 	pushl	%edi
 	movl	%esp, %ebp
 	andl	$-16, %esp
-	movl	$1, 4(%esp)
+	movl	$a, 4(%esp)
 	movl	$LC0, 0(%esp)
 	call	_printf
 	call	_getchar

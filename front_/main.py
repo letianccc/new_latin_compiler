@@ -17,8 +17,8 @@ def _main_():
     code = compile(path)
     path = r'C:\code\new_latin_compiler\test.s'
 
-    assert_code(path, code)
-    # write_code(path, code)
+    # assert_code(path, code)
+    write_code(path, code)
 
 def compile(input_path):
     f = open(input_path, 'r')
@@ -35,6 +35,15 @@ def compile(input_path):
         f.check()
     for f in functions:
         f.gen()
+
+
+    for f in functions:
+        s = f.symbol
+        size = 4
+        space = len(s.locals) * size
+        for index, local in enumerate(s.locals):
+            local.index = index
+            local.offset = space - index * size
     symbols = [f.symbol for f in functions]
     e = Emit(symbols)
     e.execute()

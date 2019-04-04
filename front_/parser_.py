@@ -62,7 +62,7 @@ class Parser:
             t = self.next_token()
             type = TypeSystem.type(t.kind)
         param = self.next_token()
-        p = ParameterNode(self.function, type, param)
+        p = ParameterNode(self.function, parameter_kind, type, param)
         parameters.insert(0, p)
 
     def parse_call(self, variable):

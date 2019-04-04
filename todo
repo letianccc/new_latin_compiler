@@ -1,6 +1,4 @@
 
 实现变量声明
 
-检测当前作用域是否重复声明 DeclaratorNode.check
-
-将function的name属性改为value属性
+实现使用声明了的变量  ParameterNode.access_name

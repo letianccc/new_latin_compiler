@@ -45,8 +45,10 @@ class FunctionEmit(object):
 
     def reserve_space(self):
         # TODO: 局部变量的空间
+
         count = self.function.max_actual_param
         size = 4
+        count += len(self.function.locals)
         space = size * count
         code = f'\tsubl\t${space}, %esp\n'
         self.emit_code(code)
