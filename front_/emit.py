@@ -99,8 +99,8 @@ class FunctionEmit(object):
     def emit_call(self, ir):
         param = ir.param
         size = 4
-        for decl in param.decls:
-            name = decl.access_name()
+        for p in param:
+            name = p.access_name()
             code = f'\tmovl\t{name}, (%esp)\n'
             self.emit_code(code)
 

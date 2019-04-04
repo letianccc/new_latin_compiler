@@ -15,7 +15,9 @@ class CallNode:
         self.kind = NodeKind.CALL
 
     def check(self):
-        self.param.check()
+        for p in self.param:
+            p.check()
+        # self.param.check()
         s = SymbolSystem.find_symbol(self.call_function)
         if s is None:
             s = FunctionSymbol()
@@ -82,32 +84,47 @@ class FunctionNode:
         self.func_tag = f'_{function.name}'
 
 
-class ParameterNode:
+class ParameterListNode:
     def __init__(self, function):
         self.function = function
-        self.decls = []
+        self.parameters = []
         self.kind = NodeKind.PARAMETER
         self.count = 0
 
-    def add(self, parameter):
-        self.decls.append(parameter)
+    def add(self, type, parameter):
+        p = ParameterNode(self.function, type, parameter)
+        p.index = self.count
         self.count += 1
+        self.parameters.append(p)
+
 
     def check(self):
-        for decl in self.decls:
-            decl.check()
+        for p in self.parameters:
+            p.check()
 
+class ParameterNode:
+    def __init__(self, function, type, parameter):
+        self.function = function
+        self.type = type
+        self.parameter = parameter
+        self.index = None
 
+    def check(self):
+        k = self.parameter.kind
+        v = self.parameter.value
+        if k is TokenKind.INTCONST:
+            type = TypeSystem.type(TokenKind.INT)
+            s = ConstantSymbol(type, v)
+        elif k is TokenKind.STRING:
+            s = StringSymbol(v)
+            SymbolSystem.add(s)
+            strings = self.function.symbol.strings
+            strings.append(s)
+        self.parameter = s
 
-# class ParameterNode:
-#     def __init__(self, type, parameter):
-#         self.type = type
-#         self.parameter = parameter
-#         self.index = None
-#
-#     def access_name(self):
-#         return self.parameter.access_name()
-#
+    def access_name(self):
+        return self.parameter.access_name()
+
 
 class Seq:
     def __init__(self, function, stmt, next_stmt):

@@ -39,7 +39,7 @@ class Parser:
         type = TypeSystem.type(t.kind)
         self.match(TokenKind.ID)
         name = self.next_token()
-        param = self.parse_parameter()
+        param = self.parse_parameter(NodeKind.FORMAL_PARAMETER)
 
         s.param = param
         s.type = type
@@ -51,61 +51,46 @@ class Parser:
 
         return node
 
-    def parse_parameter(self):
+    def parse_parameter(self, parameter_kind):
         self.expect(TokenKind.LPAREN)
-        param = self.parse_decl_parameter()
-        self.expect(TokenKind.RPAREN)
-        return param
-
-    def parse_decl_parameter(self):
-        n = ParameterNode(self)
+        params = []
         if self.match(TokenKind.RPAREN):
-            return n
-        if not self.match(TokenKind.INT):
-            raise Exception
+            self.next_token()
+            return params
 
-        t = self.next_token()
-        type = TypeSystem.type(t.kind)
-        var = self.next_token()
-        d = DeclNode(self.function, type, var)
+        type = None
+        if parameter_kind is NodeKind.FORMAL_PARAMETER:
+            t = self.next_token()
+            type = TypeSystem.type(t.kind)
+        ident = self.next_token()
+        # plist.add(type, var)
+        p = ParameterNode(self.function, type, ident)
+
         index = 0
-        d.index = index
+        p.index = index
         index += 1
-        n.add(d)
+        params.append(p)
         while self.match(TokenKind.COMMA):
             self.next_token()
             if not self.match(TokenKind.INT):
                 raise Exception
-            t = self.next_token()
-            type = TypeSystem.type(t.kind)
-            var = self.next_token()
-            d = DeclNode(self.function, type, var)
-            d.index = index
+            # t = self.next_token()
+            type = None
+            if parameter_kind is NodeKind.FORMAL_PARAMETER:
+                t = self.next_token()
+                type = TypeSystem.type(t.kind)
+            # type = TypeSystem.type(t.kind)
+            ident = self.next_token()
+            # plist.add(type, var)
+            p = ParameterNode(self.function, type, ident)
+            p.index = index
             index += 1
-            n.add(d)
-        return n
+            params.add(p)
+        self.expect(TokenKind.RPAREN)
+        return params
 
-    def parse_call_parameter(self):
-
-        n = ParameterNode(self)
-        if self.match(TokenKind.RPAREN):
-            return n
-        index = 0
-        param = self.factor()
-        d = DeclNode(self.function, None, param)
-        d.index = index
-        index += 1
-        n.add(d)
-
-        while self.match(TokenKind.COMMA):
-            self.next_token()
-            param = self.factor()
-            d = DeclNode(self.function, None, param)
-            d.index = index
-            index += 1
-            n.add(d)
-        return n
-
+    def parse_param(self, parameter_kind):
+        ...
 
     def block_(self):
         if self.match(TokenKind.LBRACE):
@@ -152,7 +137,7 @@ class Parser:
         array = list()
         while True:
             t = self.next_token()
-            num = t.name
+            num = t.value
             array.append(num)
             if self.match(TokenKind.COMMA):
                 self.expect(',')
@@ -176,7 +161,7 @@ class Parser:
     def parse_format(self):
         # format_ = self.format_word()
         t = self.next_token()
-        format_ = t.name
+        format_ = t.value
         if format_ not in self.printf_formats:
             self.printf_formats.append(format_)
         return format_
@@ -184,7 +169,7 @@ class Parser:
     # def format_word(self):
     #     format_ = ''
     #     while not self.match('\"'):
-    #         c = self.next_token().name
+    #         c = self.next_token().value
     #         format_ += c
     #     return format_
 
@@ -233,7 +218,7 @@ class Parser:
         var = self.next_token()
         expr = self.parse_array_postfix() # expr是number类型
         array = Array(var, expr)
-        array_size = int(expr.name)
+        array_size = int(expr.value)
         self.add_symbol(array, array_size)
         return DeclNode(self.function, type_, array)
 
@@ -278,20 +263,20 @@ class Parser:
         return Assign(variable, value)
 
     def parse_call(self, variable):
-        self.expect(TokenKind.LPAREN)
-        param = self.parse_call_parameter()
-        self.expect(TokenKind.RPAREN)
+        params = self.parse_parameter(NodeKind.ACTUAL_PARAMETER)
+        # param = self.parse_call_parameter()
         self.expect(TokenKind.SEMICOLON)
         n = CallNode(self.function)
         # s = SymbolSystem.find_symbol(variable)
         # if s is None:
         #     s = FunctionSymbol()
-        #     s.name = variable.value
+        #     s.value = variable.value
         #     SymbolSystem.add(s)
         n.call_function = variable
-        n.param = param
-        if param.count > self.function.symbol.max_actual_param:
-            self.function.symbol.max_actual_param = param.count
+        n.param = params
+        count = len(params)
+        if count > self.function.symbol.max_actual_param:
+            self.function.symbol.max_actual_param = count
         return n
 
     def bool_(self):
@@ -314,7 +299,7 @@ class Parser:
         expr = self.rel()
 
         while self.match(TokenKind.EQUAL) or self.match(TokenKind.UNEQUAL):
-            operator = self.next_token().name
+            operator = self.next_token().value
             # expr = Equal(expr, self.rel(), operator)
             expr = Expr(expr, self.rel(), operator)
         return expr
@@ -322,7 +307,7 @@ class Parser:
     def rel(self):
         expr = self.expr_()
         while self.match(TokenKind.LESS) or self.match(TokenKind.LESS_EQ) or self.match(TokenKind.GREAT) or self.match(TokenKind.GREAT_EQ):
-            operator = self.next_token().name
+            operator = self.next_token().value
             expr = Expr(expr, self.expr_(), operator)
         return expr
 
@@ -331,7 +316,7 @@ class Parser:
 
         while self.match(TokenKind.ADD) or self.match(TokenKind.subl):
             self.symbol_count += 1
-            operator = self.next_token().name
+            operator = self.next_token().value
             # expr = Arith(expr, self.term(), operator)
             expr = Expr(expr, self.term(), operator)
 
@@ -342,7 +327,7 @@ class Parser:
 
         while self.match(TokenKind.MUL) or self.match(TokenKind.DIV):
             self.symbol_count += 1
-            operator = self.next_token().name
+            operator = self.next_token().value
             # expr = Arith(expr, self.unary(), operator)
             expr = Expr(expr, self.unary(), operator)
 
@@ -350,7 +335,7 @@ class Parser:
 
     def unary(self):
         if self.match(TokenKind.NOT) or self.match(TokenKind.subl):
-            operator = self.next_token().name
+            operator = self.next_token().value
             expr = Unary(operator, self.factor())
         else:
             expr = self.factor()
@@ -394,7 +379,7 @@ class Parser:
 
     def is_word(self, word):
         t = self.cur_token()
-        if t.name == word:
+        if t.value == word:
             return True
         else:
             return False
@@ -435,16 +420,16 @@ class Parser:
                 self.increase_index()
             else:
                 log('not match!')
-                log('last:  ', self.tokens[self.index-4].name, self.tokens[self.index-3   ].name,
-                      self.tokens[self.index-2].name, self.tokens[self.index-1].name)
+                log('last:  ', self.tokens[self.index-4].value, self.tokens[self.index-3   ].value,
+                      self.tokens[self.index-2].value, self.tokens[self.index-1].value)
                 log('index: ', self.index, 'len:  ', len(self.tokens))
-                log('match:  ', t.name)
+                log('match:  ', t.value)
                 log('expect: ', word)
                 raise Exception
 
         else:
             log('index out of range!')
-            log('last:  ', self.tokens[self.index-1].name)
+            log('last:  ', self.tokens[self.index-1].value)
             log('expect: ', word)
             raise Exception
 
