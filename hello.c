@@ -3,6 +3,6 @@
 
 
 void main() {
-    printf("a");
+    printf("%d", 1);
     getchar();
 }

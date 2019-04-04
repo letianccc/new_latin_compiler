@@ -38,12 +38,10 @@ class Parser:
         t = self.next_token()
         type = TypeSystem.type(t.kind)
         self.match(TokenKind.ID)
-        name = self.next_token()
-        param = self.parse_parameter(NodeKind.FORMAL_PARAMETER)
+        func_ident = self.next_token()
+        params = self.parse_parameters(NodeKind.FORMAL_PARAMETER)
 
-        s.param = param
-        s.type = type
-        s.name = name.value
+        s.init(type, func_ident.value, params)
         SymbolSystem.add(s)
 
         stmts = self.block_()
@@ -51,7 +49,7 @@ class Parser:
 
         return node
 
-    def parse_parameter(self, parameter_kind):
+    def parse_parameters(self, parameter_kind):
         self.expect(TokenKind.LPAREN)
         params = []
         if self.match(TokenKind.RPAREN):
@@ -91,6 +89,16 @@ class Parser:
 
     def parse_param(self, parameter_kind):
         ...
+
+    def parse_call(self, variable):
+        params = self.parse_parameters(NodeKind.ACTUAL_PARAMETER)
+        self.expect(TokenKind.SEMICOLON)
+        n = CallNode(self.function, variable, params)
+        count = len(params)
+        if count > self.function.symbol.max_actual_param:
+            self.function.symbol.max_actual_param = count
+        return n
+
 
     def block_(self):
         if self.match(TokenKind.LBRACE):
@@ -261,23 +269,6 @@ class Parser:
 
         self.expect(';')
         return Assign(variable, value)
-
-    def parse_call(self, variable):
-        params = self.parse_parameter(NodeKind.ACTUAL_PARAMETER)
-        # param = self.parse_call_parameter()
-        self.expect(TokenKind.SEMICOLON)
-        n = CallNode(self.function)
-        # s = SymbolSystem.find_symbol(variable)
-        # if s is None:
-        #     s = FunctionSymbol()
-        #     s.value = variable.value
-        #     SymbolSystem.add(s)
-        n.call_function = variable
-        n.param = params
-        count = len(params)
-        if count > self.function.symbol.max_actual_param:
-            self.function.symbol.max_actual_param = count
-        return n
 
     def bool_(self):
         expr = self.join()

@@ -1,11 +1,9 @@
 from lexer_ import Lexer
 from parser_ import Parser
-from generator import *
 # import type_system
 from type_system import TypeSystem
 from util import *
 import os
-from check import CheckSystem
 from emit import Emit
 
 

@@ -88,8 +88,8 @@ class ExprIR(IR):
 class CallIR(object):
     """docstring for CallIR."""
 
-    def __init__(self):
+    def __init__(self, function, parameters):
         super(CallIR, self).__init__()
-        self.function = None
-        self.param = None
+        self.function = function
+        self.params = parameters
         self.kind = IRKind.CALL

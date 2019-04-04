@@ -33,13 +33,19 @@ class FunctionSymbol(Symbol):
     def __init__(self):
         super(FunctionSymbol, self).__init__()
         self.kind = SymbolKind.FUNCTION
-        self.param = None
+        self.params = None
         self.type = None
         self.name = None
         self.blocks = None
         self.max_actual_param = 0
         self.strings = []
         self.locals = []
+
+    def init(self, type, name, parameters):
+        self.params = parameters
+        self.type = type
+        self.name = name
+
 
 class StringSymbol(object):
     index = 0

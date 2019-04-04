@@ -7,17 +7,17 @@ from ir import *
 
 
 class CallNode:
-    def __init__(self, function):
+    def __init__(self, function, call_function, parameters):
         self.function = function
         self.name = None
-        self.call_function = None
-        self.param = None
+        self.call_function = call_function
+        self.params = parameters
         self.kind = NodeKind.CALL
 
     def check(self):
-        for p in self.param:
+        for p in self.params:
             p.check()
-        # self.param.check()
+        # self.params.check()
         s = SymbolSystem.find_symbol(self.call_function)
         if s is None:
             s = FunctionSymbol()
@@ -26,9 +26,7 @@ class CallNode:
         self.call_function = s
 
     def gen(self):
-        ir = CallIR()
-        ir.function = self.call_function
-        ir.param = self.param
+        ir = CallIR(self.call_function, self.params)
         self.function.gen_ir(ir)
 
 

@@ -36,7 +36,7 @@ class FunctionEmit(object):
         self.emit_string()
         self.emit_function_header()
         self.push_stack()
-
+        # self.reserve_space()
 
         for b in self.function.blocks:
             for ir in b.irs:
@@ -97,9 +97,8 @@ class FunctionEmit(object):
             self.emit_call(ir)
 
     def emit_call(self, ir):
-        param = ir.param
-        size = 4
-        for p in param:
+        ps = ir.params
+        for p in ps:
             name = p.access_name()
             code = f'\tmovl\t{name}, (%esp)\n'
             self.emit_code(code)
