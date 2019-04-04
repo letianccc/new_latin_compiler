@@ -1,8 +1,12 @@
 #include<stdio.h>
 
+int main()
+{
+	int a = 1;
+	if (a > 2) {
+		int a = 3;
+	}
 
-
-void main() {
-    printf("%d", 1);
+	printf("hello\n");
     getchar();
 }

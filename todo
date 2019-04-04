@@ -1,3 +1,6 @@
 
-实现包含%d的printf调用
-为实参分配空间需要倒序插入内存
+实现变量声明
+
+检测当前作用域是否重复声明 DeclaratorNode.check
+
+将function的name属性改为value属性

@@ -105,7 +105,7 @@ class FunctionEmit(object):
             code = f'\tmovl\t{name}, {offset}(%esp)\n'
             self.emit_code(code)
 
-        function_tag = f'_{ir.function.name}'
+        function_tag = f'_{ir.function.value}'
         code = f'\tcall\t{function_tag}\n'
         self.emit_code(code)
 

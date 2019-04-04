@@ -51,15 +51,15 @@ def case10(code):
     assert(node.__class__.__name__ == 'Seq')
     assert(stmt.__class__.__name__ == 'DeclNode')
     assert(stmt.type_ == 'int')
-    assert(stmt.variable.variable.name == 'a')
-    assert(stmt.variable.index.name == '5')
+    assert(stmt.variable.variable.value == 'a')
+    assert(stmt.variable.index.value == '5')
     node = node.next_stmt
 
     stmt = node
     assert(stmt.__class__.__name__ == 'Assign')
-    assert(stmt.variable.variable.name == 'a')
-    assert(stmt.variable.index.name == '3')
-    assert(stmt.value.name == '2')
+    assert(stmt.variable.variable.value == 'a')
+    assert(stmt.variable.index.value == '3')
+    assert(stmt.value.value == '2')
 
 def case9(code):
     root = setup(code)
@@ -71,15 +71,15 @@ def case9(code):
 
     assert(node.__class__.__name__ == 'If')
     assert(cond.__class__.__name__ == 'Equal')
-    assert(cond.left.name == 'a')
-    assert(cond.right.name == '1')
+    assert(cond.left.value == 'a')
+    assert(cond.right.value == '1')
     assert(cond.operator == '==')
     assert(then.__class__.__name__ == 'Assign')
-    assert(then.variable.name == 'a')
-    assert(then.value.name == '2')
+    assert(then.variable.value == 'a')
+    assert(then.value.value == '2')
     assert(else_.__class__.__name__ == 'Assign')
-    assert(else_.variable.name == 'a')
-    assert(else_.value.name == '3')
+    assert(else_.variable.value == 'a')
+    assert(else_.value.value == '3')
 
 
 def parser_case1(code):
@@ -90,13 +90,13 @@ def parser_case1(code):
     assert(node.__class__.__name__ == 'Seq')
     assert(stmt.__class__.__name__ == 'DeclNode')
     assert(stmt.type_ == 'int')
-    assert(stmt.variable.name == 'a')
+    assert(stmt.variable.value == 'a')
     node = node.next_stmt
 
     stmt = node
     assert(stmt.__class__.__name__ == 'Assign')
-    assert(stmt.variable.name == 'a')
-    assert(stmt.value.name == '2')
+    assert(stmt.variable.value == 'a')
+    assert(stmt.value.value == '2')
 
 
 def parser_case2(code):
@@ -107,27 +107,27 @@ def parser_case2(code):
     assert(node.__class__.__name__ == 'Seq')
     assert(stmt.__class__.__name__ == 'DeclNode')
     assert(stmt.type_ == 'int')
-    assert(stmt.variable.name == 'a')
+    assert(stmt.variable.value == 'a')
     node = node.next_stmt
 
     stmt = node.stmt
     assert(node.__class__.__name__ == 'Seq')
     assert(stmt.__class__.__name__ == 'Assign')
-    assert(stmt.variable.name == 'a')
-    assert(stmt.value.name == '2')
+    assert(stmt.variable.value == 'a')
+    assert(stmt.value.value == '2')
     node = node.next_stmt
 
     stmt = node.stmt
     assert(node.__class__.__name__ == 'Seq')
     assert(stmt.__class__.__name__ == 'DeclNode')
     assert(stmt.type_ == 'int')
-    assert(stmt.variable.name == 'b')
+    assert(stmt.variable.value == 'b')
     node = node.next_stmt
 
     stmt = node
     assert(stmt.__class__.__name__ == 'Assign')
-    assert(stmt.variable.name == 'b')
-    assert(stmt.value.name == '4')
+    assert(stmt.variable.value == 'b')
+    assert(stmt.value.value == '4')
 
 
 def parser_case3(code):
@@ -137,12 +137,12 @@ def parser_case3(code):
     else_ = root.else_
     assert(root.__class__.__name__ == 'If')
     assert(cond.__class__.__name__ == 'Equal')
-    assert(cond.left.name == 'a')
-    assert(cond.right.name == '1')
+    assert(cond.left.value == 'a')
+    assert(cond.right.value == '1')
     assert(cond.operator == '==')
     assert(then.__class__.__name__ == 'Assign')
-    assert(then.variable.name == 'a')
-    assert(then.value.name == '1')
+    assert(then.variable.value == 'a')
+    assert(then.value.value == '1')
     assert(else_ == None)
 
 
@@ -152,12 +152,12 @@ def parser_case4(code):
     then = root.then
     assert(root.__class__.__name__ == 'If')
     assert(cond.__class__.__name__ == 'Equal')
-    assert(cond.left.name == 'a')
-    assert(cond.right.name == '1')
+    assert(cond.left.value == 'a')
+    assert(cond.right.value == '1')
     assert(cond.operator == '==')
     assert(then.__class__.__name__ == 'Assign')
-    assert(then.variable.name == 'a')
-    assert(then.value.name == '1')
+    assert(then.variable.value == 'a')
+    assert(then.value.value == '1')
 
 
 
@@ -178,12 +178,12 @@ def parser_case5(code):
     right = cond.right
     assert(cond.__class__.__name__ == 'And')
     assert(left.__class__.__name__ == 'Rel')
-    assert(left.left.name == 'a')
-    assert(left.right.name == '3')
+    assert(left.left.value == 'a')
+    assert(left.right.value == '3')
     assert(left.operator == '<=')
     assert(right.__class__.__name__ == 'Equal')
-    assert(right.left.name == 'b')
-    assert(right.right.name == '4')
+    assert(right.left.value == 'b')
+    assert(right.right.value == '4')
     assert(right.operator == '==')
 
     node = if_.then
@@ -191,32 +191,32 @@ def parser_case5(code):
     assert(node.__class__.__name__ == 'Seq')
     assert(stmt.__class__.__name__ == 'DeclNode')
     assert(stmt.type_ == 'int')
-    assert(stmt.variable.name == 'd')
+    assert(stmt.variable.value == 'd')
     node = node.next_stmt
 
     stmt = node.stmt
     assert(node.__class__.__name__ == 'Seq')
     assert(stmt.__class__.__name__ == 'Assign')
-    assert(stmt.variable.name == 'd')
-    assert(stmt.value.name == '1')
+    assert(stmt.variable.value == 'd')
+    assert(stmt.value.value == '1')
     node = node.next_stmt
 
     stmt = node
     assert(stmt.__class__.__name__ == 'Assign')
-    assert(stmt.variable.name == 'a')
-    assert(stmt.value.name == '4')
+    assert(stmt.variable.value == 'a')
+    assert(stmt.value.value == '4')
 
     node = root.next_stmt
     stmt = node.stmt
     assert(node.__class__.__name__ == 'Seq')
     assert(stmt.__class__.__name__ == 'Assign')
-    assert(stmt.variable.name == 'k')
-    assert(stmt.value.name == '4')
+    assert(stmt.variable.value == 'k')
+    assert(stmt.value.value == '4')
 
     stmt = node.next_stmt
     assert(stmt.__class__.__name__ == 'Assign')
-    assert(stmt.variable.name == 'd')
-    assert(stmt.value.name == '2')
+    assert(stmt.variable.value == 'd')
+    assert(stmt.value.value == '2')
 
 
 def parser_case6(code):
@@ -227,51 +227,51 @@ def parser_case6(code):
     assert(node.__class__.__name__ == 'Seq')
     assert(stmt.__class__.__name__ == 'DeclNode')
     assert(stmt.type_ == 'int')
-    assert(stmt.variable.name == 'a')
+    assert(stmt.variable.value == 'a')
     node = node.next_stmt
 
     stmt = node.stmt
     assert(node.__class__.__name__ == 'Seq')
     assert(stmt.__class__.__name__ == 'Assign')
-    assert(stmt.variable.name == 'a')
-    assert(stmt.value.name == '2')
+    assert(stmt.variable.value == 'a')
+    assert(stmt.value.value == '2')
     node = node.next_stmt
 
     stmt = node.stmt
     assert(node.__class__.__name__ == 'Seq')
     assert(stmt.__class__.__name__ == 'DeclNode')
     assert(stmt.type_ == 'int')
-    assert(stmt.variable.name == 'b')
+    assert(stmt.variable.value == 'b')
     node = node.next_stmt
 
     stmt = node.stmt
     assert(node.__class__.__name__ == 'Seq')
     assert(stmt.__class__.__name__ == 'Assign')
-    assert(stmt.variable.name == 'b')
-    assert(stmt.value.name == '4')
+    assert(stmt.variable.value == 'b')
+    assert(stmt.value.value == '4')
     node = node.next_stmt
 
     stmt = node
     assert(stmt.__class__.__name__ == 'Assign')
-    assert(stmt.variable.name == 'a')
+    assert(stmt.variable.value == 'a')
 
     expr = stmt.value
     assert_type(expr, 'Arith')
     assert(expr.operator == '+')
-    assert(expr.right.name == 'b')
+    assert(expr.right.value == 'b')
     expr = expr.left
     assert_type(expr, 'Arith')
     assert(expr.operator == '+')
-    assert(expr.left.name == 'a')
+    assert(expr.left.value == 'a')
     expr = expr.right
     assert_type(expr, 'Arith')
     assert(expr.operator == '*')
-    assert(expr.left.name == 'a')
+    assert(expr.left.value == 'a')
     expr = expr.right
     assert_type(expr, 'Arith')
     assert(expr.operator == '+')
-    assert(expr.left.name == '2')
-    assert(expr.right.name == '3')
+    assert(expr.left.value == '2')
+    assert(expr.right.value == '3')
 
 
 def parser_case7(code):
@@ -282,33 +282,33 @@ def parser_case7(code):
     assert_type(node, 'Seq')
     assert_type(stmt, 'DeclNode')
     assert(stmt.type_ == 'int')
-    assert(stmt.variable.name == 'a')
+    assert(stmt.variable.value == 'a')
     node = node.next_stmt
 
     stmt = node.stmt
     assert_type(node, 'Seq')
     assert_type(stmt, 'Assign')
-    assert(stmt.variable.name == 'a')
-    assert(stmt.value.name == '2')
+    assert(stmt.variable.value == 'a')
+    assert(stmt.value.value == '2')
     node = node.next_stmt
 
     stmt = node
     assert_type(stmt, 'Assign')
-    assert(stmt.variable.name == 'a')
+    assert(stmt.variable.value == 'a')
 
     expr = stmt.value
     assert_type(expr, 'Arith')
     assert(expr.operator == '+')
-    assert(expr.right.name == '4')
+    assert(expr.right.value == '4')
     expr = expr.left
     assert_type(expr, 'Arith')
     assert(expr.operator == '+')
-    assert(expr.left.name == 'a')
+    assert(expr.left.value == 'a')
     expr = expr.right
     assert_type(expr, 'Arith')
     assert(expr.operator == '*')
-    assert(expr.left.name == '2')
-    assert(expr.right.name == '3')
+    assert(expr.left.value == '2')
+    assert(expr.right.value == '3')
 
 def case8(code):
     root = setup(code)
@@ -318,14 +318,14 @@ def case8(code):
     assert(node.__class__.__name__ == 'Seq')
     assert(stmt.__class__.__name__ == 'DeclNode')
     assert(stmt.type_ == 'int')
-    assert(stmt.variable.name == 'a')
+    assert(stmt.variable.value == 'a')
     node = node.next_stmt
 
     stmt = node.stmt
     assert(node.__class__.__name__ == 'Seq')
     assert(stmt.__class__.__name__ == 'Assign')
-    assert(stmt.variable.name == 'a')
-    assert(stmt.value.name == '1')
+    assert(stmt.variable.value == 'a')
+    assert(stmt.value.value == '1')
     node = node.next_stmt
 
     cond = node.cond
@@ -334,15 +334,15 @@ def case8(code):
 
     assert(node.__class__.__name__ == 'If')
     assert(cond.__class__.__name__ == 'Equal')
-    assert(cond.left.name == 'a')
-    assert(cond.right.name == '1')
+    assert(cond.left.value == 'a')
+    assert(cond.right.value == '1')
     assert(cond.operator == '==')
     assert(then.__class__.__name__ == 'Assign')
-    assert(then.variable.name == 'a')
-    assert(then.value.name == '2')
+    assert(then.variable.value == 'a')
+    assert(then.value.value == '2')
     assert(else_.__class__.__name__ == 'Assign')
-    assert(else_.variable.name == 'a')
-    assert(else_.value.name == '3')
+    assert(else_.variable.value == 'a')
+    assert(else_.value.value == '3')
 
 
 test_parser()

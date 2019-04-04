@@ -105,7 +105,7 @@ class Parser:
         if self.match(TokenKind.IF):
             return self.if_stmt()
         elif self.match(TokenKind.INT) or self.match(TokenKind.FLOAT):
-            return self.decl()
+            return self.parse_declaration()
         elif self.match(TokenKind.WHILE):
             return self.while_stmt()
         elif self.match(TokenKind.LBRACE):
@@ -125,6 +125,45 @@ class Parser:
                 # }
                 break
         return Array_(array)
+
+    def parse_declaration(self):
+        type = self.next_token()
+        ident = self.next_token()
+        self.expect(';')
+
+        declarator = DeclaratorNode(self.function)
+        declarator.identifier = ident
+        declaration = DeclarationNode(self.function)
+        declaration.add(declarator)
+        declaration.specifier = type
+        return declaration
+
+        # if self.is_array():
+        #     self.has_array = True
+        #     decl_ = self.decl_array(type)
+        #     self.expect(';')
+        # else:
+        #     decl_ = self.decl_single_variable(type)
+
+        # return decl_
+
+    # def decl_single_variable(self, type):
+    #     ident = self.next_token()
+    #
+    #     if self.match(TokenKind.LPAREN):
+    #         raise Exception
+    #
+    #
+    #     # amount = 1
+    #     # self.add_symbol(var, amount)
+    #     self.expect(';')
+    #     return DeclNode(self.function, type, ident)
+
+
+    def add_symbol(self, symbol, amount):
+        self.symbols.append(symbol)
+        self.ident_count += amount
+        self.symbol_count += amount
 
 
     def while_stmt(self):
@@ -147,19 +186,6 @@ class Parser:
         else:
             else_stmts = None
         return If(cond, then_stmts, else_stmts)
-
-    def decl(self):
-        t = self.next_token()
-
-        type = TypeSystem.type(t.kind)
-        if self.is_array():
-            self.has_array = True
-            decl_ = self.decl_array(type)
-            self.expect(';')
-        else:
-            decl_ = self.decl_single_variable(type)
-
-        return decl_
 
     def is_array(self):
         t = self.tokens[self.index + 1]
@@ -189,22 +215,6 @@ class Parser:
             if n.type_ == 'number':
                 return True
         return False
-
-    def decl_single_variable(self, type):
-        var = self.next_token()
-        if self.match(TokenKind.LPAREN):
-            raise Exception
-
-        amount = 1
-        self.add_symbol(var, amount)
-        self.expect(';')
-        return DeclNode(self.function, type, var)
-
-
-    def add_symbol(self, symbol, amount):
-        self.symbols.append(symbol)
-        self.ident_count += amount
-        self.symbol_count += amount
 
     def assign(self):
         variable = self.factor()

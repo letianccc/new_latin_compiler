@@ -9,7 +9,6 @@ from ir import *
 class CallNode:
     def __init__(self, function, call_function, parameters):
         self.function = function
-        self.name = None
         self.call_function = call_function
         self.params = parameters
         self.kind = NodeKind.CALL
@@ -17,11 +16,10 @@ class CallNode:
     def check(self):
         for p in self.params:
             p.check()
-        # self.params.check()
         s = SymbolSystem.find_symbol(self.call_function)
         if s is None:
             s = FunctionSymbol()
-            s.name = self.call_function.value
+            s.value = self.call_function.value
             SymbolSystem.add(s)
         self.call_function = s
 
@@ -40,8 +38,10 @@ class FunctionNode:
         self.code = ''
 
     def check(self):
+        SymbolSystem.enter()
         for stmt in self.statements:
             stmt.check()
+        SymbolSystem.quit()
 
     def gen(self):
         self.symbol.blocks = self.blocks
@@ -63,7 +63,7 @@ class FunctionNode:
         self.cur_block.add_ir(ir)
 
     def emit(self):
-        self.func_tag = f'_{function.name}'
+        self.func_tag = f'_{function.value}'
 
 class ParameterListNode:
     def __init__(self, function):
@@ -97,6 +97,7 @@ class ParameterNode:
             type = TypeSystem.type(TokenKind.INT)
             s = ConstantSymbol(type, v)
         elif k is TokenKind.STRING:
+            # TODO: 应该find
             s = StringSymbol(v)
             SymbolSystem.add(s)
             strings = self.function.symbol.strings
@@ -106,34 +107,36 @@ class ParameterNode:
     def access_name(self):
         return self.parameter.access_name()
 
-class DeclNode:
-    def __init__(self, function, type, variable, extra_data=None):
+class DeclarationNode:
+    def __init__(self, function):
         self.function = function
-        self.type = type
-        self.variable = variable
-        self.extra_data = extra_data
-        self.index = None
+        self.specifier = None
+        self.declarators = []
+
+    def add(self, declarator):
+        self.declarators.append(declarator)
 
     def check(self):
-        k = self.variable.kind
-        v = self.variable.value
-        if k is TokenKind.INTCONST:
-            type = TypeSystem.type(TokenKind.INT)
-            s = ConstantSymbol(type, v)
-        elif k is TokenKind.STRING:
-            s = StringSymbol(v)
-            SymbolSystem.add(s)
-            strings = self.function.symbol.strings
-            strings.append(s)
-        self.variable = s
+        self.specifier = TypeSystem.type(self.specifier.kind)
+        type = self.specifier
+        for d in self.declarators:
+            d.check(type)
 
-    def access_name(self):
-        return self.variable.access_name()
-        # if self.variable.kind is SymbolKind.STRING:
-        #     return self.variable.access_name()
-        # raise Exception
-        # size = 4
-        # offset = decl.index * size
+class DeclaratorNode:
+    def __init__(self, function):
+        self.function = function
+        self.identifier = None
+        self.initializer = None
+
+    def check(self, type):
+        s = SymbolSystem.find_symbol(self.identifier, None, LevelKind.CURRENT)
+        if s is not None:
+            raise Exception("不能声明已经存在的变量")
+        s = IdentifierSymbol()
+        s.value = self.identifier.value
+        s.type = type
+        SymbolSystem.add(s)
+
 
 class If:
     def __init__(self, cond, then_stmts, else_stmts):
