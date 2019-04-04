@@ -111,7 +111,18 @@ class Parser:
         elif self.match(TokenKind.LBRACE):
             return self.block_()
         else:
-            return self.assign()
+            return self.parse_expression()
+
+    def parse_expression(self):
+        variable = self.factor()
+        if self.match(TokenKind.LPAREN):
+            return self.parse_call(variable)
+        if self.match(TokenKind.ASSIGN):
+            self.expect('=')
+            value = self.bool_()
+            self.expect(';')
+            return AssignNode(variable, value)
+
 
     def parse_array_data(self):
         array = list()
@@ -261,7 +272,7 @@ class Parser:
     def expr_(self):
         expr = self.term()
 
-        while self.match(TokenKind.ADD) or self.match(TokenKind.subl):
+        while self.match(TokenKind.ADD) or self.match(TokenKind.SUB):
             self.symbol_count += 1
             operator = self.next_token().value
             # expr = Arith(expr, self.term(), operator)
@@ -281,7 +292,7 @@ class Parser:
         return expr
 
     def unary(self):
-        if self.match(TokenKind.NOT) or self.match(TokenKind.subl):
+        if self.match(TokenKind.NOT) or self.match(TokenKind.SUB):
             operator = self.next_token().value
             expr = Unary(operator, self.factor())
         else:

@@ -1,13 +1,28 @@
 
 from myenum import *
 
-class Table:
+
+class Field:
     def __init__(self):
-        self.outside = None
         self.symbols = []
 
     def add(self, symbol):
         self.symbols.append(symbol)
+
+    def find(self, token, type, field):
+        for s in field.symbols:
+            if s.match(token, type):
+                return s
+        return None
+
+class GlobalField(Field):
+    def find_symbol(self, token, type=None, level_kind=None):
+        return self.find(token, type, self)
+
+class IdentifierField(Field):
+    def __init__(self):
+        self.outside = None
+        self.symbols = []
 
     def find_symbol(self, token, type=None, level_kind=None):
         # TODO: find 应该增加kind参数
@@ -25,23 +40,22 @@ class Table:
             cur = cur.outside
         return None
 
-    def find(self, token, type, field):
-        for s in field.symbols:
-            if s.match(token, type):
-                return s
-        return None
-
 class SymbolSystem(object):
     identifiers = None
+    constants = None
+    strings = None
+
     @classmethod
     def init(cls):
-        cls.identifiers = []
         StringSymbol.init()
-        cls.identifiers = Table()
+        cls.identifiers = IdentifierField()
+        cls.constants = GlobalField()
+        cls.strings = GlobalField()
+
 
     @classmethod
     def enter(cls):
-        inner = Table()
+        inner = IdentifierField()
         inner.outside = cls.identifiers
         cls.identifiers = inner
 
@@ -51,11 +65,24 @@ class SymbolSystem(object):
 
     @classmethod
     def add(cls, symbol):
-        cls.identifiers.add(symbol)
+        k = symbol.kind
+        if k is SymbolKind.CONST:
+            cls.constants.add(symbol)
+        elif k is SymbolKind.STRING:
+            cls.strings.add(symbol)
+        elif k is SymbolKind.ID:
+            cls.identifiers.add(symbol)
 
     @classmethod
     def find_symbol(cls, token, type=None, level_kind=None):
-        return cls.identifiers.find_symbol(token, type, level_kind)
+        k = token.kind
+        if k is TokenKind.INTCONST:
+            s = cls.constants.find_symbol(token, type, level_kind)
+        elif k is TokenKind.STRING:
+            s = cls.strings.find_symbol(token, type, level_kind)
+        elif k is TokenKind.ID:
+            s = cls.identifiers.find_symbol(token, type, level_kind)
+        return s
 
 class Symbol(object):
     """docstring for Symbol."""

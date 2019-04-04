@@ -76,30 +76,11 @@ class ParameterNode:
     def check(self):
         k = self.parameter.kind
         v = self.parameter.value
-        if k is TokenKind.INTCONST:
-            type = TypeSystem.type(TokenKind.INT)
-            s = ConstantSymbol(type, v)
-        elif k is TokenKind.STRING:
-            # TODO: 应该find
-            s = StringSymbol(v)
-            SymbolSystem.add(s)
-            strings = self.function.symbol.strings
-            strings.append(s)
+        if k is TokenKind.INTCONST or k is TokenKind.STRING:
+            s = self.parameter.check(self.function.symbol)
         elif k is TokenKind.ID:
-            p = self.parameter
-            if self.kind is NodeKind.FORMAL_PARAMETER:
-                s = SymbolSystem.find_symbol(p, None, LevelKind.CURRENT)
-                if s is not None:
-                    raise Exception("重复定义")
-                s = IdentifierSymbol()
-                s.value = p.value
-                s.type = type
-                SymbolSystem.add(s)
-                self.function.symbol.locals.append(s)
-            else:
-                s = SymbolSystem.find_symbol(p)
-                if s is None:
-                    raise Exception("缺少声明")
+            have_declared = self.kind is NodeKind.ACTUAL_PARAMETER
+            s = self.parameter.check(self.function.symbol, have_declared)
         self.parameter = s
 
     def access_name(self):
@@ -139,70 +120,93 @@ class DeclaratorNode:
         SymbolSystem.add(s)
         self.function.symbol.locals.append(s)
 
+class AssignNode(Node):
+    def __init__(self, variable, value):
+        self.variable = variable
+        self.value = value
 
-class If:
+    def check(self):
+        self.variable = self.variable.check()
+
+        for p in self.params:
+            p.check()
+        s = SymbolSystem.find_symbol(self.call_function)
+        if s is None:
+            s = FunctionSymbol()
+            s.value = self.call_function.value
+            SymbolSystem.add(s)
+        self.call_function = s
+
+    def gen(self):
+        return
+        ir = CallIR(self.call_function, self.params)
+        self.function.gen_ir(ir)
+
+
+class Node(object):
+    """docstring for Node."""
+
+    def __init__(self):
+        super(Node, self).__init__()
+
+class IfNode(Node):
     def __init__(self, cond, then_stmts, else_stmts):
         self.cond = cond
         self.then = then_stmts
         self.else_ = else_stmts
 
-class While:
+class WhileNode(Node):
     def __init__(self, cond, suite):
         self.cond = cond
         self.suite = suite
 
-class Expr:
+class ExprNode(Node):
     def __init__(self, left, right, op):
         self.left = left
         self.right = right
         self.operator = op
 
 
-class Or:
+class OrNode(Node):
     def __init__(self, left, right):
         self.left = left
         self.right = right
         self.operator = '||'
 
-class And:
+class AndNode(Node):
     def __init__(self, left, right):
         self.left = left
         self.right = right
         self.operator = '&&'
 
-class Equal:
+class EqualNode(Node):
     def __init__(self, left, right, operator):
         self.left = left
         self.right = right
         self.operator = operator
 
-class Rel:
+class RelNode(Node):
     def __init__(self, left, right, operator):
         self.left = left
         self.right = right
         self.operator = operator
 
-class Arith:
+class ArithNode(Node):
     def __init__(self, left, right, operator):
         self.left = left
         self.right = right
         self.operator = operator
 
-class Unary:
+class UnaryNode(Node):
     def __init__(self, operator, operand):
         self.operator = operator
         self.operand = operand
 
-class Assign:
-    def __init__(self, variable, value):
-        self.variable = variable
-        self.value = value
-
-class Array:
+class ArrayNode(Node):
     def __init__(self, variable, index):
         self.variable = variable
         self.index = index
 
-class Array_:
+class Array_Node(Node):
     def __init__(self, array):
         self.array = array

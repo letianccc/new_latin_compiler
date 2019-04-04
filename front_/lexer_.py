@@ -1,5 +1,5 @@
-from token_ import Token
-from myenum import TokenKind
+from token_ import *
+from myenum import *
 
 
 #TODO 引号  反斜杠 不应该包括在symbols中   需要解析为字符串
@@ -32,7 +32,7 @@ word_map = {
     '<<=': TokenKind.LSHIFT_ASSIGN,
     '>>=': TokenKind.RSHIFT_ASSIGN,
     '+=': TokenKind.ADD_ASSIGN,
-    '-=': TokenKind.subl_ASSIGN,
+    '-=': TokenKind.SUB_ASSIGN,
     '*=': TokenKind.MUL_ASSIGN,
     '/=': TokenKind.DIV_ASSIGN,
     '%=': TokenKind.MOD_ASSIGN,
@@ -50,7 +50,7 @@ word_map = {
     '<<': TokenKind.LSHIFT,
     '>>': TokenKind.RSHIFT,
     '+': TokenKind.ADD,
-    '-': TokenKind.subl,
+    '-': TokenKind.SUB,
     '*': TokenKind.MUL,
     '/': TokenKind.DIV,
     '%': TokenKind.MOD,
@@ -116,7 +116,6 @@ class Lexer:
             self.next_char()
         self.next_char()
 
-
     def scan_string(self):
         word = self.cur_char()
         c = self.next_char()
@@ -126,7 +125,7 @@ class Lexer:
         word += c
         self.next_char()
         kind = TokenKind.STRING
-        t = Token(kind, word)
+        t = StringToken(kind, word)
         return t
 
     def scan_symbol(self):
@@ -169,7 +168,7 @@ class Lexer:
         kind = word_map.get(word)
         if kind is None:
             kind = TokenKind.ID
-        t = Token(kind, word)
+        t = IdentifierToken(kind, word)
         return t
 
     def scan_number(self):
@@ -181,7 +180,7 @@ class Lexer:
             digits += c
             self.next_char()
             digits += self.scan_digits()
-        t = Token(kind, digits)
+        t = ConstantToken(kind, digits)
         return t
 
     def scan_digits(self):

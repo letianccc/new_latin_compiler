@@ -1,4 +1,4 @@
 
 实现变量声明
 
-实现使用声明了的变量  ParameterNode.access_name
+实现AssignNode value 的 check

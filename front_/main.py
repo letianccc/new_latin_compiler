@@ -10,15 +10,15 @@ from emit import Emit
 
 
 def _main_():
-    # path = r'C:\code\new_latin_compiler\find_error.c'
-    # code = compile(path)
+    path = r'C:\code\new_latin_compiler\find_error.c'
+    code = compile(path)
 
     path = r'C:\code\new_latin_compiler\test.c'
     code = compile(path)
     path = r'C:\code\new_latin_compiler\test.s'
 
-    # assert_code(path, code)
-    write_code(path, code)
+    assert_code(path, code)
+    # write_code(path, code)
 
 def compile(input_path):
     f = open(input_path, 'r')
