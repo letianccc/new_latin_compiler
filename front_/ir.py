@@ -7,7 +7,7 @@ from myenum import *
 class Block:
     # id_pool = 0
     def __init__(self):
-        # self.stmts = stmts
+        # self.statements = stmts
         # self.id = Block.id_pool
         # Block.id_pool += 1
         self.irs = []

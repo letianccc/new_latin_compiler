@@ -11,6 +11,7 @@ class Parser:
         self.index = 0
         self.function = None
         self.AST = self.parse_functions()
+        self.function_nodes = self.AST
 
     def parse_functions(self):
         fs = []
@@ -37,7 +38,7 @@ class Parser:
         s.init(type, func_ident.value, params)
         SymbolSystem.add(s)
         stmts = self.block_()
-        node.stmts = stmts
+        node.statements = stmts
         return node
 
     def parse_parameters(self, parameter_kind):
@@ -73,34 +74,33 @@ class Parser:
             self.function.symbol.max_actual_param = count
         return n
 
-
     def block_(self):
         if self.match(TokenKind.LBRACE):
             self.expect('{')
             if self.match(TokenKind.RBRACE):
                 self.expect('}')
-                return None
+                return []
             # 数组初始化
             if self.match(TokenKind.INTCONST) or self.match(TokenKind.FLOATCONST):
                 block = self.parse_array_data()
             else:
-                block = self.stmts_()
+                block = self.parse_statements()
             self.expect('}')
         else:
             block = self.single_stmt()
         return block
 
-    def stmts_(self):
-        stmt = self.stmt_()
-        if not self.match(TokenKind.RBRACE):
-            next_stmt = self.stmts_()
-            stmt = Seq(self.function, stmt, next_stmt)
-        return stmt
+    def parse_statements(self):
+        stmts = []
+        while not self.match(TokenKind.RBRACE):
+            stmt = self.parse_statement()
+            stmts.append(stmt)
+        return stmts
 
     def single_stmt(self):
-        return self.stmt_()
+        return self.parse_statement()
 
-    def stmt_(self):
+    def parse_statement(self):
         t = self.cur_token()
         if self.match(TokenKind.IF):
             return self.if_stmt()
@@ -108,8 +108,6 @@ class Parser:
             return self.decl()
         elif self.match(TokenKind.WHILE):
             return self.while_stmt()
-        # elif self.is_word('printf'):
-        #     return self.printf_stmt()
         elif self.match(TokenKind.LBRACE):
             return self.block_()
         else:
@@ -128,32 +126,6 @@ class Parser:
                 break
         return Array_(array)
 
-    def printf_stmt(self):
-        self.expect('printf')
-        self.expect('(')
-        val = None
-        format_ = self.parse_format()
-        if self.match(TokenKind.COMMA):
-            self.expect(',')
-            val = self.factor()
-        self.expect(')')
-        self.expect(';')
-        return Printf(format_, val)
-
-    def parse_format(self):
-        # format_ = self.format_word()
-        t = self.next_token()
-        format_ = t.value
-        if format_ not in self.printf_formats:
-            self.printf_formats.append(format_)
-        return format_
-
-    # def format_word(self):
-    #     format_ = ''
-    #     while not self.match('\"'):
-    #         c = self.next_token().value
-    #         format_ += c
-    #     return format_
 
     def while_stmt(self):
         self.expect('while')

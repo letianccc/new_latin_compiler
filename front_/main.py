@@ -30,12 +30,12 @@ def compile(input_path):
     lexer.scan()
     tokens = lexer.tokens
     parser = Parser(tokens)
-    function_nodes = parser.AST
-    for f in function_nodes:
+    functions = parser.function_nodes
+    for f in functions:
         f.check()
-    for f in function_nodes:
+    for f in functions:
         f.gen()
-    symbols = [f.symbol for f in function_nodes]
+    symbols = [f.symbol for f in functions]
     e = Emit(symbols)
     e.execute()
     code = e.code

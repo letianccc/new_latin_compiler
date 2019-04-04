@@ -29,46 +29,30 @@ class CallNode:
         ir = CallIR(self.call_function, self.params)
         self.function.gen_ir(ir)
 
-
-
-# kind: number
-# class Symbol:
-#     def __init__(self):
-#         self.kind = None
-#         self.index = 0
-#         self.token = None
-#
-#     def emit(self, emiter):
-#         if self.kind == 'number':
-#             return '$' + self.token.name
-#         else:
-#             return emiter.address(self.index)
-#
-
-
 class FunctionNode:
     def __init__(self):
         self.kind = NodeKind.FUNCTION
         self.type = None
         self.symbol = None
-        self.stmts = None
+        self.statements = None
         self.cur_block = None
         self.blocks = []
         self.code = ''
 
     def check(self):
-        if self.stmts is not None:
-            self.stmts.check()
+        for stmt in self.statements:
+            stmt.check()
 
     def gen(self):
         self.symbol.blocks = self.blocks
-        if self.stmts is None:
+        if self.statements is None:
             return
         b = Block()
         b.kind = BlockKind.FUNCTION
         self.cur_block = b
         self.blocks.append(b)
-        self.stmts.gen()
+        for stmt in self.statements:
+            stmt.gen()
         index = 0
         for b in self.blocks:
             if b.kind is BlockKind.GENERAL:
@@ -80,7 +64,6 @@ class FunctionNode:
 
     def emit(self):
         self.func_tag = f'_{function.name}'
-
 
 class ParameterListNode:
     def __init__(self, function):
@@ -123,33 +106,34 @@ class ParameterNode:
     def access_name(self):
         return self.parameter.access_name()
 
-
-class Seq:
-    def __init__(self, function, stmt, next_stmt):
+class DeclNode:
+    def __init__(self, function, type, variable, extra_data=None):
         self.function = function
-        self.stmt = stmt
-        self.next_stmt = next_stmt
-        self.kind = NodeKind.SEQ
+        self.type = type
+        self.variable = variable
+        self.extra_data = extra_data
+        self.index = None
 
     def check(self):
-        self.stmt.check()
-        if self.next_stmt is not None:
-            self.next_stmt.check()
+        k = self.variable.kind
+        v = self.variable.value
+        if k is TokenKind.INTCONST:
+            type = TypeSystem.type(TokenKind.INT)
+            s = ConstantSymbol(type, v)
+        elif k is TokenKind.STRING:
+            s = StringSymbol(v)
+            SymbolSystem.add(s)
+            strings = self.function.symbol.strings
+            strings.append(s)
+        self.variable = s
 
-    def gen(self):
-        self.stmt.gen()
-        if self.next_stmt is not None:
-            self.next_stmt.gen()
-
-class Stmt:
-    def __init__(self, stmt):
-        self.stmt = stmt
-
-class Printf:
-    def __init__(self, format_, value):
-        self.format_ = format_
-        self.value = value
-        self.kind = NodeKind.PRINTF
+    def access_name(self):
+        return self.variable.access_name()
+        # if self.variable.kind is SymbolKind.STRING:
+        #     return self.variable.access_name()
+        # raise Exception
+        # size = 4
+        # offset = decl.index * size
 
 class If:
     def __init__(self, cond, then_stmts, else_stmts):
@@ -203,36 +187,6 @@ class Unary:
     def __init__(self, operator, operand):
         self.operator = operator
         self.operand = operand
-
-class DeclNode:
-    def __init__(self, function, type, variable, extra_data=None):
-        self.function = function
-        self.type = type
-        self.variable = variable
-        self.extra_data = extra_data
-        self.index = None
-
-    def check(self):
-        k = self.variable.kind
-        v = self.variable.value
-        if k is TokenKind.INTCONST:
-            type = TypeSystem.type(TokenKind.INT)
-            s = ConstantSymbol(type, v)
-        elif k is TokenKind.STRING:
-            s = StringSymbol(v)
-            SymbolSystem.add(s)
-            strings = self.function.symbol.strings
-            strings.append(s)
-        self.variable = s
-
-    def access_name(self):
-        return self.variable.access_name()
-        # if self.variable.kind is SymbolKind.STRING:
-        #     return self.variable.access_name()
-        # raise Exception
-        # size = 4
-        # offset = decl.index * size
-
 
 class Assign:
     def __init__(self, variable, value):
