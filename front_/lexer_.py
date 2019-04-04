@@ -81,15 +81,18 @@ class Lexer:
         self.length = len(code)
 
     def scan(self):
-        self.skip_space()
         while not self.is_eof():
             t = self.scan_token()
-            self.tokens.append(t)
-            self.skip_space()
+            if t is not None:
+                self.tokens.append(t)
         t = Token(TokenKind.EOF)
         self.tokens.append(t)
 
     def scan_token(self):
+        self.skip_space()
+        if self.is_eof():
+            return None
+
         c = self.cur_char()
         if c.isalpha():
             t = self.scan_identifier()
@@ -97,11 +100,22 @@ class Lexer:
             t = self.scan_number()
         elif c == '"':
             t = self.scan_string()
+        elif c == '/':
+            self.skip_comment()
+            t = None
         elif c in symbols:
             t = self.scan_symbol()
         else:
             raise Exception(c)
         return t
+
+    def skip_comment(self):
+        self.expect('/')
+        self.expect('/')
+        while self.cur_char() != '\n':
+            self.next_char()
+        self.next_char()
+
 
     def scan_string(self):
         word = self.cur_char()
@@ -195,10 +209,9 @@ class Lexer:
     def skip_space(self):
         while not self.is_eof():
             c = self.cur_char()
-            if c.isspace():
-                self.next_char()
-            else:
+            if not c.isspace():
                 return
+            self.next_char()
 
     def is_eof(self):
         return self.index >= self.length

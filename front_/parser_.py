@@ -9,15 +9,8 @@ class Parser:
     def __init__(self, tokens):
         self.tokens = tokens
         self.index = 0
-        # self.symbols = list()
-        # self.printf_formats = list()
-        # self.symbol_count = 0
-        # self.ident_count = 0
-        # self.has_array = False
         self.function = None
         self.AST = self.parse_functions()
-
-
 
     def parse_functions(self):
         fs = []
@@ -27,26 +20,24 @@ class Parser:
         self.expect(TokenKind.EOF)
         return fs
 
-
-
     def parse_function(self, type=None, name=None):
         node = FunctionNode()
         s = FunctionSymbol()
         node.symbol = s
         self.function = node
+        # 返回值  函数名
         self.match(TokenKind.INT)
         t = self.next_token()
         type = TypeSystem.type(t.kind)
         self.match(TokenKind.ID)
         func_ident = self.next_token()
+        # 参数
         params = self.parse_parameters(NodeKind.FORMAL_PARAMETER)
 
         s.init(type, func_ident.value, params)
         SymbolSystem.add(s)
-
         stmts = self.block_()
         node.stmts = stmts
-
         return node
 
     def parse_parameters(self, parameter_kind):
