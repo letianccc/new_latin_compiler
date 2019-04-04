@@ -2,7 +2,11 @@
 from myenum import *
 
 class SymbolSystem(object):
-    symbols = []
+    symbols = None
+    @classmethod
+    def init(cls):
+        cls.symbols = []
+        StringSymbol.init()
 
     @classmethod
     def add(cls, symbol):
@@ -50,6 +54,9 @@ class FunctionSymbol(Symbol):
 class StringSymbol(object):
     index = 0
     """docstring for StringSymbol."""
+    @classmethod
+    def init(cls):
+        cls.index = 0
 
     def __init__(self, string):
         super(StringSymbol, self).__init__()

@@ -57,9 +57,10 @@ class Parser:
             return params
         self.parse_param(params, parameter_kind)
         while self.match(TokenKind.COMMA):
+            self.next_token()
             self.parse_param(params, parameter_kind)
         self.expect(TokenKind.RPAREN)
-        for index, p in enumerate(params):
+        for index, p in enumerate(reversed(params)):
             p.index = index
         return params
 
@@ -68,9 +69,9 @@ class Parser:
         if parameter_kind is NodeKind.FORMAL_PARAMETER:
             t = self.next_token()
             type = TypeSystem.type(t.kind)
-        ident = self.next_token()
-        p = ParameterNode(self.function, type, ident)
-        parameters.append(p)
+        param = self.next_token()
+        p = ParameterNode(self.function, type, param)
+        parameters.insert(0, p)
 
     def parse_call(self, variable):
         params = self.parse_parameters(NodeKind.ACTUAL_PARAMETER)

@@ -1,11 +1,8 @@
 
 
-void func(int a) {
 
-}
 
 void main() {
-    func(1);
-    printf("hello\n");
+    printf("aaa%d\n", 1);
     getchar();
 }

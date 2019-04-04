@@ -98,9 +98,11 @@ class FunctionEmit(object):
 
     def emit_call(self, ir):
         ps = ir.params
+        size = 4
         for p in ps:
             name = p.access_name()
-            code = f'\tmovl\t{name}, (%esp)\n'
+            offset = size * p.index
+            code = f'\tmovl\t{name}, {offset}(%esp)\n'
             self.emit_code(code)
 
         function_tag = f'_{ir.function.name}'

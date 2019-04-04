@@ -2,6 +2,7 @@ from lexer_ import Lexer
 from parser_ import Parser
 # import type_system
 from type_system import TypeSystem
+from mysymbol import SymbolSystem
 from util import *
 import os
 from emit import Emit
@@ -9,59 +10,38 @@ from emit import Emit
 
 
 def _main_():
-
-    code = '{int a;a=1;' \
-           'printf("value");}'
-
-    code = '{printf("value");}'
-
-    code = '''
-        int func() {
-            printf("func\n");
-        }
-        int main() {
-            func();
-            printf("value\n");
-        }
-
-    '''
+    path = r'C:\code\new_latin_compiler\find_error.c'
+    code = compile(path)
 
     path = r'C:\code\new_latin_compiler\test.c'
-    f = open(path, 'r')
-    code = f.read()
-    TypeSystem.init()
-
-    lexer = Lexer(code)
-    lexer.scan()
-    tokens = lexer.tokens
-    parser = Parser(tokens)
-
-    # gen = Generator_as1(parser)
-    # gen.gen_executable_ir()
-    # cs = CheckSystem(parser.AST)
-    # cs.execute()
-
-    function_nodes = parser.AST
-    for f in function_nodes:
-        f.check()
-
-    # gentor = Gentor(parser.AST)
-    # gentor.execute()
-
-    for f in function_nodes:
-        f.gen()
-
-    symbols = [f.symbol for f in function_nodes]
-
-    # symbols = gentor.symbols
-    e = Emit(symbols)
-    e.execute()
-    code = e.code
-    # log(code)
+    code = compile(path)
     path = r'C:\code\new_latin_compiler\test.s'
 
     assert_code(path, code)
     # write_code(path, code)
+
+def compile(input_path):
+    f = open(input_path, 'r')
+    code = f.read()
+
+    TypeSystem.init()
+    SymbolSystem.init()
+    lexer = Lexer(code)
+    lexer.scan()
+    tokens = lexer.tokens
+    parser = Parser(tokens)
+    function_nodes = parser.AST
+    for f in function_nodes:
+        f.check()
+    for f in function_nodes:
+        f.gen()
+    symbols = [f.symbol for f in function_nodes]
+    e = Emit(symbols)
+    e.execute()
+    code = e.code
+    # log(code)
+    return code
+
 
 def write_code(path, code):
     f = open(path, 'w')
