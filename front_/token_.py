@@ -33,7 +33,6 @@ class IdentifierToken(object):
 
     def check(self, function, kind=None, type=None):
         if kind is NodeKind.FUNCTION:
-            # TODO: 应该检测最外层
             s = SymbolSystem.find_symbol(self)
             if s is not None:
                 raise Exception("重复定义")
@@ -45,9 +44,7 @@ class IdentifierToken(object):
             s = SymbolSystem.find_symbol(self, None, LevelKind.CURRENT)
             if s is not None:
                 raise Exception("重复定义")
-            s = IdentifierSymbol()
-            s.value = self.value
-            s.type = type
+            s = IdentifierSymbol(type, self.value)
             SymbolSystem.add(s)
             if kind is NodeKind.DECLARATOR:
                 function.locals.append(s)
@@ -68,6 +65,8 @@ class IdentifierToken(object):
         if s is None:
             raise Exception("缺少声明")
         return s
+
+
 
 class StringToken(object):
     def __init__(self, kind, value=None):

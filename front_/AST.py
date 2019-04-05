@@ -53,26 +53,17 @@ class FunctionNode:
         SymbolSystem.quit()
 
     def gen(self):
-        self.symbol.blocks = self.blocks
         if self.statements is None:
             return
-        b = Block()
-        b.kind = BlockKind.FUNCTION
-        self.cur_block = b
-        self.blocks.append(b)
         for stmt in self.statements:
             stmt.gen()
-        index = 0
-        for b in self.blocks:
-            if b.kind is BlockKind.GENERAL:
-                b.index = index
-                index += 1
+        self.symbol.allocate_block_id()
 
     def gen_ir(self, ir):
-        self.cur_block.add_ir(ir)
+        self.symbol.gen_ir(ir)
 
     def emit(self):
-        self.func_tag = f'_{function.value}'
+        ...
 
 class ParameterNode:
     def __init__(self, function, kind, type, parameter):

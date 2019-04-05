@@ -1,6 +1,7 @@
 
 from front_.myenum import *
 from front_.field import *
+from front_.ir import *
 
 
 class SymbolSystem(object):
@@ -71,14 +72,27 @@ class FunctionSymbol(Symbol):
         self.type = type
         self.params = []
         self.value = name
-        self.blocks = None
         self.max_actual_param = 0
         self.strings = []
         self.locals = []
+        b = Block()
+        b.kind = BlockKind.FUNCTION
+        self.cur_block = b
+        self.blocks = [b]
 
     def add_param(self, parameter):
         parameter.index = len(self.params)
         self.params.append(parameter)
+
+    def allocate_block_id(self):
+        index = 0
+        for b in self.blocks:
+            if b.kind is BlockKind.GENERAL:
+                b.index = index
+                index += 1
+
+    def gen_ir(self, ir):
+        self.cur_block.add_ir(ir)
 
 class StringSymbol(Symbol):
     index = 0
@@ -115,11 +129,11 @@ class ConstantSymbol(Symbol):
 class IdentifierSymbol(Symbol):
     """docstring for IdentifierSymbol."""
 
-    def __init__(self):
+    def __init__(self, type, value):
         super(IdentifierSymbol, self).__init__()
         self.kind = SymbolKind.ID
-        self.type = None
-        self.value = None
+        self.type = type
+        self.value = value
         self.index = 0
         self.offset = None
         self.is_formal_param = False
