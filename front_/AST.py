@@ -2,7 +2,7 @@
 from front_.util import *
 from front_.myenum import *
 from front_.type_system import TypeSystem
-from front_.mysymbol import *
+from front_.symbol_system import *
 from front_.ir import *
 
 class Node(object):
@@ -19,14 +19,14 @@ class CallNode:
         self.kind = NodeKind.CALL
 
     def check(self):
+        count = len(self.params)
+        if count > self.function.symbol.max_actual_param:
+            self.function.symbol.max_actual_param = count
+
         for p in self.params:
             p.check()
-        s = SymbolSystem.find_symbol(self.call_function)
-        if s is None:
-            s = FunctionSymbol()
-            s.value = self.call_function.value
-            SymbolSystem.add(s)
-        self.call_function = s
+
+        self.call_function = self.call_function.check(self.function, NodeKind.CALL)
 
     def gen(self):
         ir = CallIR(self.call_function, self.params)
@@ -36,6 +36,8 @@ class FunctionNode:
     def __init__(self):
         self.kind = NodeKind.FUNCTION
         self.type = None
+        self.identifier = None
+        self.params = None
         self.symbol = None
         self.statements = None
         self.cur_block = None
@@ -44,6 +46,8 @@ class FunctionNode:
 
     def check(self):
         SymbolSystem.enter()
+        for p in self.params:
+            p.check()
         for stmt in self.statements:
             stmt.check()
         SymbolSystem.quit()
@@ -86,7 +90,10 @@ class ParameterNode:
         if k is TokenKind.INTCONST or k is TokenKind.STRING:
             s = self.parameter.check(self.function.symbol)
         elif k is TokenKind.ID:
-            s = self.parameter.check(self.function.symbol, self.type)
+
+            s = self.parameter.check(self.function.symbol, self.kind, self.type)
+            if self.kind is NodeKind.FORMAL_PARAMETER:
+                self.function.symbol.add_param(s)
         self.parameter = s
 
     def access_name(self):
@@ -113,12 +120,13 @@ class DeclarationNode:
 
 class DeclaratorNode:
     def __init__(self, function, identifier, initializer):
+        self.kind = NodeKind.DECLARATOR
         self.function = function
         self.identifier = identifier
         self.initializer = initializer
 
     def check(self, identifier_type):
-        self.identifier = self.identifier.check(self.function.symbol, identifier_type)
+        self.identifier = self.identifier.check(self.function.symbol, self.kind, identifier_type)
         if self.initializer:
             self.initializer = self.initializer.check(self.function.symbol)
 

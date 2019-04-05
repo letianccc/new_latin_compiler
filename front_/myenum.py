@@ -111,6 +111,8 @@ class NodeKind(IntEnum):
     ACTUAL_PARAMETER = auto()
     FORMAL_PARAMETER = auto()
     PARAMETER = auto()
+    DECLARATOR = auto()
+    DECLARATION = auto()
 
 class BlockKind(IntEnum):
     FUNCTION = auto()

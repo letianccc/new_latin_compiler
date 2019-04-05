@@ -23,8 +23,8 @@ class Parser:
 
     def parse_function(self, type=None, name=None):
         node = FunctionNode()
-        s = FunctionSymbol()
-        node.symbol = s
+        # s = FunctionSymbol()
+        # node.symbol = s
         self.function = node
         # 返回值  函数名
         self.match(TokenKind.INT)
@@ -35,10 +35,13 @@ class Parser:
         # 参数
         params = self.parse_parameters(NodeKind.FORMAL_PARAMETER)
 
-        s.init(type, func_ident.value, params)
-        SymbolSystem.add(s)
+        # s.init(type, func_ident.value, params)
+        # SymbolSystem.add(s)
         stmts = self.block_()
         node.statements = stmts
+        node.type = type
+        node.identifier = func_ident
+        node.params = params
         return node
 
     def parse_parameters(self, parameter_kind):
@@ -63,15 +66,16 @@ class Parser:
             type = TypeSystem.type(t.kind)
         param = self.next_token()
         p = ParameterNode(self.function, parameter_kind, type, param)
-        parameters.insert(0, p)
+        # TODO: 这里要重构
+        if parameter_kind is NodeKind.ACTUAL_PARAMETER:
+            parameters.insert(0, p)
+        else:
+            parameters.append(p)
 
     def parse_call(self, variable):
         params = self.parse_parameters(NodeKind.ACTUAL_PARAMETER)
         self.expect(TokenKind.SEMICOLON)
         n = CallNode(self.function, variable, params)
-        count = len(params)
-        if count > self.function.symbol.max_actual_param:
-            self.function.symbol.max_actual_param = count
         return n
 
     def block_(self):

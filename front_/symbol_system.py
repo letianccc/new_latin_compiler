@@ -1,44 +1,7 @@
 
 from front_.myenum import *
+from front_.field import *
 
-
-class Field:
-    def __init__(self):
-        self.symbols = []
-
-    def add(self, symbol):
-        self.symbols.append(symbol)
-
-    def find(self, token, type, field):
-        for s in field.symbols:
-            if s.match(token, type):
-                return s
-        return None
-
-class GlobalField(Field):
-    def find_symbol(self, token, type=None, level_kind=None):
-        return self.find(token, type, self)
-
-class IdentifierField(Field):
-    def __init__(self):
-        self.outside = None
-        self.symbols = []
-
-    def find_symbol(self, token, type=None, level_kind=None):
-        # TODO: find 应该增加kind参数
-        cur = self
-        t = token
-        if level_kind is LevelKind.CURRENT:
-            s = self.find(t, type, cur)
-            if s is not None:
-                return s
-            return None
-        while cur is not None:
-            s = self.find(t, type, cur)
-            if s is not None:
-                return s
-            cur = cur.outside
-        return None
 
 class SymbolSystem(object):
     identifiers = None
@@ -70,7 +33,7 @@ class SymbolSystem(object):
             cls.constants.add(symbol)
         elif k is SymbolKind.STRING:
             cls.strings.add(symbol)
-        elif k is SymbolKind.ID:
+        elif k is SymbolKind.ID or k is SymbolKind.FUNCTION:
             cls.identifiers.add(symbol)
 
     @classmethod
@@ -102,21 +65,20 @@ class Symbol(object):
 class FunctionSymbol(Symbol):
     """docstring for FunctionSymbol."""
 
-    def __init__(self):
+    def __init__(self, type, name):
         super(FunctionSymbol, self).__init__()
         self.kind = SymbolKind.FUNCTION
-        self.params = None
-        self.type = None
-        self.value = None
+        self.type = type
+        self.params = []
+        self.value = name
         self.blocks = None
         self.max_actual_param = 0
         self.strings = []
         self.locals = []
 
-    def init(self, type, name, parameters):
-        self.params = parameters
-        self.type = type
-        self.value = name
+    def add_param(self, parameter):
+        parameter.index = len(self.params)
+        self.params.append(parameter)
 
 class StringSymbol(Symbol):
     index = 0
@@ -160,7 +122,9 @@ class IdentifierSymbol(Symbol):
         self.value = None
         self.index = 0
         self.offset = None
+        self.is_formal_param = False
 
 
     def access_name(self):
-        return f'{self.offset}(%esp)'
+        reg = '%ebp' if self.is_formal_param else '%esp'
+        return f'{self.offset}({reg})'

@@ -89,6 +89,9 @@ class FunctionEmit(object):
         for index, local in enumerate(s.locals):
             local.index = index
             local.offset = sp - index * size
+        for p in self.function.params:
+            # +5  要跳过 返回地址，ebp,ebx,esi,edi 寻址到第一个传递过来的值
+            p.offset = (p.index + 5) * size
         code = f'    subl\t${space}, %esp\n'
         self.emit_code(code)
 
