@@ -1,23 +1,26 @@
-	//by latin
+    //by latin
 
 LC0:
-	.string	"aaa%d\n"
-	.text
-	.globl	_main
+    .string	"aaa%d\n"
+    .text
+    .globl	_main
 _main:
-	pushl	%ebp
-	pushl	%ebx
-	pushl	%esi
-	pushl	%edi
-	movl	%esp, %ebp
-	andl	$-16, %esp
-	movl	$1, 4(%esp)
-	movl	$LC0, 0(%esp)
-	call	_printf
-	call	_getchar
-	movl	%ebp, %esp
-	popl	%edi
-	popl	%esi
-	popl	%ebx
-	popl	%ebp
-	ret
+    pushl	%ebp
+    pushl	%ebx
+    pushl	%esi
+    pushl	%edi
+    movl	%esp, %ebp
+    andl	$-16, %esp
+    subl	$12, %esp
+    movl	$4, 8(%esp)
+    movl	8(%esp), %eax
+    movl	%eax, 4(%esp)
+    movl	$LC0, 0(%esp)
+    call	_printf
+    call	_getchar
+    movl	%ebp, %esp
+    popl	%edi
+    popl	%esi
+    popl	%ebx
+    popl	%ebp
+    ret

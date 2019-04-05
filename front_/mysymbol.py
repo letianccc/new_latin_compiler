@@ -116,7 +116,7 @@ class FunctionSymbol(Symbol):
     def init(self, type, name, parameters):
         self.params = parameters
         self.type = type
-        self.name = name
+        self.value = name
 
 class StringSymbol(Symbol):
     index = 0
@@ -159,7 +159,8 @@ class IdentifierSymbol(Symbol):
         self.type = None
         self.value = None
         self.index = 0
+        self.offset = None
 
 
     def access_name(self):
-        return f'${self.value}'
+        return f'{self.offset}(%esp)'

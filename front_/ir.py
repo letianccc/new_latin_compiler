@@ -48,32 +48,15 @@ class BranchIR(IR):
             emiter.emit_jmp(self.op, self.target)
 
 
-class PrintIR(IR):
-    def __init__(self):
-        super(PrintIR, self).__init__()
-        self.value = None
-        self.format = None
-
-    def emit(self, emiter):
-        if self.value:
-            if hasattr(self.value, 'index'):
-                addr = emiter.address(self.value.index)
-            else:
-                addr = '$' + self.value.name
-            emiter.movl(addr, '%esi')
-        LC_tag = '$' + emiter.LC_tag(self.format)
-        ir = 'movl ' + LC_tag + ', %edi\n'\
-                   'movl $0, %eax\n'\
-                   'call printf\n'\
-                   'movl $0, %eax\n'
-        emiter.emit_as(ir)
-
 class AssignIR(IR):
-    def emit(self, emiter):
-        left = self.operands[0]
-        right = self.operands[1]
-        emiter.movl(right.emit(emiter), '%eax')
-        emiter.movl('%eax', emiter.address(left.index))
+    def __init__(self, function, operand1, operand2, operand3=None):
+        super(AssignIR, self).__init__()
+        self.kind = IRKind.ASSIGN
+        self.operands[0] = operand1
+        self.operands[1] = operand2
+        self.operands[2] = operand3
+
+
 
 class ExprIR(IR):
     def __init__(self):

@@ -5,6 +5,11 @@ from type_system import TypeSystem
 from mysymbol import *
 from ir import *
 
+class Node(object):
+    """docstring for Node."""
+
+    def __init__(self):
+        super(Node, self).__init__()
 
 class CallNode:
     def __init__(self, function, call_function, parameters):
@@ -121,33 +126,19 @@ class DeclaratorNode:
         self.function.symbol.locals.append(s)
 
 class AssignNode(Node):
-    def __init__(self, variable, value):
+    def __init__(self, function, variable, value):
         self.variable = variable
         self.value = value
+        self.function = function
 
     def check(self):
-        self.variable = self.variable.check()
-
-        for p in self.params:
-            p.check()
-        s = SymbolSystem.find_symbol(self.call_function)
-        if s is None:
-            s = FunctionSymbol()
-            s.value = self.call_function.value
-            SymbolSystem.add(s)
-        self.call_function = s
+        have_declared = True
+        self.variable = self.variable.check(self.function, have_declared)
+        self.value = self.value.check(self.function)
 
     def gen(self):
-        return
-        ir = CallIR(self.call_function, self.params)
+        ir = AssignIR(self.function.symbol, self.variable, self.value)
         self.function.gen_ir(ir)
-
-
-class Node(object):
-    """docstring for Node."""
-
-    def __init__(self):
-        super(Node, self).__init__()
 
 class IfNode(Node):
     def __init__(self, cond, then_stmts, else_stmts):

@@ -1,4 +1,8 @@
 
 实现变量声明
 
-实现AssignNode value 的 check
+
+需要把部分逻辑从emit过程转移到gen过程，即增加中间代码
+
+
+assert 报错 工具

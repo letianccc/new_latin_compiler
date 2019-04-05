@@ -5,20 +5,20 @@ from type_system import TypeSystem
 from mysymbol import SymbolSystem
 from util import *
 import os
-from emit import Emit
+from emitor import Emit
 
 
 
 def _main_():
-    path = r'C:\code\new_latin_compiler\find_error.c'
-    code = compile(path)
+    # path = r'C:\code\new_latin_compiler\find_error.c'
+    # code = compile(path)
 
     path = r'C:\code\new_latin_compiler\test.c'
     code = compile(path)
     path = r'C:\code\new_latin_compiler\test.s'
 
-    assert_code(path, code)
-    # write_code(path, code)
+    # assert_code(code)
+    write_code(path, code)
 
 def compile(input_path):
     f = open(input_path, 'r')
@@ -37,13 +37,7 @@ def compile(input_path):
         f.gen()
 
 
-    for f in functions:
-        s = f.symbol
-        size = 4
-        space = len(s.locals) * size
-        for index, local in enumerate(s.locals):
-            local.index = index
-            local.offset = space - index * size
+
     symbols = [f.symbol for f in functions]
     e = Emit(symbols)
     e.execute()
@@ -56,11 +50,17 @@ def write_code(path, code):
     f = open(path, 'w')
     f.write(code)
 
-def assert_code(path, code):
-    f = open(path, 'r')
-    expect_code = f.read()
-    assert expect_code == code
-
+def assert_code(code):
+    refer_path = r'C:\code\new_latin_compiler\test_copy.s'
+    with open(refer_path, 'r') as refer:
+        refer_lines = refer.read().split('\n')
+        lines = code.split('\n')
+        for index, refer_line in enumerate(refer_lines):
+            line = lines[index]
+            if refer_line != line:
+                log(f'{index}: expect({refer_line})')
+                log(f'{index}: code  ({line})')
+                raise Exception
 
 
 _main_()

@@ -121,7 +121,7 @@ class Parser:
             self.expect('=')
             value = self.bool_()
             self.expect(';')
-            return AssignNode(variable, value)
+            return AssignNode(self.function, variable, value)
 
 
     def parse_array_data(self):

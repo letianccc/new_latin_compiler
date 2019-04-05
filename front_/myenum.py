@@ -125,7 +125,8 @@ class SymbolKind(IntEnum):
 
 class IRKind(IntEnum):
     CALL = auto()
-
+    ASSIGN = auto()
+    
 class LevelKind(IntEnum):
     CURRENT = auto()
     OUTEST = auto()
