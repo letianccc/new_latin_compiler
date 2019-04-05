@@ -1,5 +1,5 @@
 
-from myenum import *
+from front_.myenum import *
 
 
 
@@ -19,7 +19,7 @@ class Emit(object):
             self.code += fe.code
 
     def start(self):
-        code = '    //by latin\n\n'
+        code = '//by latin\n\n'
         self.code += code
 
 

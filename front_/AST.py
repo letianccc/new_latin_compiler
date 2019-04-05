@@ -1,9 +1,9 @@
 
-from util import *
-from myenum import *
-from type_system import TypeSystem
-from mysymbol import *
-from ir import *
+from front_.util import *
+from front_.myenum import *
+from front_.type_system import TypeSystem
+from front_.mysymbol import *
+from front_.ir import *
 
 class Node(object):
     """docstring for Node."""
@@ -119,12 +119,14 @@ class DeclaratorNode:
 
     def check(self, identifier_type):
         self.identifier = self.identifier.check(self.function.symbol, identifier_type)
-        self.initializer = self.initializer.check(self.function.symbol)
+        if self.initializer:
+            self.initializer = self.initializer.check(self.function.symbol)
 
     def gen(self):
         # TODO: initializer 应该递归gen
-        ir = AssignIR(self.function.symbol, self.identifier, self.initializer)
-        self.function.gen_ir(ir)
+        if self.initializer:
+            ir = AssignIR(self.function.symbol, self.identifier, self.initializer)
+            self.function.gen_ir(ir)
 
 class AssignNode(Node):
     def __init__(self, function, variable, value):

@@ -1,5 +1,5 @@
-from token_ import *
-from myenum import *
+from front_.token_ import *
+from front_.myenum import *
 
 
 #TODO 引号  反斜杠 不应该包括在symbols中   需要解析为字符串

@@ -1,6 +1,6 @@
-from mysymbol import *
-from myenum import *
-from type_system import TypeSystem
+from front_.mysymbol import *
+from front_.myenum import *
+from front_.type_system import TypeSystem
 
 
 class Token(object):

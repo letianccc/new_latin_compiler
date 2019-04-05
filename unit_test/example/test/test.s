@@ -1,4 +1,4 @@
-    //by latin
+//by latin
 
 LC0:
     .string	"aaa%d\n"
@@ -11,10 +11,14 @@ _main:
     pushl	%edi
     movl	%esp, %ebp
     andl	$-16, %esp
-    subl	$12, %esp
-    movl	$7, 8(%esp)
-    movl	8(%esp), %eax
+    subl	$20, %esp
+    movl	$7, 16(%esp)
+    movl	$4, 12(%esp)
+    movl	12(%esp), %eax
     movl	%eax, 4(%esp)
+    movl	$LC0, 0(%esp)
+    call	_printf
+    movl	$2, 4(%esp)
     movl	$LC0, 0(%esp)
     call	_printf
     call	_getchar

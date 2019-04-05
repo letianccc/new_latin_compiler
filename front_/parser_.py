@@ -1,8 +1,8 @@
-from lexer_ import Lexer
-from AST import *
-from myenum import *
-from type_system import TypeSystem
-# from mysymbol import *
+from front_.lexer_ import Lexer
+from front_.AST import *
+from front_.myenum import *
+from front_.type_system import TypeSystem
+# from front_.mysymbol import *
 
 class Parser:
 

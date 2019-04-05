@@ -1,5 +1,5 @@
 
-from myenum import *
+from front_.myenum import *
 
 class TypeSystem(object):
     types = None
