@@ -74,6 +74,8 @@ class ParameterNode:
     def __init__(self, function, kind, type, parameter):
         self.function = function
         self.kind = kind
+        # 表示实参的变量或常量已经存在，因此有type
+        # 表示形参的变量未声明，因此type为None
         self.type = type
         self.parameter = parameter
         self.index = None
@@ -84,17 +86,16 @@ class ParameterNode:
         if k is TokenKind.INTCONST or k is TokenKind.STRING:
             s = self.parameter.check(self.function.symbol)
         elif k is TokenKind.ID:
-            have_declared = self.kind is NodeKind.ACTUAL_PARAMETER
-            s = self.parameter.check(self.function.symbol, have_declared)
+            s = self.parameter.check(self.function.symbol, self.type)
         self.parameter = s
 
     def access_name(self):
         return self.parameter.access_name()
 
 class DeclarationNode:
-    def __init__(self, function):
+    def __init__(self, function, specifier):
         self.function = function
-        self.specifier = None
+        self.specifier = specifier
         self.declarators = []
 
     def add(self, declarator):
@@ -107,23 +108,23 @@ class DeclarationNode:
             d.check(type)
 
     def gen(self):
-        return
+        for d in self.declarators:
+            d.gen()
 
 class DeclaratorNode:
-    def __init__(self, function):
+    def __init__(self, function, identifier, initializer):
         self.function = function
-        self.identifier = None
-        self.initializer = None
+        self.identifier = identifier
+        self.initializer = initializer
 
-    def check(self, type):
-        s = SymbolSystem.find_symbol(self.identifier, None, LevelKind.CURRENT)
-        if s is not None:
-            raise Exception("不能声明已经存在的变量")
-        s = IdentifierSymbol()
-        s.value = self.identifier.value
-        s.type = type
-        SymbolSystem.add(s)
-        self.function.symbol.locals.append(s)
+    def check(self, identifier_type):
+        self.identifier = self.identifier.check(self.function.symbol, identifier_type)
+        self.initializer = self.initializer.check(self.function.symbol)
+
+    def gen(self):
+        # TODO: initializer 应该递归gen
+        ir = AssignIR(self.function.symbol, self.identifier, self.initializer)
+        self.function.gen_ir(ir)
 
 class AssignNode(Node):
     def __init__(self, function, variable, value):
@@ -132,8 +133,7 @@ class AssignNode(Node):
         self.function = function
 
     def check(self):
-        have_declared = True
-        self.variable = self.variable.check(self.function, have_declared)
+        self.variable = self.variable.check(self.function)
         self.value = self.value.check(self.function)
 
     def gen(self):

@@ -12,7 +12,9 @@ _main:
     movl	%esp, %ebp
     andl	$-16, %esp
     subl	$12, %esp
-    movl	$3, 4(%esp)
+    movl	$5, 8(%esp)
+    movl	8(%esp), %eax
+    movl	%eax, 4(%esp)
     movl	$LC0, 0(%esp)
     call	_printf
     call	_getchar

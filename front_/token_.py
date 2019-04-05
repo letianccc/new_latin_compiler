@@ -31,9 +31,12 @@ class IdentifierToken(object):
         self.value = value
         self.kind = kind
 
-    def check(self, function, have_declared):
+    def check(self, function, type=None):
+        # 标识符是未声明（等待声明）的变量，则需要type以add symbol，检测是否重复定义
+        # 需要type 则type不能是None
         # 如果已经声明，则未找到symbol报错
         # 如果未声明，则生成symbol
+        have_declared = type is None
         if have_declared:
             s = SymbolSystem.find_symbol(self)
             if s is None:
@@ -43,7 +46,7 @@ class IdentifierToken(object):
             if s is not None:
                 raise Exception("重复定义")
             s = IdentifierSymbol()
-            s.value = p.value
+            s.value = self.value
             s.type = type
             SymbolSystem.add(s)
             function.locals.append(s)

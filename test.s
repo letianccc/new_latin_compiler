@@ -12,7 +12,7 @@ _main:
     movl	%esp, %ebp
     andl	$-16, %esp
     subl	$12, %esp
-    movl	$4, 8(%esp)
+    movl	$7, 8(%esp)
     movl	8(%esp), %eax
     movl	%eax, 4(%esp)
     movl	$LC0, 0(%esp)
