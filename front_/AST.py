@@ -19,12 +19,19 @@ class CallNode:
         self.kind = NodeKind.CALL
 
     def check(self):
-        count = len(self.params)
-        if count > self.function.symbol.max_actual_param:
-            self.function.symbol.max_actual_param = count
+
 
         for p in self.params:
             p.check()
+
+        space = 0
+        for p in self.params:
+            space += p.parameter.type.size
+        if space > self.function.symbol.call_space:
+            self.function.symbol.call_space = space
+        # count = len(self.params)
+        # if count > self.function.symbol.max_actual_param:
+        #     self.function.symbol.max_actual_param = count
 
         self.call_function = self.call_function.check(self.function, NodeKind.CALL)
 
@@ -78,7 +85,7 @@ class ParameterNode:
     def check(self):
         k = self.parameter.kind
         v = self.parameter.value
-        if k is TokenKind.INTCONST or k is TokenKind.STRING:
+        if k is TokenKind.INTCONST or k is TokenKind.STRING or k is TokenKind.DOUBLECONST:
             s = self.parameter.check(self.function.symbol)
         elif k is TokenKind.ID:
 

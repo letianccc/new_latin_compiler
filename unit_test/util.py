@@ -5,12 +5,6 @@ from front_.mycompiler import compile
 from front_.util import *
 
 
-def decimal_number(float_number):
-    # 浮点数字符串转换为十进制表示
-    f = float_number
-    bytes = struct.pack('<f', f)
-    d = struct.unpack('<i', bytes)[0]
-    return d
 
 def filepaths(test_dir):
     ps = []
@@ -36,8 +30,8 @@ def assert_file(test_dir, path, refer_path):
         for index, refer_line in enumerate(refer_lines):
             line = lines[index]
             if refer_line != line:
-                path = os.path.relpath(path, test_dir)
-                log(path)
+                # path = os.path.relpath(path, test_dir)
+                # log(path)
                 log(f'{index}: expect({refer_line})')
                 log(f'{index}: code  ({line})')
                 raise Exception

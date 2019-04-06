@@ -19,6 +19,10 @@ class GlobalField(Field):
     def find_symbol(self, token, type=None, level_kind=None):
         return self.find(token, type, self)
 
+    def double_constants(self):
+        const = [s for s in self.symbols if s.kind is SymbolKind.DOUBLECONST]
+        return const
+
 class IdentifierField(Field):
     def __init__(self):
         self.outside = None

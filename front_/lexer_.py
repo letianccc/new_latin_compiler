@@ -108,7 +108,7 @@ class Lexer:
         digits = self.scan_digits()
         c = self.cur_char()
         if c == '.':
-            kind = TokenKind.FLOATCONST
+            kind = TokenKind.DOUBLECONST
             digits += c
             self.next_char()
             digits += self.scan_digits()

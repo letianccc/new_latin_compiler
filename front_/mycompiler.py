@@ -36,6 +36,7 @@ def compile(input_path):
 
 
     symbols = [f.symbol for f in functions]
+    
     e = Emit(symbols)
     e.execute()
     code = e.code

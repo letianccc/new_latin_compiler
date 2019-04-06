@@ -15,15 +15,16 @@ class ConstantToken(object):
         self.kind = kind
 
     def check(self, function):
-        assert self.kind is TokenKind.INTCONST or self.kind is TokenKind.FLOATCONST
+        assert self.kind is TokenKind.INTCONST or self.kind is TokenKind.DOUBLECONST
         if self.kind is TokenKind.INTCONST:
             k = SymbolKind.INTCONST
+            type = TypeSystem.type(TokenKind.INT)
         else:
-            k = SymbolKind.FLOATCONST
+            k = SymbolKind.DOUBLECONST
+            type = TypeSystem.type(TokenKind.DOUBLE)
         s = SymbolSystem.find_symbol(self)
         if s is None:
-            type = TypeSystem.type(TokenKind.INT)
-            s = ConstantSymbol(SymbolKind.INTCONST, type, self.value)
+            s = ConstantSymbol(k, type, self.value)
             SymbolSystem.add(s)
         return s
 
@@ -79,7 +80,8 @@ class StringToken(object):
         # TODO: 检测最外层
         s = SymbolSystem.find_symbol(self)
         if s is None:
-            s = StringSymbol(self.value)
+            type = TypeSystem.type(TokenKind.STRING)
+            s = StringSymbol(self.value, type)
             SymbolSystem.add(s)
             strings = function.strings
             strings.append(s)

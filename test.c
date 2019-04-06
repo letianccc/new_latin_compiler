@@ -3,7 +3,8 @@
 
 
 void main() {
-    float a = 1.5;
-    float b = a;
+    // double a = 1.5;
+    // float b = a;
+    printf("hello%f", 1.5);
     getchar();
 }

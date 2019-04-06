@@ -1,5 +1,7 @@
 //by latin
 
+LC0:
+    .string	"hello%f"
     .text
     .globl	_main
 _main:
@@ -9,10 +11,11 @@ _main:
     pushl	%edi
     movl	%esp, %ebp
     andl	$-16, %esp
-    subl	$8, %esp
-    movl	$1.5, 4(%esp)
-    movl	4(%esp), %eax
-    movl	%eax, 0(%esp)
+    subl	$16, %esp
+    fldl	FLOAT0
+    fstpl	4(%esp)
+    movl	$LC0, 0(%esp)
+    call	_printf
     call	_getchar
     movl	%ebp, %esp
     popl	%edi
@@ -20,3 +23,6 @@ _main:
     popl	%ebx
     popl	%ebp
     ret
+FLOAT0:
+    .long	0
+    .long	1073217536

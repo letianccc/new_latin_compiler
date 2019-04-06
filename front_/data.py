@@ -15,6 +15,7 @@ reserve_symbols = [ '+', '-', '*', '/', '!', '=',
 word_map = {
     'int': TokenKind.INT,
     'float': TokenKind.FLOAT,
+    'double': TokenKind.DOUBLE,
     'void': TokenKind.VOID,
     'if': TokenKind.IF,
     'else': TokenKind.ELSE,

@@ -101,6 +101,7 @@ class TypeKind(IntEnum):
     FLOAT = auto()
     DOUBLE = auto()
     VOID = auto()
+    STRING = auto()
 
 class NodeKind(IntEnum):
     CALL = auto()
@@ -126,6 +127,7 @@ class SymbolKind(IntEnum):
     CONST = auto()
     FLOATCONST = auto()
     INTCONST = auto()
+    DOUBLECONST = auto()
 
 class IRKind(IntEnum):
     CALL = auto()

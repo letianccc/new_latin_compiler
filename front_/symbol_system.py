@@ -10,12 +10,29 @@ class SymbolSystem(object):
     strings = None
 
     @classmethod
-    def init(cls):
-        StringSymbol.init()
-        cls.identifiers = IdentifierField()
-        cls.constants = GlobalField()
-        cls.strings = GlobalField()
+    def add(cls, symbol):
+        k = symbol.kind
+        if k is SymbolKind.INTCONST or k is SymbolKind.DOUBLECONST:
+            cls.constants.add(symbol)
+        elif k is SymbolKind.STRING:
+            cls.strings.add(symbol)
+        elif k is SymbolKind.ID or k is SymbolKind.FUNCTION:
+            cls.identifiers.add(symbol)
 
+    @classmethod
+    def find_symbol(cls, token, type=None, level_kind=None):
+        k = token.kind
+        if k is TokenKind.INTCONST or k is TokenKind.DOUBLECONST:
+            s = cls.constants.find_symbol(token, type, level_kind)
+        elif k is TokenKind.STRING:
+            s = cls.strings.find_symbol(token, type, level_kind)
+        elif k is TokenKind.ID:
+            s = cls.identifiers.find_symbol(token, type, level_kind)
+        return s
+
+    @classmethod
+    def double_constants(cls):
+        return cls.constants.double_constants()
 
     @classmethod
     def enter(cls):
@@ -28,25 +45,11 @@ class SymbolSystem(object):
         cls.identifiers = cls.identifiers.outside
 
     @classmethod
-    def add(cls, symbol):
-        k = symbol.kind
-        if k is SymbolKind.CONST  or k is SymbolKind.FLOATCONST:
-            cls.constants.add(symbol)
-        elif k is SymbolKind.STRING:
-            cls.strings.add(symbol)
-        elif k is SymbolKind.ID or k is SymbolKind.FUNCTION:
-            cls.identifiers.add(symbol)
-
-    @classmethod
-    def find_symbol(cls, token, type=None, level_kind=None):
-        k = token.kind
-        if k is TokenKind.INTCONST or k is TokenKind.FLOATCONST:
-            s = cls.constants.find_symbol(token, type, level_kind)
-        elif k is TokenKind.STRING:
-            s = cls.strings.find_symbol(token, type, level_kind)
-        elif k is TokenKind.ID:
-            s = cls.identifiers.find_symbol(token, type, level_kind)
-        return s
+    def init(cls):
+        StringSymbol.init()
+        cls.identifiers = IdentifierField()
+        cls.constants = GlobalField()
+        cls.strings = GlobalField()
 
 class Symbol(object):
     """docstring for Symbol."""
@@ -72,7 +75,8 @@ class FunctionSymbol(Symbol):
         self.type = type
         self.params = []
         self.value = name
-        self.max_actual_param = 0
+        # self.max_actual_param = 0
+        self.call_space = 0
         self.strings = []
         self.locals = []
         b = Block()
@@ -101,9 +105,10 @@ class StringSymbol(Symbol):
     def init(cls):
         cls.index = 0
 
-    def __init__(self, string):
+    def __init__(self, string, type):
         super(StringSymbol, self).__init__()
         self.kind = SymbolKind.STRING
+        self.type = type
         self.value = string
         self.tag = None
         self.index = StringSymbol.index
@@ -131,6 +136,10 @@ class ConstantSymbol(Symbol):
         self.kind = kind
         self.value = value
         self.type = type
+        if self.kind is SymbolKind.INTCONST:
+            self.size = 4
+        elif self.kind is SymbolKind.DOUBLECONST:
+            self.size = 8
         self.__access_name = f'${self.value}'
 
     def access_name():
@@ -143,6 +152,9 @@ class ConstantSymbol(Symbol):
             del self.__access_name
         return locals()
     access_name = property(**access_name())
+
+
+
 
 class IdentifierSymbol(Symbol):
     """docstring for IdentifierSymbol."""

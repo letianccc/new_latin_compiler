@@ -85,10 +85,11 @@ class Parser:
                 self.expect(TokenKind.RBRACE)
                 return []
             # 数组初始化
-            if self.match(TokenKind.INTCONST) or self.match(TokenKind.FLOATCONST):
-                block = self.parse_array_data()
-            else:
-                block = self.parse_statements()
+            # if self.match(TokenKind.INTCONST) or self.match(TokenKind.DOUBLECONST):
+            #     block = self.parse_array_data()
+            # else:
+            #     block = self.parse_statements()
+            block = self.parse_statements()
             self.expect(TokenKind.RBRACE)
         else:
             block = self.single_stmt()
@@ -108,7 +109,7 @@ class Parser:
         t = self.cur_token()
         if self.match(TokenKind.IF):
             return self.if_stmt()
-        elif self.match(TokenKind.INT) or self.match(TokenKind.FLOAT):
+        elif self.match(TokenKind.INT) or self.match(TokenKind.DOUBLE):
             return self.parse_declaration()
         elif self.match(TokenKind.WHILE):
             return self.while_stmt()
@@ -327,7 +328,10 @@ class Parser:
             raise Exception
 
     def match_number(self):
-        return self.match(TokenKind.INTCONST) or self.match(TokenKind.FLOATCONST)
+        r = self.match(TokenKind.INTCONST) \
+            or self.match(TokenKind.FLOATCONST) \
+            or self.match(TokenKind.DOUBLECONST)
+        return r
 
     def parse_identifier(self):
         t = self.cur_token()

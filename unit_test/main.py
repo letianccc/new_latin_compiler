@@ -16,8 +16,12 @@ def _main_():
     test_dir = r'C:\code\new_latin_compiler\unit_test\example'
     paths = filepaths(test_dir)
     for cfile, sfile in paths:
-        assert_file(test_dir, cfile, sfile)
-
+        try:
+            assert_file(test_dir, cfile, sfile)
+        except Exception:
+            path = os.path.relpath(cfile, test_dir)
+            log(path)
+            raise Exception
 
 
 _main_()
