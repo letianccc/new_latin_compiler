@@ -124,6 +124,8 @@ class SymbolKind(IntEnum):
     STRING = auto()
     ID = auto()
     CONST = auto()
+    FLOATCONST = auto()
+    INTCONST = auto()
 
 class IRKind(IntEnum):
     CALL = auto()

@@ -54,7 +54,7 @@ class FunctionEmit(object):
         size = 4
         code = ''
         for p in ps:
-            src = p.access_name()
+            src = p.access_name
             offset = size * p.index
             # 不能把内存move到内存，需要寄存器过渡
             target = f'{offset}(%esp)'
@@ -71,8 +71,8 @@ class FunctionEmit(object):
         dst = ir.operands[0]
         src1 = ir.operands[1]
         code = ''
-        dst_addr = dst.access_name()
-        src_addr = src1.access_name()
+        dst_addr = dst.access_name
+        src_addr = src1.access_name
         if src1.kind is SymbolKind.ID:
             code += f'    movl\t{src_addr}, %eax\n'
             src_addr = '%eax'
@@ -103,7 +103,7 @@ class FunctionEmit(object):
         code = ''
         for s in strings:
             s.allocate = True
-            code += f'{s.access_name()[1:]}:\n'\
+            code += f'{s.access_name[1:]}:\n'\
                     f'    .string\t{s.value}\n'
         self.emit_code(code)
 

@@ -87,8 +87,9 @@ class ParameterNode:
                 self.function.symbol.add_param(s)
         self.parameter = s
 
+    @property
     def access_name(self):
-        return self.parameter.access_name()
+        return self.parameter.access_name
 
 class DeclarationNode:
     def __init__(self, function, specifier):

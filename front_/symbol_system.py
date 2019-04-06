@@ -30,7 +30,7 @@ class SymbolSystem(object):
     @classmethod
     def add(cls, symbol):
         k = symbol.kind
-        if k is SymbolKind.CONST:
+        if k is SymbolKind.CONST  or k is SymbolKind.FLOATCONST:
             cls.constants.add(symbol)
         elif k is SymbolKind.STRING:
             cls.strings.add(symbol)
@@ -40,7 +40,7 @@ class SymbolSystem(object):
     @classmethod
     def find_symbol(cls, token, type=None, level_kind=None):
         k = token.kind
-        if k is TokenKind.INTCONST:
+        if k is TokenKind.INTCONST or k is TokenKind.FLOATCONST:
             s = cls.constants.find_symbol(token, type, level_kind)
         elif k is TokenKind.STRING:
             s = cls.strings.find_symbol(token, type, level_kind)
@@ -109,22 +109,40 @@ class StringSymbol(Symbol):
         self.index = StringSymbol.index
         StringSymbol.index += 1
         self.allocate = False
+        self.__access_name = None
 
-    def access_name(self):
-        return f'$LC{self.index}'
+    def access_name():
+        doc = "The access_name property."
+        def fget(self):
+            return f'$LC{self.index}'
+        def fset(self, access_name):
+            self.__access_name = access_name
+        return locals()
+    access_name = property(**access_name())
+
+    # def access_name(self):
+    #     return f'$LC{self.index}'
 
 class ConstantSymbol(Symbol):
     """docstring for ConstantSymbol."""
 
-    def __init__(self, type, value):
+    def __init__(self, kind, type, value):
         super(ConstantSymbol, self).__init__()
-        self.kind = SymbolKind.CONST
+        self.kind = kind
         self.value = value
         self.type = type
+        self.__access_name = f'${self.value}'
 
-
-    def access_name(self):
-        return f'${self.value}'
+    def access_name():
+        doc = "The access_name property."
+        def fget(self):
+            return self.__access_name
+        def fset(self, access_name):
+            self.__access_name = access_name
+        def fdel(self):
+            del self.__access_name
+        return locals()
+    access_name = property(**access_name())
 
 class IdentifierSymbol(Symbol):
     """docstring for IdentifierSymbol."""
@@ -137,8 +155,18 @@ class IdentifierSymbol(Symbol):
         self.index = 0
         self.offset = None
         self.is_formal_param = False
+        self.__access_name = None
 
+    def access_name():
+        doc = "The access_name property."
+        def fget(self):
+            reg = '%ebp' if self.is_formal_param else '%esp'
+            return f'{self.offset}({reg})'
+        def fset(self, access_name):
+            self.__access_name = access_name
+        return locals()
+    access_name = property(**access_name())
 
-    def access_name(self):
-        reg = '%ebp' if self.is_formal_param else '%esp'
-        return f'{self.offset}({reg})'
+    # def access_name(self):
+    #     reg = '%ebp' if self.is_formal_param else '%esp'
+    #     return f'{self.offset}({reg})'

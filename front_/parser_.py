@@ -317,7 +317,7 @@ class Parser:
         elif self.match(TokenKind.STRING):
             t = self.next_token()
             return t
-        elif self.match(TokenKind.INTCONST):
+        elif self.match_number():
             t = self.next_token()
             return t
         elif self.match(TokenKind.ID):
@@ -325,6 +325,9 @@ class Parser:
             return self.parse_identifier()
         else:
             raise Exception
+
+    def match_number(self):
+        return self.match(TokenKind.INTCONST) or self.match(TokenKind.FLOATCONST)
 
     def parse_identifier(self):
         t = self.cur_token()

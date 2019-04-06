@@ -5,6 +5,12 @@ from front_.mycompiler import compile
 from front_.util import *
 
 
+def decimal_number(float_number):
+    # 浮点数字符串转换为十进制表示
+    f = float_number
+    bytes = struct.pack('<f', f)
+    d = struct.unpack('<i', bytes)[0]
+    return d
 
 def filepaths(test_dir):
     ps = []

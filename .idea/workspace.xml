@@ -6,10 +6,21 @@
   <component name="ChangeListManager">
     <list default="true" id="7e88492a-b3e9-467d-a75b-e7f93ff371c8" name="Default" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/a.exe" beforeDir="false" afterPath="$PROJECT_DIR$/a.exe" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/front_/AST.py" beforeDir="false" afterPath="$PROJECT_DIR$/front_/AST.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/front_/emitor.py" beforeDir="false" afterPath="$PROJECT_DIR$/front_/emitor.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/front_/lexer_.py" beforeDir="false" afterPath="$PROJECT_DIR$/front_/lexer_.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/front_/myenum.py" beforeDir="false" afterPath="$PROJECT_DIR$/front_/myenum.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/front_/parser_.py" beforeDir="false" afterPath="$PROJECT_DIR$/front_/parser_.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/front_/symbol_system.py" beforeDir="false" afterPath="$PROJECT_DIR$/front_/symbol_system.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/front_/token_.py" beforeDir="false" afterPath="$PROJECT_DIR$/front_/token_.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/hello.c" beforeDir="false" afterPath="$PROJECT_DIR$/hello.c" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/hello.s" beforeDir="false" afterPath="$PROJECT_DIR$/hello.s" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test.c" beforeDir="false" afterPath="$PROJECT_DIR$/test.c" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test.py" beforeDir="false" afterPath="$PROJECT_DIR$/test.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test.s" beforeDir="false" afterPath="$PROJECT_DIR$/test.s" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/todo" beforeDir="false" afterPath="$PROJECT_DIR$/todo" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/unit_test/util.py" beforeDir="false" afterPath="$PROJECT_DIR$/unit_test/util.py" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -18,10 +29,10 @@
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
   <component name="CoverageDataManager">
-    <SUITE FILE_PATH="coverage/new_latin_compiler$main.coverage" NAME="main Coverage Results" MODIFIED="1554480212521" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/front_" />
+    <SUITE FILE_PATH="coverage/new_latin_compiler$main.coverage" NAME="main Coverage Results" MODIFIED="1554520248254" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/front_" />
     <SUITE FILE_PATH="coverage/new_latin_compiler$new_gen.coverage" NAME="new_gen Coverage Results" MODIFIED="1543867835737" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/unit_test" />
     <SUITE FILE_PATH="coverage/new_latin_compiler$test1.coverage" NAME="test1 Coverage Results" MODIFIED="1554355764890" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
-    <SUITE FILE_PATH="coverage/new_latin_compiler$main__1_.coverage" NAME="main (1) Coverage Results" MODIFIED="1554481138867" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/unit_test" />
+    <SUITE FILE_PATH="coverage/new_latin_compiler$main__1_.coverage" NAME="main (1) Coverage Results" MODIFIED="1554522578443" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/unit_test" />
     <SUITE FILE_PATH="coverage/new_latin_compiler$AST.coverage" NAME="AST Coverage Results" MODIFIED="1554345087658" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/front_" />
     <SUITE FILE_PATH="coverage/new_latin_compiler$none.coverage" NAME="none Coverage Results" MODIFIED="1543866596322" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/new_latin_compiler$gen.coverage" NAME="gen Coverage Results" MODIFIED="1543589494123" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/front_/gen" />
@@ -29,93 +40,46 @@
     <SUITE FILE_PATH="coverage/new_latin_compiler$test_all.coverage" NAME="test_all Coverage Results" MODIFIED="1543568859498" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/unit_test" />
     <SUITE FILE_PATH="coverage/new_latin_compiler$config.coverage" NAME="config Coverage Results" MODIFIED="1543586605678" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/front_" />
     <SUITE FILE_PATH="coverage/new_latin_compiler$main1.coverage" NAME="main1 Coverage Results" MODIFIED="1554457073786" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
-    <SUITE FILE_PATH="coverage/new_latin_compiler$test.coverage" NAME="test Coverage Results" MODIFIED="1554458688125" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/new_latin_compiler$test.coverage" NAME="test Coverage Results" MODIFIED="1554522309751" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/new_latin_compiler$py_test_in_gen_py.coverage" NAME="py.test in gen.py Coverage Results" MODIFIED="1543568851129" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/unit_test" />
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="600">
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/test.py">
-          <provider selected="true" editor-type-id="text-editor" />
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="187">
+              <caret line="24" column="13" selection-start-line="24" selection-start-column="13" selection-end-line="24" selection-end-column="13" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/unit_test/main.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="96">
+              <caret line="18" selection-start-line="18" selection-end-line="18" />
+              <folding>
+                <element signature="e#4#14#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/front_/parser_.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="154">
-              <caret line="78" column="16" selection-start-line="78" selection-start-column="16" selection-end-line="78" selection-end-column="16" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/front_/token_.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="143">
-              <caret line="68" selection-start-line="68" selection-end-line="68" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/front_/main.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="181">
-              <caret line="21" selection-start-line="21" selection-end-line="21" />
-              <folding>
-                <element signature="e#1#11#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/front_/symbol_system.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="96">
-              <caret line="77" selection-start-line="77" selection-end-line="77" />
-              <folding>
-                <element signature="e#1#28#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/front_/emitor.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="55">
-              <caret line="83" selection-start-line="83" selection-end-line="83" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/front_/mycompiler.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="66">
-              <caret line="30" selection-start-line="30" selection-end-line="30" />
-              <folding>
-                <element signature="e#1#32#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/front_/type_system.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="88">
-              <caret line="4" column="16" selection-start-line="4" selection-start-column="16" selection-end-line="4" selection-end-column="16" />
+            <state relative-caret-position="118">
+              <caret line="303" column="14" selection-start-line="303" selection-start-column="8" selection-end-line="303" selection-end-column="14" />
             </state>
           </provider>
         </entry>
       </file>
       <file pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/front_/AST.py">
+        <entry file="file://$PROJECT_DIR$/front_/emitor.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="170">
-              <caret line="65" column="11" selection-start-line="65" selection-start-column="11" selection-end-line="65" selection-end-column="11" />
+            <state relative-caret-position="149">
+              <caret line="60" column="26" selection-start-line="60" selection-start-column="26" selection-end-line="60" selection-end-column="26" />
             </state>
           </provider>
         </entry>
@@ -131,9 +95,6 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>rax</find>
-      <find>rcx</find>
-      <find>rdx</find>
       <find>sub</find>
       <find>subll</find>
       <find>'.type	main, @function\n'\</find>
@@ -160,12 +121,12 @@
       <find>expect_code</find>
       <find>from</find>
       <find>emit_call</find>
+      <find>access_name</find>
+      <find>self._value</find>
       <find>reserve_space</find>
+      <find>p.parameter</find>
     </findStrings>
     <replaceStrings>
-      <replace>sub</replace>
-      <replace>self.expect</replace>
-      <replace>def expect</replace>
       <replace>rbp</replace>
       <replace>rsp</replace>
       <replace>rsi</replace>
@@ -192,7 +153,10 @@
       <replace>parse_decl_parameter</replace>
       <replace>.value</replace>
       <replace>.statements</replace>
+      <replace>value</replace>
+      <replace>self.__value</replace>
       <replace>refer_line</replace>
+      <replace>p</replace>
     </replaceStrings>
   </component>
   <component name="Git.Settings">
@@ -213,19 +177,19 @@
         <option value="$PROJECT_DIR$/front_/type_system.py" />
         <option value="$PROJECT_DIR$/front_/util.py" />
         <option value="$PROJECT_DIR$/test1.py" />
-        <option value="$PROJECT_DIR$/front_/lexer_.py" />
         <option value="$PROJECT_DIR$/front_/mysymbol.py" />
         <option value="$PROJECT_DIR$/front_/emit.py" />
-        <option value="$PROJECT_DIR$/front_/emitor.py" />
         <option value="$PROJECT_DIR$/main1.py" />
         <option value="$PROJECT_DIR$/front_/main.py" />
         <option value="$PROJECT_DIR$/unit_test/main.py" />
-        <option value="$PROJECT_DIR$/test.py" />
         <option value="$PROJECT_DIR$/front_/parser_.py" />
         <option value="$PROJECT_DIR$/front_/mycompiler.py" />
         <option value="$PROJECT_DIR$/front_/token_.py" />
         <option value="$PROJECT_DIR$/front_/symbol_system.py" />
+        <option value="$PROJECT_DIR$/front_/lexer_.py" />
         <option value="$PROJECT_DIR$/front_/AST.py" />
+        <option value="$PROJECT_DIR$/test.py" />
+        <option value="$PROJECT_DIR$/front_/emitor.py" />
       </list>
     </option>
   </component>
@@ -419,8 +383,8 @@
     <recent_temporary>
       <list>
         <item itemvalue="Python.main (1)" />
-        <item itemvalue="Python.main" />
         <item itemvalue="Python.test" />
+        <item itemvalue="Python.main" />
         <item itemvalue="Python.main1" />
         <item itemvalue="Python.test1" />
       </list>
@@ -439,7 +403,7 @@
       <workItem from="1553929518796" duration="542000" />
       <workItem from="1553930099241" duration="38698000" />
       <workItem from="1554128589445" duration="44283000" />
-      <workItem from="1554347253929" duration="49774000" />
+      <workItem from="1554347253929" duration="55310000" />
     </task>
     <servers />
   </component>
@@ -452,7 +416,7 @@
     </history-entry>
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="133297000" />
+    <option name="totallyTimeSpent" value="138833000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -472,7 +436,7 @@
       <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" weight="0.3285968" />
-      <window_info active="true" anchor="bottom" id="Run" order="2" visible="true" weight="0.39609236" />
+      <window_info active="true" anchor="bottom" id="Run" order="2" visible="true" weight="0.4689165" />
       <window_info anchor="bottom" id="Debug" order="3" weight="0.55950266" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
@@ -565,7 +529,7 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/front_/token_.py</url>
-          <line>68</line>
+          <line>65</line>
           <option name="timeStamp" value="119" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
@@ -800,17 +764,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/front_/lexer_.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="618">
-          <caret line="170" selection-start-line="170" selection-end-line="170" />
-          <folding>
-            <element signature="e#5562#5925#0" />
-            <element signature="e#5952#6092#0" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/main1.py">
       <provider selected="true" editor-type-id="text-editor">
         <state>
@@ -828,26 +781,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/unit_test/main.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="286">
-          <caret line="19" lean-forward="true" selection-start-line="19" selection-end-line="19" />
-          <folding>
-            <element signature="e#4#14#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/unit_test/util.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="550">
-          <caret line="25" column="6" selection-start-line="25" selection-start-column="6" selection-end-line="25" selection-end-column="6" />
-          <folding>
-            <element signature="e#2#11#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/front_/myenum.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="220">
@@ -859,9 +792,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="181">
           <caret line="21" selection-start-line="21" selection-end-line="21" />
-          <folding>
-            <element signature="e#1#11#0" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -872,34 +802,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/test.py">
-      <provider selected="true" editor-type-id="text-editor" />
-    </entry>
     <entry file="file://$PROJECT_DIR$/front_/field.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="660">
           <caret line="30" selection-start-line="30" selection-end-line="30" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/front_/parser_.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="154">
-          <caret line="78" column="16" selection-start-line="78" selection-start-column="16" selection-end-line="78" selection-end-column="16" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$USER_HOME$/AppData/Local/Programs/Python/Python37/Lib/enum.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="85">
-          <caret line="347" selection-start-line="347" selection-end-line="347" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/front_/token_.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="143">
-          <caret line="68" selection-start-line="68" selection-end-line="68" />
         </state>
       </provider>
     </entry>
@@ -913,27 +819,85 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/front_/emitor.py">
+    <entry file="file://$PROJECT_DIR$/front_/lexer_.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="55">
-          <caret line="83" selection-start-line="83" selection-end-line="83" />
+        <state>
+          <caret selection-end-line="1" selection-end-column="27" />
+          <folding>
+            <element signature="e#0#27#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/front_/token_.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="8">
+          <caret line="21" selection-start-line="21" selection-end-line="21" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$USER_HOME$/AppData/Local/Programs/Python/Python37/Lib/enum.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="104">
+          <caret line="347" selection-start-line="347" selection-end-line="347" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/front_/symbol_system.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="96">
-          <caret line="77" selection-start-line="77" selection-end-line="77" />
+          <caret line="32" column="58" selection-start-line="32" selection-start-column="53" selection-end-line="32" selection-end-column="63" />
           <folding>
             <element signature="e#1#28#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/unit_test/util.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="160">
+          <caret line="42" selection-start-line="42" selection-end-line="42" />
+          <folding>
+            <element signature="e#2#11#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/front_/AST.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="170">
-          <caret line="65" column="11" selection-start-line="65" selection-start-column="11" selection-end-line="65" selection-end-column="11" />
+        <state relative-caret-position="193">
+          <caret line="90" column="25" selection-start-line="90" selection-start-column="25" selection-end-line="90" selection-end-column="25" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/front_/parser_.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="118">
+          <caret line="303" column="14" selection-start-line="303" selection-start-column="8" selection-end-line="303" selection-end-column="14" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/test.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="187">
+          <caret line="24" column="13" selection-start-line="24" selection-start-column="13" selection-end-line="24" selection-end-column="13" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/unit_test/main.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="96">
+          <caret line="18" selection-start-line="18" selection-end-line="18" />
+          <folding>
+            <element signature="e#4#14#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/front_/emitor.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="149">
+          <caret line="60" column="26" selection-start-line="60" selection-start-column="26" selection-end-line="60" selection-end-column="26" />
         </state>
       </provider>
     </entry>

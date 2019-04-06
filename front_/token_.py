@@ -15,15 +15,17 @@ class ConstantToken(object):
         self.kind = kind
 
     def check(self, function):
+        assert self.kind is TokenKind.INTCONST or self.kind is TokenKind.FLOATCONST
         if self.kind is TokenKind.INTCONST:
-            s = SymbolSystem.find_symbol(self)
-            if s is None:
-                type = TypeSystem.type(TokenKind.INT)
-                s = ConstantSymbol(type, self.value)
-                SymbolSystem.add(s)
-            return s
+            k = SymbolKind.INTCONST
         else:
-            raise Exception()
+            k = SymbolKind.FLOATCONST
+        s = SymbolSystem.find_symbol(self)
+        if s is None:
+            type = TypeSystem.type(TokenKind.INT)
+            s = ConstantSymbol(SymbolKind.INTCONST, type, self.value)
+            SymbolSystem.add(s)
+        return s
 
 
 class IdentifierToken(object):
