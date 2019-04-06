@@ -8,6 +8,7 @@ class Emit(object):
 
     def __init__(self, symbols):
         super(Emit, self).__init__()
+        # TODO: symbol应该为function
         self.symbols = symbols
         self.code = ''
 
@@ -18,16 +19,48 @@ class Emit(object):
             fe = FunctionEmit(f)
             fe.execute()
             self.emit_code(fe.code)
+        self.emit_string()
         self.emit_double()
 
-    def  allocate(self):
-        # double
+    def emit_string(self):
+        code = ''
+        for s in SymbolSystem.strings.symbols:
+            # TODO: addr 和 access_name 应该分开
+            tag = s.access_name[1:]
+            code += f'{tag}:\n'\
+                    f'    .string\t{s.value}\n'
+        self.emit_code(code)
+
+    def allocate(self):
+        self.allocate_float()
+        self.allocate_stack()
+
+    def allocate_float(self):
         # TODO: 待重构
         doubles = SymbolSystem.double_constants()
         for index, f in enumerate(doubles):
             addr = f'FLOAT{index}'
             f.access_name = addr
 
+    def allocate_stack(self):
+        # TODO: type.size 待重构
+        for func in self.symbols:
+            # 计算预留空间
+            space = 0
+            for local in func.locals:
+                space += local.type.size
+            space += func.call_space
+            func.reverse_space = space
+            # 为局部变量分配偏移
+            sp = space
+            for index, local in enumerate(func.locals):
+                local.index = index
+                size = local.type.size
+                local.offset = sp - (index + 1) * size
+            # 为函数参数分配偏移
+            for p in func.params:
+                # +5  要跳过 返回地址，ebp,ebx,esi,edi 寻址到第一个传递过来的值
+                p.offset = (p.index + 5) * p.type.size
 
     def start(self):
         code = '//by latin\n\n'
@@ -35,8 +68,9 @@ class Emit(object):
 
     def emit_double(self):
         doubles = SymbolSystem.double_constants()
-        code = ''
+
         for f in doubles:
+            code = ''
             code += f'{f.access_name}:\n'
             d1, d2 = decimal_from_double(f.value)
             code += f'    .long\t{d1}\n'
@@ -57,7 +91,6 @@ class FunctionEmit(object):
         self.code = ''
 
     def execute(self):
-        self.emit_string()
         self.emit_function_header()
         self.push_stack()
         self.reserve_space()
@@ -141,40 +174,10 @@ class FunctionEmit(object):
         self.emit_code(code)
 
     def reserve_space(self):
-        # TODO: 局部变量的空间
-        s = self.function
-        # count = len(s.locals) + self.function.max_actual_param
-
-        space = 0
-        for local in s.locals:
-            space += local.type.size
-        # count = len(s.locals)
-        # size = 4
-        # space = count * size
-        space += self.function.call_space
+        space = self.function.reverse_space
         code = f'    subl\t${space}, %esp\n'
         self.emit_code(code)
-        # 分配地址
-        sp = space
-        for index, local in enumerate(s.locals):
-            local.index = index
-            size = local.type.size
-            local.offset = sp - (index + 1) * size
-        for p in self.function.params:
-            # +5  要跳过 返回地址，ebp,ebx,esi,edi 寻址到第一个传递过来的值
-            p.offset = (p.index + 5) * p.type.size
-
-    def emit_string(self):
-        strings = []
-        for s in self.function.strings:
-            if s.allocate is False:
-                strings.append(s)
-        code = ''
-        for s in strings:
-            s.allocate = True
-            code += f'{s.access_name[1:]}:\n'\
-                    f'    .string\t{s.value}\n'
-        self.emit_code(code)
+        return
 
     def emit_function_header(self):
         code = '    .text\n'\

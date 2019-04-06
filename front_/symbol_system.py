@@ -35,6 +35,10 @@ class SymbolSystem(object):
         return cls.constants.double_constants()
 
     @classmethod
+    def strings(cls):
+        return cls.strings.symbols
+
+    @classmethod
     def enter(cls):
         inner = IdentifierField()
         inner.outside = cls.identifiers
@@ -77,6 +81,8 @@ class FunctionSymbol(Symbol):
         self.value = name
         # self.max_actual_param = 0
         self.call_space = 0
+        # reverse_space 包括局部变量与调用参数所需要的全部空间
+        self.reverse_space = 0
         self.strings = []
         self.locals = []
         b = Block()

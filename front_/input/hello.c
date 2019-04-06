@@ -1,6 +1,15 @@
 
+#include<stdio.h>
+
 
 void func1(int a, int b) {
+    int c = a;
+    printf("value: %d\n", a);
+    printf("value: %d\n", b);
+    printf("value: %d\n", c);
+}
+
+void func2(int a, int b) {
     int a1 = 3, a2 = 2, a3 = 1;
     int b1 = 1, b2 = 3, b3;
     int c1, c2, c3;
@@ -16,13 +25,6 @@ void func1(int a, int b) {
     printf("value: None\n");
     printf("value: %d\n", 5);
 
-}
-
-void func2(int a, int b) {
-    int c = a;
-    printf("value: %d\n", a);
-    printf("value: %d\n", b);
-    printf("value: %d\n", c);
 }
 
 void func3() {
@@ -50,7 +52,7 @@ void main() {
     printf("value: %d\n", 5);
 
     func1(1, 2);
-    func2(1, 2);
+    func2(3, 4);
     func3();
     func4(1);
     getchar();

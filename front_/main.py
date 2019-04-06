@@ -9,8 +9,8 @@ from front_.mycompiler import compile
 from front_.util import *
 
 def _main_():
-    cpath = r'C:\code\new_latin_compiler\test.c'
-    spath = r'C:\code\new_latin_compiler\test.s'
+    cpath = r'C:\code\new_latin_compiler\front_\input\test.c'
+    spath = r'C:\code\new_latin_compiler\front_\input\test.s'
     write_code(cpath, spath)
 
 
