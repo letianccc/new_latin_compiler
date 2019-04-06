@@ -38,9 +38,9 @@ class Emit(object):
         code = ''
         for f in doubles:
             code += f'{f.access_name}:\n'
-            d = decimal_number(f.value)
-            code += f'    .long\t0\n'
-            code += f'    .long\t{d}\n'
+            d1, d2 = decimal_from_double(f.value)
+            code += f'    .long\t{d1}\n'
+            code += f'    .long\t{d2}\n'
             self.emit_code(code)
 
     def emit_code(self, code):
