@@ -2,7 +2,7 @@
 from front_.myenum import *
 from front_.field import *
 from front_.ir import *
-
+from front_.type_system import *
 
 class SymbolSystem(object):
     identifiers = None
@@ -122,17 +122,8 @@ class StringSymbol(Symbol):
         self.allocate = False
         self.__access_name = None
 
-    def access_name():
-        doc = "The access_name property."
-        def fget(self):
-            return f'$LC{self.index}'
-        def fset(self, access_name):
-            self.__access_name = access_name
-        return locals()
-    access_name = property(**access_name())
-
-    # def access_name(self):
-    #     return f'$LC{self.index}'
+    def access_name(self):
+        return f'$LC{self.index}'
 
 class ConstantSymbol(Symbol):
     """docstring for ConstantSymbol."""
@@ -147,17 +138,27 @@ class ConstantSymbol(Symbol):
         elif self.kind is SymbolKind.DOUBLECONST:
             self.size = 8
         self.__access_name = f'${self.value}'
+        # self.__access_name = f'${self.value}'
 
-    def access_name():
-        doc = "The access_name property."
-        def fget(self):
-            return self.__access_name
-        def fset(self, access_name):
-            self.__access_name = access_name
-        def fdel(self):
-            del self.__access_name
-        return locals()
-    access_name = property(**access_name())
+    def access_name(self):
+        return self.__access_name
+
+    def set_access_name(self, name):
+        self.__access_name = name
+
+class IntSymbol(Symbol):
+    """docstring for ConstantSymbol."""
+
+    def __init__(self, value):
+        super(IntSymbol, self).__init__()
+        self.kind = SymbolKind.INTCONST
+        self.type = TypeSystem.INT
+        self.size = 4
+        self.value = value
+        self.__access_name = f'${self.value}'
+
+    def access_name(self):
+        return self.__access_name
 
 
 
@@ -175,16 +176,6 @@ class IdentifierSymbol(Symbol):
         self.is_formal_param = False
         self.__access_name = None
 
-    def access_name():
-        doc = "The access_name property."
-        def fget(self):
-            reg = '%ebp' if self.is_formal_param else '%esp'
-            return f'{self.offset}({reg})'
-        def fset(self, access_name):
-            self.__access_name = access_name
-        return locals()
-    access_name = property(**access_name())
-
-    # def access_name(self):
-    #     reg = '%ebp' if self.is_formal_param else '%esp'
-    #     return f'{self.offset}({reg})'
+    def access_name(self):
+        reg = '%ebp' if self.is_formal_param else '%esp'
+        return f'{self.offset}({reg})'

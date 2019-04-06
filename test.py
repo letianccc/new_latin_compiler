@@ -1,15 +1,26 @@
 class T:
-    v = 0
-    @classmethod
-    def init(cls):
-        cls.v = 1
+    def __init__(self):
+        self.__v = 0
 
-    @classmethod
     @property
-    def value(cls):
-        return 1
+    def value(self):
+        print('T get')
+        return self.__v
 
-print(T.v)
-T.init()
-print(T.v)
-print(T.value)
+    @value.setter
+    def value(self, value):
+        print('T set')
+        self.__v = value
+
+class Child(T):
+    @property
+    def value(self):
+        print('cHILD get')
+        return super().value
+
+t = Child()
+print(t.value)
+t.value = 5
+print(t.value)
+
+# print(t.__v)

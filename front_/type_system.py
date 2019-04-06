@@ -1,24 +1,6 @@
 
 from front_.myenum import *
 
-class TypeSystem(object):
-    types = None
-    @classmethod
-    def init(cls):
-        cls.types = {
-            TokenKind.INT: Type(TypeKind.INT, 4),
-            TokenKind.FLOAT: Type(TypeKind.FLOAT, 4),
-            TokenKind.DOUBLE: Type(TypeKind.DOUBLE, 8),
-            TokenKind.VOID: Type(TypeKind.VOID, 0),
-            TokenKind.STRING: Type(TypeKind.STRING, 4),
-
-        }
-
-    @classmethod
-    def type(cls, token_kind):
-        return cls.types[token_kind]
-
-
 class Type(object):
     """docstring for Type."""
 
@@ -27,3 +9,27 @@ class Type(object):
         self.kind = kind
         self.child = None
         self.size = size
+
+
+class TypeSystem(object):
+    INT = Type(TypeKind.INT, 4)
+    FLOAT = Type(TypeKind.FLOAT, 4)
+    DOUBLE = Type(TypeKind.DOUBLE, 8)
+    VOID = Type(TypeKind.VOID, 0)
+    STRING = Type(TypeKind.STRING, 4)
+
+    types = None
+    @classmethod
+    def init(cls):
+        cls.types = {
+            TokenKind.INT: cls.INT,
+            TokenKind.FLOAT: cls.FLOAT,
+            TokenKind.DOUBLE: cls.DOUBLE,
+            TokenKind.VOID: cls.VOID,
+            TokenKind.STRING: cls.STRING,
+
+        }
+
+    @classmethod
+    def type(cls, token_kind):
+        return cls.types[token_kind]

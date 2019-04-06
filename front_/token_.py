@@ -24,7 +24,10 @@ class ConstantToken(object):
             type = TypeSystem.type(TokenKind.DOUBLE)
         s = SymbolSystem.find_symbol(self)
         if s is None:
-            s = ConstantSymbol(k, type, self.value)
+            if self.kind is TokenKind.INTCONST:
+                s = IntSymbol(self.value)
+            else:
+                s = ConstantSymbol(k, type, self.value)
             SymbolSystem.add(s)
         return s
 

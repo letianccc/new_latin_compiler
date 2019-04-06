@@ -26,7 +26,7 @@ class Emit(object):
         code = ''
         for s in SymbolSystem.strings.symbols:
             # TODO: addr 和 access_name 应该分开
-            tag = s.access_name[1:]
+            tag = s.access_name()[1:]
             code += f'{tag}:\n'\
                     f'    .string\t{s.value}\n'
         self.emit_code(code)
@@ -38,9 +38,9 @@ class Emit(object):
     def allocate_float(self):
         # TODO: 待重构
         doubles = SymbolSystem.double_constants()
-        for index, f in enumerate(doubles):
+        for index, d in enumerate(doubles):
             addr = f'FLOAT{index}'
-            f.access_name = addr
+            d.set_access_name(addr)
 
     def allocate_stack(self):
         # TODO: type.size 待重构
@@ -71,7 +71,7 @@ class Emit(object):
 
         for f in doubles:
             code = ''
-            code += f'{f.access_name}:\n'
+            code += f'{f.access_name()}:\n'
             d1, d2 = decimal_from_double(f.value)
             code += f'    .long\t{d1}\n'
             code += f'    .long\t{d2}\n'
@@ -111,10 +111,11 @@ class FunctionEmit(object):
         # size = 4
         code = ''
 
+        # 为实参分配偏移
         # TODO: 这部分逻辑要移到别的地方
         size = 0
         for p in reversed(ps):
-            # src = p.access_name
+            # src = p.access_name()
             offset = size * p.index
             p.offset = offset
             size = p.parameter.type.size
@@ -122,7 +123,7 @@ class FunctionEmit(object):
 
         for p in ps:
             # size = p.parameter.type.size
-            src = p.access_name
+            src = p.access_name()
             # offset = size * p.index
 
             # 不能把内存move到内存，需要寄存器过渡
@@ -154,8 +155,8 @@ class FunctionEmit(object):
         dst = ir.operands[0]
         src1 = ir.operands[1]
         code = ''
-        dst_addr = dst.access_name
-        src_addr = src1.access_name
+        dst_addr = dst.access_name()
+        src_addr = src1.access_name()
         if src1.kind is SymbolKind.DOUBLECONST:
             code += f'    fldl\t{src_addr}\n'
             code += f'    fstpl\t{dst_addr}\n'
