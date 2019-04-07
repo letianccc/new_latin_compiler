@@ -19,21 +19,25 @@ class CallNode:
         self.kind = NodeKind.CALL
 
     def check(self):
-
-
         for p in self.params:
             p.check()
-
+        # 计算调用最多需要预留的栈空间
         space = 0
         for p in self.params:
             space += p.parameter.type.size
         if space > self.function.symbol.call_space:
             self.function.symbol.call_space = space
-        # count = len(self.params)
-        # if count > self.function.symbol.max_actual_param:
-        #     self.function.symbol.max_actual_param = count
+        # 分配实参偏移
+        self.set_param_offset()
 
         self.call_function = self.call_function.check(self.function, NodeKind.CALL)
+
+    def set_param_offset(self):
+        size = 0
+        for p in reversed(self.params):
+            offset = size * p.index
+            p.offset = offset
+            size = p.parameter.type.size
 
     def gen(self):
         ir = CallIR(self.call_function, self.params)
@@ -83,15 +87,14 @@ class ParameterNode:
         self.index = None
 
     def check(self):
-        k = self.parameter.kind
-        v = self.parameter.value
-        if k is TokenKind.INTCONST or k is TokenKind.STRING or k is TokenKind.DOUBLECONST:
-            s = self.parameter.check(self.function.symbol)
-        elif k is TokenKind.ID:
-
-            s = self.parameter.check(self.function.symbol, self.kind, self.type)
+        f = self.function.symbol
+        p = self.parameter
+        if p.match(TokenKind.INTCONST, TokenKind.STRING, TokenKind.DOUBLECONST):
+            s = p.check(f)
+        elif p.match(TokenKind.ID):
+            s = p.check(f, self.kind, self.type)
             if self.kind is NodeKind.FORMAL_PARAMETER:
-                self.function.symbol.add_param(s)
+                f.add_param(s)
         self.parameter = s
 
 

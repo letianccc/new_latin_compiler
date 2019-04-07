@@ -10,6 +10,11 @@ class Type(object):
         self.child = None
         self.size = size
 
+    def match(self, *kinds):
+        for k in kinds:
+            if self.kind is k:
+                return True
+        return False    
 
 class TypeSystem(object):
     INT = Type(TypeKind.INT, 4)

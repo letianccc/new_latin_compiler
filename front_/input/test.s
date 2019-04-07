@@ -26,12 +26,11 @@ _func1:
     call	_printf
     fldl	FLOAT0
     fstpl	-8(%esp)
-    fldl	-8(%esp)
-    fstpl	4(%esp)
+    movl	-8(%esp), %eax
+    movl	%eax, 4(%esp)
     movl	$LC1, 0(%esp)
     call	_printf
-    fldl	FLOAT1
-    fstpl	4(%esp)
+    movl	FLOAT1, 4(%esp)
     movl	$LC1, 0(%esp)
     call	_printf
     movl	$LC2, 0(%esp)
@@ -133,12 +132,11 @@ _main:
     call	_printf
     fldl	FLOAT0
     fstpl	-8(%esp)
-    fldl	-8(%esp)
-    fstpl	4(%esp)
+    movl	-8(%esp), %eax
+    movl	%eax, 4(%esp)
     movl	$LC1, 0(%esp)
     call	_printf
-    fldl	FLOAT1
-    fstpl	4(%esp)
+    movl	FLOAT1, 4(%esp)
     movl	$LC1, 0(%esp)
     call	_printf
     movl	$LC2, 0(%esp)

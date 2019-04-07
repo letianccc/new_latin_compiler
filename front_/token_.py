@@ -8,8 +8,13 @@ class Token(object):
         self.value = value
         self.kind = kind
 
+    def match(self, *kinds):
+        for k in kinds:
+            if self.kind is k:
+                return True
+        return False
 
-class ConstantToken(object):
+class ConstantToken(Token):
     def __init__(self, kind, value=None):
         self.value = value
         self.kind = kind
@@ -32,7 +37,7 @@ class ConstantToken(object):
         return s
 
 
-class IdentifierToken(object):
+class IdentifierToken(Token):
     def __init__(self, kind, value=None):
         self.value = value
         self.kind = kind
@@ -74,7 +79,7 @@ class IdentifierToken(object):
 
 
 
-class StringToken(object):
+class StringToken(Token):
     def __init__(self, kind, value=None):
         self.value = value
         self.kind = kind

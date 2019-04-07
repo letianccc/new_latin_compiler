@@ -32,6 +32,9 @@ class IR:
         self.operands = [None, None, None]
         self.op = None
 
+    def match(self, kind):
+        return self.kind is kind
+
 class BranchIR(IR):
     def __init__(self):
         super(BranchIR, self).__init__()
@@ -68,7 +71,7 @@ class ExprIR(IR):
     def emit(self, emiter):
         emiter.emit_expr(self.op, self.left, self.right, self.result)
 
-class CallIR(object):
+class CallIR(IR):
     """docstring for CallIR."""
 
     def __init__(self, function, parameters):

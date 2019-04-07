@@ -101,77 +101,41 @@ class FunctionEmit(object):
         self.pop_stack()
 
     def emit(self, ir):
-        if self.match(ir, IRKind.CALL):
+        if ir.match(IRKind.CALL):
             self.emit_call(ir)
-        elif self.match(ir, IRKind.ASSIGN):
+        elif ir.match(IRKind.ASSIGN):
             self.emit_assign(ir)
 
     def emit_call(self, ir):
-        ps = ir.params
-        # size = 4
-        code = ''
-
-        # 为实参分配偏移
-        # TODO: 这部分逻辑要移到别的地方
-        size = 0
-        for p in reversed(ps):
-            # src = p.access_name()
-            offset = size * p.index
-            p.offset = offset
-            size = p.parameter.type.size
-
-
-        for p in ps:
-            # size = p.parameter.type.size
-            src = p.access_name()
-            # offset = size * p.index
-
-            # 不能把内存move到内存，需要寄存器过渡
-            target = f'{p.offset}(%esp)'
-            if p.parameter.type.kind is TypeKind.DOUBLE:
-                code += f'    fldl\t{src}\n'
-                code += f'    fstpl\t{target}\n'
-                self.emit_code(code)
-                continue
-
-
-            if p.parameter.kind is SymbolKind.ID:
-                if p.parameter.type.kind is TypeKind.DOUBLE:
-                    code += f'    fldl\t{src}\n'
-                    code += f'    fstpl\t{target}\n'
-                    self.emit_code(code)
-                    continue
-                code = f'    movl\t{src}, %eax\n'
-                self.emit_code(code)
-                src = '%eax'
-            code = f'    movl\t{src}, {target}\n'
-            self.emit_code(code)
-
+        # 生成实参分配空间代码
+        self.emit_param(ir)
         function_tag = f'_{ir.function.value}'
         code = f'    call\t{function_tag}\n'
         self.emit_code(code)
 
+    def emit_param(self, ir):
+        for p in ir.params:
+            dst_addr = f'{p.offset}(%esp)'
+            self.emit_load(p.parameter, dst_addr)
+
     def emit_assign(self, ir):
+        src = ir.operands[1]
         dst = ir.operands[0]
-        src1 = ir.operands[1]
-        code = ''
         dst_addr = dst.access_name()
-        src_addr = src1.access_name()
-        if src1.kind is SymbolKind.DOUBLECONST:
+        self.emit_load(src, dst_addr)
+
+    def emit_load(self, source, destination_addr):
+        code = ''
+        src_addr = source.access_name()
+        dst_addr = destination_addr
+        if source.type.match(TypeKind.DOUBLE):
             code += f'    fldl\t{src_addr}\n'
             code += f'    fstpl\t{dst_addr}\n'
-            self.emit_code(code)
-            return
-
-        if src1.kind is SymbolKind.ID:
-            if src1.type.kind is TypeKind.DOUBLE:
-                code += f'    fldl\t{src_addr}\n'
-                code += f'    fstpl\t{dst_addr}\n'
-                self.emit_code(code)
-                return
-            code += f'    movl\t{src_addr}, %eax\n'
-            src_addr = '%eax'
-        code += f'    movl\t{src_addr}, {dst_addr}\n'
+        else:
+            if source.match(SymbolKind.ID):
+                code += f'    movl\t{src_addr}, %eax\n'
+                src_addr = '%eax'
+            code += f'    movl\t{src_addr}, {dst_addr}\n'
         self.emit_code(code)
 
     def reserve_space(self):
@@ -185,10 +149,6 @@ class FunctionEmit(object):
         	   f'    .globl\t{self.func_tag}\n'\
                f'{self.func_tag}:\n'
         self.emit_code(code)
-
-    def access_name(self, symbol):
-        if symbol.kind is SymbolKind.DOUBLECONST:
-            ...
 
     def push_stack(self):
         code =   '    pushl\t%ebp\n'\
@@ -213,6 +173,3 @@ class FunctionEmit(object):
 
     def emit_code(self, code):
         self.code += code
-
-    def match(self, ir, ir_kind):
-        return ir.kind is ir_kind

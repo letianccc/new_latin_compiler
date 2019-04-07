@@ -11,7 +11,7 @@ class Field:
 
     def find(self, token, type, field):
         for s in field.symbols:
-            if s.match(token, type):
+            if s.equal(type, token):
                 return s
         return None
 
@@ -20,7 +20,7 @@ class GlobalField(Field):
         return self.find(token, type, self)
 
     def double_constants(self):
-        const = [s for s in self.symbols if s.kind is SymbolKind.DOUBLECONST]
+        const = [s for s in self.symbols if s.match(SymbolKind.DOUBLECONST)]
         return const
 
 class IdentifierField(Field):

@@ -11,23 +11,23 @@ class SymbolSystem(object):
 
     @classmethod
     def add(cls, symbol):
-        k = symbol.kind
-        if k is SymbolKind.INTCONST or k is SymbolKind.DOUBLECONST:
-            cls.constants.add(symbol)
-        elif k is SymbolKind.STRING:
-            cls.strings.add(symbol)
-        elif k is SymbolKind.ID or k is SymbolKind.FUNCTION:
-            cls.identifiers.add(symbol)
+        if symbol.match(SymbolKind.INTCONST, SymbolKind.DOUBLECONST):
+            symbols = cls.constants
+        elif symbol.match(SymbolKind.STRING):
+            symbols = cls.strings
+        elif symbol.match(SymbolKind.ID, SymbolKind.FUNCTION):
+            symbols = cls.identifiers
+        symbols.add(symbol)
 
     @classmethod
     def find_symbol(cls, token, type=None, level_kind=None):
-        k = token.kind
-        if k is TokenKind.INTCONST or k is TokenKind.DOUBLECONST:
-            s = cls.constants.find_symbol(token, type, level_kind)
-        elif k is TokenKind.STRING:
-            s = cls.strings.find_symbol(token, type, level_kind)
-        elif k is TokenKind.ID:
-            s = cls.identifiers.find_symbol(token, type, level_kind)
+        t = token
+        if t.match(TokenKind.INTCONST, TokenKind.DOUBLECONST):
+            s = cls.constants.find_symbol(t, type, level_kind)
+        elif t.match(TokenKind.STRING):
+            s = cls.strings.find_symbol(t, type, level_kind)
+        elif t.match(TokenKind.ID):
+            s = cls.identifiers.find_symbol(t, type, level_kind)
         return s
 
     @classmethod
@@ -63,11 +63,18 @@ class Symbol(object):
         self.kind = None
         self.value = None
 
-    def match(self, token, type=None):
+    def equal(self, type, token=None):
         if self.value == token.value:
             if type is None or self.type is type:
                 return True
         return False
+
+    def match(self, *kinds):
+        for k in kinds:
+            if self.kind is k:
+                return True
+        return False
+
 
 
 class FunctionSymbol(Symbol):
@@ -160,8 +167,25 @@ class IntSymbol(Symbol):
     def access_name(self):
         return self.__access_name
 
+class DoubleSymbol(Symbol):
+    """docstring for ConstantSymbol."""
 
+    def __init__(self, value):
+        super(DoubleSymbol, self).__init__()
+        self.kind = SymbolKind.DOUBLECONST
+        self.type = TypeSystem.DOUBLE
+        self.size = 8
+        self.value = value
+        self.__access_name = f'${self.value}'
 
+    def access_name(self):
+        return self.__access_name
+
+    def set_access_name(self, name):
+        self.__access_name = name
+
+    def emit(self):
+        ...
 
 class IdentifierSymbol(Symbol):
     """docstring for IdentifierSymbol."""
