@@ -106,6 +106,7 @@ class FunctionEmit(object):
         elif ir.match(IRKind.ASSIGN):
             self.emit_assign(ir)
 
+
     def emit_call(self, ir):
         # 生成实参分配空间代码
         self.emit_param(ir)
