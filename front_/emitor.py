@@ -6,16 +6,16 @@ from front_.symbol_system import *
 class Emit(object):
     """docstring for Emit."""
 
-    def __init__(self, symbols):
+    def __init__(self, functions):
         super(Emit, self).__init__()
         # TODO: symbol应该为function
-        self.symbols = symbols
+        self.functions = functions
         self.code = ''
 
     def execute(self):
         self.allocate()
         self.start()
-        for f in self.symbols:
+        for f in self.functions:
             fe = FunctionEmit(f)
             fe.execute()
             self.emit_code(fe.code)
@@ -44,7 +44,7 @@ class Emit(object):
 
     def allocate_stack(self):
         # TODO: type.size 待重构
-        for func in self.symbols:
+        for func in self.functions:
             # 计算预留空间
             space = 0
             for local in func.locals:

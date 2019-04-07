@@ -19,23 +19,36 @@ class ConstantToken(Token):
         self.value = value
         self.kind = kind
 
+class IntConstant(ConstantToken):
+    def __init__(self, value):
+        self.value = value
+        self.kind = TokenKind.INTCONST
+
     def check(self, function):
-        assert self.kind is TokenKind.INTCONST or self.kind is TokenKind.DOUBLECONST
-        if self.kind is TokenKind.INTCONST:
-            k = SymbolKind.INTCONST
-            type = TypeSystem.type(TokenKind.INT)
-        else:
-            k = SymbolKind.DOUBLECONST
-            type = TypeSystem.type(TokenKind.DOUBLE)
+        k = SymbolKind.INTCONST
+        type = TypeSystem.type(TokenKind.INT)
         s = SymbolSystem.find_symbol(self)
         if s is None:
-            if self.kind is TokenKind.INTCONST:
-                s = IntSymbol(self.value)
-            else:
-                s = ConstantSymbol(k, type, self.value)
+            s = IntSymbol(self.value)
             SymbolSystem.add(s)
         return s
 
+class DoubleConstant(ConstantToken):
+    def __init__(self, value):
+        self.value = value
+        self.kind = TokenKind.DOUBLECONST
+
+    def check(self, function):
+        # TODO: 这部分逻辑可以抽象
+        # add_symbol(kind, type, value)
+        # type = TypeSystem.type(self.type)
+        k = SymbolKind.DOUBLECONST
+        type = TypeSystem.type(TokenKind.DOUBLE)
+        s = SymbolSystem.find_symbol(self)
+        if s is None:
+            s = ConstantSymbol(k, type, self.value)
+            SymbolSystem.add(s)
+        return s
 
 class IdentifierToken(Token):
     def __init__(self, kind, value=None):

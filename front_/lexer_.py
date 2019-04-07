@@ -104,15 +104,16 @@ class Lexer:
         return t
 
     def scan_number(self):
-        kind = TokenKind.INTCONST
         digits = self.scan_digits()
         c = self.cur_char()
+        is_float = False
         if c == '.':
-            kind = TokenKind.DOUBLECONST
+            is_float = True
             digits += c
             self.next_char()
             digits += self.scan_digits()
-        t = ConstantToken(kind, digits)
+        Const = DoubleConstant if is_float else IntConstant
+        t = Const(digits)
         return t
 
     def scan_digits(self):

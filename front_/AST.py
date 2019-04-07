@@ -34,10 +34,11 @@ class CallNode:
 
     def set_param_offset(self):
         size = 0
+        offset = 0
         for p in reversed(self.params):
-            offset = size * p.index
             p.offset = offset
             size = p.parameter.type.size
+            offset += size
 
     def gen(self):
         ir = CallIR(self.call_function, self.params)
