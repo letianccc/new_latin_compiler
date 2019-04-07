@@ -81,7 +81,7 @@ class IdentifierToken(Token):
             s = SymbolSystem.find_symbol(self)
             if s is None:
                 v = self.value
-                s = FunctionSymbol(None, v)
+                s = FunctionSymbol(None, v, True)
                 SymbolSystem.add(s)
             return s
 

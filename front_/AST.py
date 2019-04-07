@@ -19,8 +19,15 @@ class CallNode:
         self.kind = NodeKind.CALL
 
     def check(self):
+        self.call_function = self.call_function.check(self.function, NodeKind.CALL)
+
         for p in self.params:
             p.check()
+
+        if not self.call_function.is_extern:
+            if len(self.params) != len(self.call_function.params):
+                raise Exception('函数参数数量不匹配')
+            # TODO: 检测参数兼容性
         # 计算调用最多需要预留的栈空间
         space = 0
         for p in self.params:
@@ -30,7 +37,6 @@ class CallNode:
         # 分配实参偏移
         self.set_param_offset()
 
-        self.call_function = self.call_function.check(self.function, NodeKind.CALL)
 
     def set_param_offset(self):
         size = 0

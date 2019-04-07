@@ -80,12 +80,13 @@ class Symbol(object):
 class FunctionSymbol(Symbol):
     """docstring for FunctionSymbol."""
 
-    def __init__(self, type, name):
+    def __init__(self, type, name, is_extern=False):
         super(FunctionSymbol, self).__init__()
         self.kind = SymbolKind.FUNCTION
         self.type = type
         self.params = []
         self.value = name
+        self.is_extern = is_extern
         # self.max_actual_param = 0
         self.call_space = 0
         # reverse_space 包括局部变量与调用参数所需要的全部空间
