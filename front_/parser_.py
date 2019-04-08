@@ -3,7 +3,7 @@ from front_.AST import *
 from front_.myenum import *
 from front_.type_system import TypeSystem
 # from front_.mysymbol import *
-
+from front_.myexpr import *
 class Parser:
 
     def __init__(self, tokens):
@@ -76,6 +76,7 @@ class Parser:
         params = self.parse_parameters(NodeKind.ACTUAL_PARAMETER)
         self.expect(TokenKind.SEMICOLON)
         n = CallNode(self.function, variable, params)
+        self.function.call_nodes.append(n)
         return n
 
     def block_(self):
@@ -245,7 +246,7 @@ class Parser:
         while self.match(TokenKind.OR):
             self.expect('||')
             # expr = Or(expr, self.join())
-            expr = Expr(expr, self.join(), '||')
+            expr = ExprNode(expr, self.join(), '||')
         return expr
 
     def join(self):
@@ -253,7 +254,7 @@ class Parser:
         while self.match(TokenKind.AND):
             self.expect('&&')
             # expr = And(expr, self.equal())
-            expr = Expr(expr, self.equal(), '&&')
+            expr = ExprNode(expr, self.equal(), '&&')
         return expr
 
     def equal(self):
@@ -262,35 +263,40 @@ class Parser:
         while self.match(TokenKind.EQUAL) or self.match(TokenKind.UNEQUAL):
             operator = self.next_token().value
             # expr = Equal(expr, self.rel(), operator)
-            expr = Expr(expr, self.rel(), operator)
+            expr = ExprNode(expr, self.rel(), operator)
         return expr
 
     def rel(self):
         expr = self.expr_()
         while self.match(TokenKind.LESS) or self.match(TokenKind.LESS_EQ) or self.match(TokenKind.GREAT) or self.match(TokenKind.GREAT_EQ):
             operator = self.next_token().value
-            expr = Expr(expr, self.expr_(), operator)
+            expr = ExprNode(expr, self.expr_(), operator)
         return expr
 
     def expr_(self):
         expr = self.term()
-
         while self.match(TokenKind.ADD) or self.match(TokenKind.SUB):
-            self.symbol_count += 1
-            operator = self.next_token().value
-            # expr = Arith(expr, self.term(), operator)
-            expr = Expr(expr, self.term(), operator)
-
+            m = {
+                TokenKind.ADD: NodeKind.ADD,
+                TokenKind.SUB: NodeKind.SUB,
+            }
+            t = self.cur_token()
+            k = m[t.kind]
+            self.next_token()
+            expr = ExprNode(self.function, k, expr, self.term())
         return expr
 
     def term(self):
         expr = self.unary()
-
         while self.match(TokenKind.MUL) or self.match(TokenKind.DIV):
-            self.symbol_count += 1
-            operator = self.next_token().value
-            # expr = Arith(expr, self.unary(), operator)
-            expr = Expr(expr, self.unary(), operator)
+            m = {
+                TokenKind.MUL: NodeKind.MUL,
+                TokenKind.DIV: NodeKind.DIV,
+            }
+            t = self.cur_token()
+            k = m[t.kind]
+            self.next_token()
+            expr = ExprNode(self.function, k, expr, self.term())
 
         return expr
 

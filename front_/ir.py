@@ -32,8 +32,11 @@ class IR:
         self.operands = [None, None, None]
         self.op = None
 
-    def match(self, kind):
-        return self.kind is kind
+    def match(self, *kinds):
+        for k in kinds:
+            if self.kind is k:
+                return True
+        return False
 
 class BranchIR(IR):
     def __init__(self):
@@ -62,11 +65,11 @@ class AssignIR(IR):
 
 
 class ExprIR(IR):
-    def __init__(self):
-        self.op = None
-        self.left = None
-        self.right = None
-        self.result = None
+    def __init__(self, kind, destination, left, right):
+        self.kind = kind
+        self.left = left
+        self.right = right
+        self.destination = destination
 
     def emit(self, emiter):
         emiter.emit_expr(self.op, self.left, self.right, self.result)

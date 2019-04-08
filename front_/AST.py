@@ -24,10 +24,6 @@ class CallNode:
         for p in self.params:
             p.check()
 
-        if not self.call_function.is_extern:
-            if len(self.params) != len(self.call_function.params):
-                raise Exception('函数参数数量不匹配')
-            # TODO: 检测参数兼容性
         # 计算调用最多需要预留的栈空间
         space = 0
         for p in self.params:
@@ -37,8 +33,15 @@ class CallNode:
         # 分配实参偏移
         self.set_param_offset()
 
+    def check_callee(self):
+        if not self.call_function.is_extern:
+            if len(self.params) != len(self.call_function.params):
+                raise Exception('函数参数数量不匹配')
+            # TODO: 检测参数兼容性
+
 
     def set_param_offset(self):
+        # TODO: 这部分逻辑要移到emit中
         size = 0
         offset = 0
         for p in reversed(self.params):
@@ -61,6 +64,7 @@ class FunctionNode:
         self.cur_block = None
         self.blocks = []
         self.code = ''
+        self.call_nodes = []
 
     def check(self):
         SymbolSystem.enter()
@@ -142,7 +146,8 @@ class DeclaratorNode:
     def gen(self):
         # TODO: initializer 应该递归gen
         if self.initializer:
-            ir = AssignIR(self.function.symbol, self.identifier, self.initializer)
+            src = self.initializer.gen()
+            ir = AssignIR(self.function.symbol, self.identifier, src)
             self.function.gen_ir(ir)
 
 class AssignNode(Node):
@@ -156,7 +161,8 @@ class AssignNode(Node):
         self.value = self.value.check(self.function)
 
     def gen(self):
-        ir = AssignIR(self.function.symbol, self.variable, self.value)
+        src = self.value.gen()
+        ir = AssignIR(self.function.symbol, self.variable, src)
         self.function.gen_ir(ir)
 
 class IfNode(Node):

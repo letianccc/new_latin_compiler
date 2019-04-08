@@ -47,8 +47,11 @@ class Emit(object):
         for func in self.functions:
             # 计算预留空间
             space = 0
+
             for local in func.locals:
                 space += local.type.size
+            for tag in func.tags:
+                space += tag.type.size
             space += func.call_space
             func.reverse_space = space
             # 为局部变量分配偏移
@@ -56,11 +59,19 @@ class Emit(object):
             for index, local in enumerate(func.locals):
                 local.index = index
                 size = local.type.size
-                local.offset = sp - (index + 1) * size
+                sp -= size
+                local.offset = sp
+            # 为中间变量分配偏移
+            for tag in func.tags:
+                sp -= tag.type.size
+                tag.offset = sp
             # 为函数参数分配偏移
+            # +5  要跳过 返回地址，ebp,ebx,esi,edi 寻址到第一个传递过来的值
+            offset = 5 * 4
             for p in func.params:
-                # +5  要跳过 返回地址，ebp,ebx,esi,edi 寻址到第一个传递过来的值
-                p.offset = (p.index + 5) * p.type.size
+                p.offset = offset
+                offset += p.type.size
+
 
     def start(self):
         code = '//by latin\n\n'
@@ -105,6 +116,29 @@ class FunctionEmit(object):
             self.emit_call(ir)
         elif ir.match(IRKind.ASSIGN):
             self.emit_assign(ir)
+        elif ir.match(IRKind.ADD, IRKind.SUB, IRKind.MUL, IRKind.DIV):
+            self.emit_arith(ir)
+
+    def emit_arith(self, ir):
+        dst = ir.destination
+        left = ir.left
+        right = ir.right
+        dst_addr = dst.access_name()
+        right_addr = right.access_name()
+        self.emit_load(left, '%eax')
+        m = {
+            IRKind.ADD: 'addl',
+            IRKind.SUB: 'subl',
+            IRKind.MUL: 'imull',
+            IRKind.DIV: 'divl',
+        }
+        op = m[ir.kind]
+        # TODO: 加一步检测  减少使用eax的指令
+        code = ''
+        code += f'    {op}\t{right_addr}, %eax\n'
+        code += f'    movl\t%eax, {dst_addr}\n'
+        self.emit_code(code)
+
 
 
     def emit_call(self, ir):
@@ -133,7 +167,7 @@ class FunctionEmit(object):
             code += f'    fldl\t{src_addr}\n'
             code += f'    fstpl\t{dst_addr}\n'
         else:
-            if source.match(SymbolKind.ID):
+            if source.match(SymbolKind.ID, SymbolKind.TAG):
                 code += f'    movl\t{src_addr}, %eax\n'
                 src_addr = '%eax'
             code += f'    movl\t{src_addr}, {dst_addr}\n'

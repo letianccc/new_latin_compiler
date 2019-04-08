@@ -114,6 +114,10 @@ class NodeKind(IntEnum):
     PARAMETER = auto()
     DECLARATOR = auto()
     DECLARATION = auto()
+    ADD = auto()
+    SUB = auto()
+    MUL = auto()
+    DIV = auto()
 
 class BlockKind(IntEnum):
     FUNCTION = auto()
@@ -128,10 +132,15 @@ class SymbolKind(IntEnum):
     FLOATCONST = auto()
     INTCONST = auto()
     DOUBLECONST = auto()
+    TAG = auto()
 
 class IRKind(IntEnum):
     CALL = auto()
     ASSIGN = auto()
+    ADD = auto()
+    SUB = auto()
+    MUL = auto()
+    DIV = auto()
 
 class LevelKind(IntEnum):
     CURRENT = auto()

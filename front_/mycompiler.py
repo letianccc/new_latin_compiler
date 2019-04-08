@@ -31,12 +31,17 @@ def compile(input_path):
     for f in functions:
         f.check()
     for f in functions:
+        for node in f.call_nodes:
+            node.check_callee()
+
+
+    for f in functions:
         f.gen()
 
 
 
     symbols = [f.symbol for f in functions]
-    
+
     e = Emit(symbols)
     e.execute()
     code = e.code

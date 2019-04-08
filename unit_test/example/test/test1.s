@@ -1,6 +1,61 @@
 //by latin
 
     .text
+    .globl	_main
+_main:
+    pushl	%ebp
+    pushl	%ebx
+    pushl	%esi
+    pushl	%edi
+    movl	%esp, %ebp
+    andl	$-16, %esp
+    subl	$72, %esp
+    movl	$3, 68(%esp)
+    movl	$2, 64(%esp)
+    movl	$1, 60(%esp)
+    movl	$1, 56(%esp)
+    movl	$3, 52(%esp)
+    movl	60(%esp), %eax
+    movl	%eax, 4(%esp)
+    movl	$LC0, 0(%esp)
+    call	_printf
+    movl	$2, 48(%esp)
+    movl	48(%esp), %eax
+    movl	%eax, 4(%esp)
+    movl	$LC0, 0(%esp)
+    call	_printf
+    fldl	FLOAT0
+    fstpl	28(%esp)
+    fldl	28(%esp)
+    fstpl	4(%esp)
+    movl	$LC1, 0(%esp)
+    call	_printf
+    fldl	FLOAT1
+    fstpl	4(%esp)
+    movl	$LC1, 0(%esp)
+    call	_printf
+    movl	$5, 4(%esp)
+    movl	$LC0, 0(%esp)
+    call	_printf
+    movl	$LC2, 0(%esp)
+    call	_printf
+    movl	$2, 4(%esp)
+    movl	$1, 0(%esp)
+    call	_func1
+    movl	$2, 4(%esp)
+    movl	$1, 0(%esp)
+    call	_func2
+    call	_func3
+    movl	$1, 0(%esp)
+    call	_func4
+    call	_getchar
+    movl	%ebp, %esp
+    popl	%edi
+    popl	%esi
+    popl	%ebx
+    popl	%ebp
+    ret
+    .text
     .globl	_func1
 _func1:
     pushl	%ebp
@@ -25,8 +80,8 @@ _func1:
     movl	$LC0, 0(%esp)
     call	_printf
     fldl	FLOAT0
-    fstpl	-8(%esp)
-    fldl	-8(%esp)
+    fstpl	28(%esp)
+    fldl	28(%esp)
     fstpl	4(%esp)
     movl	$LC1, 0(%esp)
     call	_printf
@@ -34,10 +89,10 @@ _func1:
     fstpl	4(%esp)
     movl	$LC1, 0(%esp)
     call	_printf
-    movl	$LC2, 0(%esp)
-    call	_printf
     movl	$5, 4(%esp)
     movl	$LC0, 0(%esp)
+    call	_printf
+    movl	$LC2, 0(%esp)
     call	_printf
     movl	%ebp, %esp
     popl	%edi
@@ -101,61 +156,6 @@ _func4:
     movl	%esp, %ebp
     andl	$-16, %esp
     subl	$0, %esp
-    movl	%ebp, %esp
-    popl	%edi
-    popl	%esi
-    popl	%ebx
-    popl	%ebp
-    ret
-    .text
-    .globl	_main
-_main:
-    pushl	%ebp
-    pushl	%ebx
-    pushl	%esi
-    pushl	%edi
-    movl	%esp, %ebp
-    andl	$-16, %esp
-    subl	$72, %esp
-    movl	$3, 68(%esp)
-    movl	$2, 64(%esp)
-    movl	$1, 60(%esp)
-    movl	$1, 56(%esp)
-    movl	$3, 52(%esp)
-    movl	60(%esp), %eax
-    movl	%eax, 4(%esp)
-    movl	$LC0, 0(%esp)
-    call	_printf
-    movl	$2, 48(%esp)
-    movl	48(%esp), %eax
-    movl	%eax, 4(%esp)
-    movl	$LC0, 0(%esp)
-    call	_printf
-    fldl	FLOAT0
-    fstpl	-8(%esp)
-    fldl	-8(%esp)
-    fstpl	4(%esp)
-    movl	$LC1, 0(%esp)
-    call	_printf
-    fldl	FLOAT1
-    fstpl	4(%esp)
-    movl	$LC1, 0(%esp)
-    call	_printf
-    movl	$LC2, 0(%esp)
-    call	_printf
-    movl	$5, 4(%esp)
-    movl	$LC0, 0(%esp)
-    call	_printf
-    movl	$2, 4(%esp)
-    movl	$1, 0(%esp)
-    call	_func1
-    movl	$2, 4(%esp)
-    movl	$1, 0(%esp)
-    call	_func2
-    call	_func3
-    movl	$1, 0(%esp)
-    call	_func4
-    call	_getchar
     movl	%ebp, %esp
     popl	%edi
     popl	%esi

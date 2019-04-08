@@ -7,7 +7,7 @@ from front_.AST import Node
 
 
 class ExprNode(Node):
-    def __init__(self, function, left, right, kind):
+    def __init__(self, function, kind, left, right):
         self.left = left
         self.right = right
         self.kind = kind
@@ -22,7 +22,9 @@ class ExprNode(Node):
         left = self.left.gen()
         right = self.right.gen()
         type = TypeSystem.max_type(left.type, right.type)
+        # TODO: 可能需要add symbol
         dst = TagSymbol(type)
+        self.function.symbol.tags.append(dst)
         m = {
             NodeKind.ADD: IRKind.ADD,
             NodeKind.SUB: IRKind.SUB,

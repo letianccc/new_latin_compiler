@@ -14,7 +14,7 @@ class Type(object):
         for k in kinds:
             if self.kind is k:
                 return True
-        return False    
+        return False
 
 class TypeSystem(object):
     INT = Type(TypeKind.INT, 4)
@@ -33,8 +33,20 @@ class TypeSystem(object):
             TokenKind.VOID: cls.VOID,
             TokenKind.STRING: cls.STRING,
 
+            TypeKind.INT: cls.INT,
+            TypeKind.FLOAT: cls.FLOAT,
+            TypeKind.DOUBLE: cls.DOUBLE,
+            TypeKind.VOID: cls.VOID,
+            TypeKind.STRING: cls.STRING,
+
         }
 
     @classmethod
     def type(cls, token_kind):
         return cls.types[token_kind]
+
+    @classmethod
+    def max_type(cls, *types):
+        k = max(t.kind for t in types)
+        t = cls.type(k)
+        return t

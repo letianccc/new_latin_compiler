@@ -75,7 +75,8 @@ class Symbol(object):
                 return True
         return False
 
-
+    def gen(self):
+        return self
 
 class FunctionSymbol(Symbol):
     """docstring for FunctionSymbol."""
@@ -91,6 +92,7 @@ class FunctionSymbol(Symbol):
         self.call_space = 0
         # reverse_space 包括局部变量与调用参数所需要的全部空间
         self.reverse_space = 0
+        self.tags = []
         self.strings = []
         self.locals = []
         b = Block()
@@ -204,3 +206,15 @@ class IdentifierSymbol(Symbol):
     def access_name(self):
         reg = '%ebp' if self.is_formal_param else '%esp'
         return f'{self.offset}({reg})'
+
+class TagSymbol(Symbol):
+    """docstring for IdentifierSymbol."""
+
+    def __init__(self, type):
+        super(TagSymbol, self).__init__()
+        self.kind = SymbolKind.TAG
+        self.type = type
+        self.offset = None
+
+    def access_name(self):
+        return f'{self.offset}(%esp)'
