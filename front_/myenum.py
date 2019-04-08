@@ -118,6 +118,8 @@ class NodeKind(IntEnum):
     SUB = auto()
     MUL = auto()
     DIV = auto()
+    ADDRESS_OF = auto()
+    INDIRECTION = auto()
 
 class BlockKind(IntEnum):
     FUNCTION = auto()
@@ -141,6 +143,8 @@ class IRKind(IntEnum):
     SUB = auto()
     MUL = auto()
     DIV = auto()
+    ADDRESS_OF = auto()
+    INDIRECTION = auto()
 
 class LevelKind(IntEnum):
     CURRENT = auto()

@@ -301,9 +301,17 @@ class Parser:
         return expr
 
     def unary(self):
-        if self.match(TokenKind.NOT) or self.match(TokenKind.SUB):
-            operator = self.next_token().value
-            expr = Unary(operator, self.factor())
+        if self.match(TokenKind.NOT) or self.match(TokenKind.SUB) \
+            or self.match(TokenKind.BITAND) or self.match(TokenKind.MUL):
+            # operator = self.next_token().value
+            t = self.cur_token()
+            m = {
+                TokenKind.BITAND: NodeKind.ADDRESS_OF,
+                TokenKind.MUL: NodeKind.INDIRECTION,
+            }
+            k = m[t.kind]
+            self.next_token()
+            expr = UnaryNode(self.function, k, self.factor())
         else:
             expr = self.factor()
         return expr

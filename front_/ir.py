@@ -74,6 +74,12 @@ class ExprIR(IR):
     def emit(self, emiter):
         emiter.emit_expr(self.op, self.left, self.right, self.result)
 
+class UnaryIR(IR):
+    def __init__(self, kind, destination, operand):
+        self.kind = kind
+        self.operand = operand
+        self.destination = destination
+
 class CallIR(IR):
     """docstring for CallIR."""
 

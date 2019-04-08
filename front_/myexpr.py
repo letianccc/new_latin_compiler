@@ -67,12 +67,30 @@ class ArithNode(Node):
         self.operator = operator
 
 class UnaryNode(Node):
-    def __init__(self, kind, operand):
+    def __init__(self, function, kind, operand):
         self.kind = kind
         self.operand = operand
+        self.function = function
 
-    def check(self):
-        self.operand.check()
+    def check(self, function):
+        self.operand = self.operand.check(function)
+        return self
+
+    def gen(self):
+        if self.kind is NodeKind.ADDRESS_OF:
+            operand = self.operand.gen()
+            dst = TagSymbol(TypeSystem.INT)
+            self.function.symbol.tags.append(dst)
+            ir = UnaryIR(IRKind.ADDRESS_OF, dst, operand)
+            self.function.symbol.gen_ir(ir)
+        elif self.kind is NodeKind.INDIRECTION:
+            # TODO: 类型的获取需要进一步实现
+            operand = self.operand.gen()
+            dst = TagSymbol(TypeSystem.INT)
+            self.function.symbol.tags.append(dst)
+            ir = UnaryIR(IRKind.INDIRECTION, dst, operand)
+            self.function.symbol.gen_ir(ir)
+        return dst
 
 class ArrayNode(Node):
     def __init__(self, variable, index):

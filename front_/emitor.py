@@ -118,6 +118,32 @@ class FunctionEmit(object):
             self.emit_assign(ir)
         elif ir.match(IRKind.ADD, IRKind.SUB, IRKind.MUL, IRKind.DIV):
             self.emit_arith(ir)
+        elif ir.match(IRKind.ADDRESS_OF):
+            self.emit_address_of(ir)
+        elif ir.match(IRKind.INDIRECTION):
+            self.emit_indirection(ir)
+        else:
+            raise Exception
+
+    def emit_indirection(self, ir):
+        dst = ir.destination
+        src = ir.operand
+        dst_addr = dst.access_name()
+        self.emit_load(src, '%eax')
+        code = ''
+        code += f'    movl\t(%eax), %eax\n'
+        code += f'    movl\t%eax, {dst_addr}\n'
+        self.emit_code(code)
+
+    def emit_address_of(self, ir):
+        dst = ir.destination
+        src = ir.operand
+        src_addr = src.access_name()
+        dst_addr = dst.access_name()
+        code = ''
+        code += f'    leal\t{src_addr}, %eax\n'
+        code += f'    movl\t%eax, {dst_addr}\n'
+        self.emit_code(code)
 
     def emit_arith(self, ir):
         dst = ir.destination
@@ -206,3 +232,30 @@ class FunctionEmit(object):
 
     def emit_code(self, code):
         self.code += code
+
+    # def emit_template(self, kind, destination, source1, source2=None):
+    #     dst = destination.access_name()
+    #     src1 = source1.access_name()
+    #     src2 = None
+    #     if source2 is not None:
+    #         src2 = source2.access_name()
+    #     m = {
+    #         IRKind.ADDRESS_OF:  f'    leal\t{src1}, %eax\n'
+    #                             f'    movl\t%eax, {dst}\n',
+    #         IRKind.INDIRECTION: f'    movl\t{src1}, %eax\n'
+    #                             f'    movl\t(%eax), %eax\n'
+    #                             f'    movl\t%eax, {dst}\n',
+    #         IRKind.ADD:         f'    movl\t{src1}, %eax\n'
+    #                             f'    addl\t{src2}, %eax\n'
+    #                             f'    movl\t%eax, {dst}\n',
+    #         IRKind.SUB:         f'    movl\t{src1}, %eax\n'
+    #                             f'    subl\t{src2}, %eax\n'
+    #                             f'    movl\t%eax, {dst}\n',
+    #         IRKind.MUL:         f'    movl\t{src1}, %eax\n'
+    #                             f'    imull\t{src2}, %eax\n'
+    #                             f'    movl\t%eax, {dst}\n',
+    #
+    #     }
+    #     code = m[kind]
+    #     self.emit_code(code)
+    #
