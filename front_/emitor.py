@@ -139,8 +139,6 @@ class FunctionEmit(object):
         code += f'    movl\t%eax, {dst_addr}\n'
         self.emit_code(code)
 
-
-
     def emit_call(self, ir):
         # 生成实参分配空间代码
         self.emit_param(ir)
