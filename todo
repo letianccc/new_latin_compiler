@@ -19,3 +19,7 @@ double声明
 把1赋值给double类型的变量，1是什么类型？ double还是int？
 
 assert 报错 工具
+
+当前：
+printf   short 转 int
+增加short类型

@@ -10,13 +10,14 @@ class Type(object):
         self.child = None
         self.size = size
 
-    def match(self, *kinds):
-        for k in kinds:
-            if self.kind is k:
+    def match(self, *types):
+        for t in types:
+            if self.kind is t.kind:
                 return True
         return False
 
 class TypeSystem(object):
+    SHORT = Type(TypeKind.SHORT, 2)
     INT = Type(TypeKind.INT, 4)
     FLOAT = Type(TypeKind.FLOAT, 4)
     DOUBLE = Type(TypeKind.DOUBLE, 8)
@@ -32,12 +33,14 @@ class TypeSystem(object):
             TokenKind.DOUBLE: cls.DOUBLE,
             TokenKind.VOID: cls.VOID,
             TokenKind.STRING: cls.STRING,
+            TokenKind.SHORT: cls.SHORT,
 
             TypeKind.INT: cls.INT,
             TypeKind.FLOAT: cls.FLOAT,
             TypeKind.DOUBLE: cls.DOUBLE,
             TypeKind.VOID: cls.VOID,
             TypeKind.STRING: cls.STRING,
+            TokenKind.SHORT: cls.SHORT,
 
         }
 

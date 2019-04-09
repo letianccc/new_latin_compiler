@@ -1,11 +1,16 @@
 
 
+
+
 void main() {
-    int a = 1;
-    int b = &a;
-    int c = *b;
-    printf("value: %d\n", a);
-    printf("value: %d\n", b);
-    printf("value: %d\n", c);
+
+    // int a = 1;
+    short b = 5;
+    // int c = b;
+    // short d = a;
+    // int d = a + b;
+    // short c = a + b;
+    printf("(aa%d)\n", b);
+
     getchar();
 }

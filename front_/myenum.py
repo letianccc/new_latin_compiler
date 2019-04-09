@@ -102,6 +102,7 @@ class TypeKind(IntEnum):
     DOUBLE = auto()
     VOID = auto()
     STRING = auto()
+    SHORT = auto()
 
 class NodeKind(IntEnum):
     CALL = auto()

@@ -10,7 +10,8 @@ _main:
     movl	%esp, %ebp
     andl	$-16, %esp
     subl	$28, %esp
-    movl	$1, 24(%esp)
+    movl	$1, %eax
+    movl	%eax, 24(%esp)
     leal	24(%esp), %eax
     movl	%eax, 12(%esp)
     movl	12(%esp), %eax
@@ -23,15 +24,18 @@ _main:
     movl	%eax, 16(%esp)
     movl	24(%esp), %eax
     movl	%eax, 4(%esp)
-    movl	$LC0, 0(%esp)
+    movl	$LC0, %eax
+    movl	%eax, 0(%esp)
     call	_printf
     movl	20(%esp), %eax
     movl	%eax, 4(%esp)
-    movl	$LC0, 0(%esp)
+    movl	$LC0, %eax
+    movl	%eax, 0(%esp)
     call	_printf
     movl	16(%esp), %eax
     movl	%eax, 4(%esp)
-    movl	$LC0, 0(%esp)
+    movl	$LC0, %eax
+    movl	%eax, 0(%esp)
     call	_printf
     call	_getchar
     movl	%ebp, %esp

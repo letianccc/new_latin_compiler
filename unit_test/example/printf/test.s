@@ -22,7 +22,8 @@ _main:
     fstpl	12(%esp)
     fldl	FLOAT0
     fstpl	4(%esp)
-    movl	$LC0, 0(%esp)
+    movl	$LC0, %eax
+    movl	%eax, 0(%esp)
     call	_printf
     fldl	28(%esp)
     fstpl	20(%esp)
@@ -30,7 +31,8 @@ _main:
     fstpl	12(%esp)
     fldl	44(%esp)
     fstpl	4(%esp)
-    movl	$LC0, 0(%esp)
+    movl	$LC0, %eax
+    movl	%eax, 0(%esp)
     call	_printf
     fldl	28(%esp)
     fstpl	20(%esp)
@@ -38,7 +40,8 @@ _main:
     fstpl	12(%esp)
     fldl	FLOAT0
     fstpl	4(%esp)
-    movl	$LC0, 0(%esp)
+    movl	$LC0, %eax
+    movl	%eax, 0(%esp)
     call	_printf
     fldl	28(%esp)
     fstpl	20(%esp)
@@ -46,7 +49,8 @@ _main:
     fstpl	12(%esp)
     fldl	44(%esp)
     fstpl	4(%esp)
-    movl	$LC0, 0(%esp)
+    movl	$LC0, %eax
+    movl	%eax, 0(%esp)
     call	_printf
     fldl	FLOAT2
     fstpl	20(%esp)
@@ -54,7 +58,8 @@ _main:
     fstpl	12(%esp)
     fldl	44(%esp)
     fstpl	4(%esp)
-    movl	$LC0, 0(%esp)
+    movl	$LC0, %eax
+    movl	%eax, 0(%esp)
     call	_printf
     call	_getchar
     movl	%ebp, %esp

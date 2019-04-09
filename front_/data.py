@@ -13,6 +13,7 @@ reserve_symbols = [ '+', '-', '*', '/', '!', '=',
 
 
 word_map = {
+    'short': TokenKind.SHORT,
     'int': TokenKind.INT,
     'float': TokenKind.FLOAT,
     'double': TokenKind.DOUBLE,

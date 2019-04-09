@@ -175,26 +175,50 @@ class FunctionEmit(object):
     def emit_param(self, ir):
         for p in ir.params:
             dst_addr = f'{p.offset}(%esp)'
+            type = p.parameter.type
+            if type.match(TypeSystem.SHORT):
+                src_addr = p.parameter.access_name()
+                code = ''
+                dst_addr = f'{p.offset}(%esp)'
+                code += f'    movswl\t{src_addr}, %eax\n'
+                code += f'    movl\t%eax, {dst_addr}\n'
+                self.emit_code(code)
+                continue
             self.emit_load(p.parameter, dst_addr)
 
     def emit_assign(self, ir):
         src = ir.operands[1]
         dst = ir.operands[0]
+        code = ''
+        src_addr = src.access_name()
         dst_addr = dst.access_name()
-        self.emit_load(src, dst_addr)
+        if src.type.match(TypeSystem.DOUBLE) or dst.type.match(TypeSystem.DOUBLE):
+            self.emit_load(src, dst_addr)
+            return
+        if src.type.match(TypeSystem.SHORT):
+            movop = 'movswl'
+        elif src.type.match(TypeSystem.INT):
+            movop = 'movl'
+        code += f'    {movop}\t{src_addr}, %eax\n'
+        if dst.type.match(TypeSystem.SHORT):
+            movop = 'movw'
+            reg = '%ax'
+        elif dst.type.match(TypeSystem.INT):
+            movop = 'movl'
+            reg = '%eax'
+        code += f'    {movop}\t{reg}, {dst_addr}\n'
+        self.emit_code(code)
 
     def emit_load(self, source, destination_addr):
         code = ''
         src_addr = source.access_name()
         dst_addr = destination_addr
-        if source.type.match(TypeKind.DOUBLE):
+        if source.type.match(TypeSystem.DOUBLE):
             code += f'    fldl\t{src_addr}\n'
             code += f'    fstpl\t{dst_addr}\n'
         else:
-            if source.match(SymbolKind.ID, SymbolKind.TAG):
-                code += f'    movl\t{src_addr}, %eax\n'
-                src_addr = '%eax'
-            code += f'    movl\t{src_addr}, {dst_addr}\n'
+            code += f'    movl\t{src_addr}, %eax\n'
+            code += f'    movl\t%eax, {dst_addr}\n'
         self.emit_code(code)
 
     def reserve_space(self):

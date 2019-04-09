@@ -96,6 +96,7 @@ class ParameterNode:
         self.type = type
         self.parameter = parameter
         self.index = None
+        self.offset = None
 
     def check(self):
         f = self.function.symbol
@@ -110,7 +111,7 @@ class ParameterNode:
 
 
     def access_name(self):
-        return self.parameter.access_name()
+        return f'{self.offset}(%esp)'
 
 class DeclarationNode:
     def __init__(self, function, specifier):

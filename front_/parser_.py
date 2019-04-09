@@ -110,7 +110,7 @@ class Parser:
         t = self.cur_token()
         if self.match(TokenKind.IF):
             return self.if_stmt()
-        elif self.match(TokenKind.INT) or self.match(TokenKind.DOUBLE):
+        elif self.match(TokenKind.INT, TokenKind.DOUBLE, TokenKind.SHORT):
             return self.parse_declaration()
         elif self.match(TokenKind.WHILE):
             return self.while_stmt()
@@ -434,6 +434,9 @@ class Parser:
             log('expect: ', word)
             raise Exception
 
-    def match(self, token_kind):
+    def match(self, *token_kind):
         t = self.cur_token()
-        return t.kind is token_kind
+        for k in token_kind:
+            if t.kind is k:
+                return True
+        return False
