@@ -150,8 +150,9 @@ class FunctionEmit(object):
         left = ir.left
         right = ir.right
         dst_addr = dst.access_name()
+        left_addr = left.access_name()
         right_addr = right.access_name()
-        self.emit_load(left, '%eax')
+        # self.emit_load(left, '%eax')
         m = {
             IRKind.ADD: 'addl',
             IRKind.SUB: 'subl',
@@ -161,9 +162,21 @@ class FunctionEmit(object):
         op = m[ir.kind]
         # TODO: 加一步检测  减少使用eax的指令
         code = ''
-        code += f'    {op}\t{right_addr}, %eax\n'
-        code += f'    movl\t%eax, {dst_addr}\n'
+        if left.type.match(TypeSystem.INT):
+            code += f'    movl\t{left_addr}, %eax\n'
+        else:
+            code += f'    movzwl\t{left_addr}, %eax\n'
+        if right.type.match(TypeSystem.INT):
+            code += f'    movl\t{right_addr}, %edx\n'
+        else:
+            code += f'    movzwl\t{right_addr}, %edx\n'
+        code += f'    {op}\t%edx, %eax\n'
+        if ir.type.match(TypeSystem.INT):
+            code += f'    movl\t%eax, {dst_addr}\n'
+        else:
+            code += f'    movw\t%ax, {dst_addr}\n'
         self.emit_code(code)
+
 
     def emit_call(self, ir):
         # 生成实参分配空间代码

@@ -31,12 +31,11 @@
 
 void main() {
 
-    // int a = 1;
-    short b = 5;
-    // int c = b;
-    // short d = a;
-    // int d = a + b;
-    // short c = a + b;
-    printf("%d", b);
+    short a = 1;
+    // short b = 1;
+    int c = 2;
+    // int d = 1;
+    short e = a + c;
+    printf("%d", e);
     getchar();
 }

@@ -40,7 +40,7 @@ class TypeSystem(object):
             TypeKind.DOUBLE: cls.DOUBLE,
             TypeKind.VOID: cls.VOID,
             TypeKind.STRING: cls.STRING,
-            TokenKind.SHORT: cls.SHORT,
+            TypeKind.SHORT: cls.SHORT,
 
         }
 

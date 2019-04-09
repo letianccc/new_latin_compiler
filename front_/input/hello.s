@@ -13,8 +13,14 @@ _main:
 	andl	$-16, %esp
 	subl	$32, %esp
 	call	___main
-	movw	$5, 30(%esp)
-	movswl	30(%esp), %eax
+	movw	$1, 30(%esp)
+	movl	$2, 24(%esp)
+	movl	24(%esp), %eax
+	movl	%eax, %edx
+	movzwl	30(%esp), %eax
+	addl	%edx, %eax
+	movw	%ax, 22(%esp)
+	movswl	22(%esp), %eax
 	movl	%eax, 4(%esp)
 	movl	$LC0, (%esp)
 	call	_printf

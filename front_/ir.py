@@ -1,7 +1,7 @@
 
 
 from front_.myenum import *
-
+from front_.type_system import *
 
 
 class Block:
@@ -70,6 +70,7 @@ class ExprIR(IR):
         self.left = left
         self.right = right
         self.destination = destination
+        self.type = TypeSystem.max_type(self.left.type, self.right.type)
 
     def emit(self, emiter):
         emiter.emit_expr(self.op, self.left, self.right, self.result)
