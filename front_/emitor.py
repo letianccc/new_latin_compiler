@@ -122,8 +122,18 @@ class FunctionEmit(object):
             self.emit_address_of(ir)
         elif ir.match(IRKind.INDIRECTION):
             self.emit_indirection(ir)
+        elif ir.match(IRKind.RETURN):
+            self.emit_return(ir)
+
         else:
             raise Exception
+
+    def emit_return(self, ir):
+        op = ir.operand
+        src = op.access_name()
+        dst = '%eax'
+        dst_type = ir.type
+        self.emit_mov(src, dst, op.type, dst_type)
 
     def emit_indirection(self, ir):
         dst = ir.destination

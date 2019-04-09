@@ -18,14 +18,6 @@ class Block:
     def add_ir(self, ir):
         self.irs.append(ir)
 
-# class IfBlock:
-#     def __init__(self, stmts):
-#         self.condBlock = None
-#         self.clauseBlock = None
-#         self.elseBlock = None
-#         # if块接下来的块
-#         self.nextBlock = None
-
 class IR:
     def __init__(self):
         self.kind = None
@@ -37,6 +29,12 @@ class IR:
             if self.kind is k:
                 return True
         return False
+
+class ReturnIR(IR):
+    def __init__(self, type, operand):
+        self.kind = IRKind.RETURN
+        self.operand = operand
+        self.type = type
 
 class BranchIR(IR):
     def __init__(self):
@@ -53,16 +51,13 @@ class BranchIR(IR):
             emiter.emit_cmp(left, right)
             emiter.emit_jmp(self.op, self.target)
 
-
 class AssignIR(IR):
-    def __init__(self, function, operand1, operand2, operand3=None):
+    def __init__(self, destination, source1, source2=None):
         super(AssignIR, self).__init__()
         self.kind = IRKind.ASSIGN
-        self.operands[0] = operand1
-        self.operands[1] = operand2
-        self.operands[2] = operand3
-
-
+        self.operands[0] = destination
+        self.operands[1] = source1
+        self.operands[2] = source2
 
 class ExprIR(IR):
     def __init__(self, kind, destination, left, right):

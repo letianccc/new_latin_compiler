@@ -13,9 +13,9 @@ class ExprNode(Node):
         self.kind = kind
         self.function = function
 
-    def check(self, function):
-        self.left = self.left.check(function)
-        self.right = self.right.check(function)
+    def check(self):
+        self.left = self.left.check()
+        self.right = self.right.check()
         return self
 
     def gen(self):
@@ -72,8 +72,8 @@ class UnaryNode(Node):
         self.operand = operand
         self.function = function
 
-    def check(self, function):
-        self.operand = self.operand.check(function)
+    def check(self):
+        self.operand = self.operand.check()
         return self
 
     def gen(self):

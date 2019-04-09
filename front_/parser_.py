@@ -4,6 +4,8 @@ from front_.myenum import *
 from front_.type_system import TypeSystem
 # from front_.mysymbol import *
 from front_.myexpr import *
+
+
 class Parser:
 
     def __init__(self, tokens):
@@ -74,7 +76,7 @@ class Parser:
 
     def parse_call(self, variable):
         params = self.parse_parameters(NodeKind.ACTUAL_PARAMETER)
-        self.expect(TokenKind.SEMICOLON)
+        # self.expect(TokenKind.SEMICOLON)
         n = CallNode(self.function, variable, params)
         self.function.call_nodes.append(n)
         return n
@@ -108,26 +110,37 @@ class Parser:
 
     def parse_statement(self):
         t = self.cur_token()
+
         if self.match(TokenKind.IF):
-            return self.if_stmt()
+            stmt = self.if_stmt()
         elif self.match(TokenKind.INT, TokenKind.DOUBLE, TokenKind.SHORT):
-            return self.parse_declaration()
+            stmt = self.parse_declaration()
         elif self.match(TokenKind.WHILE):
-            return self.while_stmt()
+            stmt = self.while_stmt()
         elif self.match(TokenKind.LBRACE):
-            return self.block_()
+            stmt = self.block_()
+        elif self.match(TokenKind.RETURN):
+            stmt = self.parse_return()
         else:
-            return self.parse_expression()
+            stmt = self.parse_expression()
+        self.expect(TokenKind.SEMICOLON)
+        return stmt
 
     def parse_expression(self):
-        variable = self.factor()
-        if self.match(TokenKind.LPAREN):
-            return self.parse_call(variable)
+        variable = self.bool_()
+        # TODO: assign 应该像其他表达式一样用一个循环实现
         if self.match(TokenKind.ASSIGN):
             self.next_token()
-            value = self.bool_()
-            self.expect(TokenKind.SEMICOLON)
+            value = self.parse_expression()
+            # self.expect(TokenKind.SEMICOLON)
             return AssignNode(self.function, variable, value)
+        return variable
+
+    def parse_return(self):
+        self.expect(TokenKind.RETURN)
+        expr = self.parse_expression()
+        expr = ReturnNode(self.function, expr)
+        return expr
 
     def parse_declaration(self):
         type = self.next_token()
@@ -135,10 +148,9 @@ class Parser:
         while True:
             d = self.parse_declarator()
             node.add(d)
-            if self.match(TokenKind.SEMICOLON):
+            if not self.match(TokenKind.COMMA):
                 break
-            self.expect(TokenKind.COMMA)
-        self.expect(TokenKind.SEMICOLON)
+            self.next_token()
         return node
 
     def parse_declarator(self):
@@ -146,7 +158,7 @@ class Parser:
         init = None
         if self.match(TokenKind.ASSIGN):
             self.next_token()
-            init = self.bool_()
+            init = self.parse_expression()
         d = DeclaratorNode(self.function, ident, init)
         return d
 
@@ -231,21 +243,10 @@ class Parser:
                 return True
         return False
 
-    def assign(self):
-        variable = self.factor()
-        if self.match(TokenKind.LPAREN):
-            return self.parse_call(variable)
-        self.expect(TokenKind.ASSIGN)
-        value = self.bool_()
-
-        self.expect(TokenKind.SEMICOLON)
-        return Assign(variable, value)
-
     def bool_(self):
         expr = self.join()
         while self.match(TokenKind.OR):
             self.expect('||')
-            # expr = Or(expr, self.join())
             expr = ExprNode(expr, self.join(), '||')
         return expr
 
@@ -253,7 +254,6 @@ class Parser:
         expr = self.equal()
         while self.match(TokenKind.AND):
             self.expect('&&')
-            # expr = And(expr, self.equal())
             expr = ExprNode(expr, self.equal(), '&&')
         return expr
 
@@ -262,7 +262,6 @@ class Parser:
 
         while self.match(TokenKind.EQUAL) or self.match(TokenKind.UNEQUAL):
             operator = self.next_token().value
-            # expr = Equal(expr, self.rel(), operator)
             expr = ExprNode(expr, self.rel(), operator)
         return expr
 
@@ -317,7 +316,6 @@ class Parser:
         return expr
 
     def factor(self):
-        t = self.cur_token()
         if self.match(TokenKind.LPAREN):
             self.expect(TokenKind.LPAREN)
             expr = self.bool_()
@@ -337,7 +335,11 @@ class Parser:
             return t
         elif self.match(TokenKind.ID):
             # 标识符
-            return self.parse_identifier()
+            expr = self.parse_identifier()
+            if self.match(TokenKind.LPAREN):
+                expr = self.parse_call(expr)
+            return expr
+            # return self.parse_identifier()
         else:
             raise Exception
 

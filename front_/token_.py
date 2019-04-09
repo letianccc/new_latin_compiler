@@ -24,7 +24,7 @@ class IntConstant(ConstantToken):
         self.value = value
         self.kind = TokenKind.INTCONST
 
-    def check(self, function):
+    def check(self):
         k = SymbolKind.INTCONST
         type = TypeSystem.type(TokenKind.INT)
         s = SymbolSystem.find_symbol(self)
@@ -38,7 +38,7 @@ class DoubleConstant(ConstantToken):
         self.value = value
         self.kind = TokenKind.DOUBLECONST
 
-    def check(self, function):
+    def check(self):
         # TODO: 这部分逻辑可以抽象
         # add_symbol(kind, type, value)
         # type = TypeSystem.type(self.type)
@@ -55,15 +55,7 @@ class IdentifierToken(Token):
         self.value = value
         self.kind = kind
 
-    def check(self, function, kind=None, type=None):
-        if kind is NodeKind.FUNCTION:
-            s = SymbolSystem.find_symbol(self)
-            if s is not None:
-                raise Exception("重复定义")
-            s = FunctionSymbol(type, self.value)
-            SymbolSystem.add(s)
-            function.symbol = s
-            return s
+    def check(self, kind=None, type=None):
         if kind is NodeKind.DECLARATOR or kind is NodeKind.FORMAL_PARAMETER:
             s = SymbolSystem.find_symbol(self, None, LevelKind.CURRENT)
             if s is not None:
@@ -71,17 +63,18 @@ class IdentifierToken(Token):
             s = IdentifierSymbol(type, self.value)
             SymbolSystem.add(s)
             if kind is NodeKind.DECLARATOR:
-                function.locals.append(s)
+                ...
             else:
                 s.is_formal_param = True
 
-        if kind is NodeKind.CALL:
+        elif kind is NodeKind.CALL:
             # TODO: 检测最外层作用域标识符是否存在
             # TODO: 检测是否有声明保留函数 printf
             s = SymbolSystem.find_symbol(self)
             if s is None:
                 v = self.value
-                s = FunctionSymbol(None, v, True)
+                type = TypeSystem.VOID
+                s = FunctionSymbol(type, v, True)
                 SymbolSystem.add(s)
             return s
 
@@ -97,13 +90,11 @@ class StringToken(Token):
         self.value = value
         self.kind = kind
 
-    def check(self, function):
+    def check(self):
         # TODO: 检测最外层
         s = SymbolSystem.find_symbol(self)
         if s is None:
             type = TypeSystem.type(TokenKind.STRING)
             s = StringSymbol(self.value, type)
             SymbolSystem.add(s)
-            strings = function.strings
-            strings.append(s)
         return s

@@ -4,6 +4,7 @@ from front_.myenum import *
 from front_.type_system import TypeSystem
 from front_.symbol_system import *
 from front_.ir import *
+from front_.reg_system import *
 
 class Node(object):
     """docstring for Node."""
@@ -19,7 +20,7 @@ class CallNode:
         self.kind = NodeKind.CALL
 
     def check(self):
-        self.call_function = self.call_function.check(self.function, NodeKind.CALL)
+        self.call_function = self.call_function.check(NodeKind.CALL)
 
         for p in self.params:
             p.check()
@@ -32,6 +33,7 @@ class CallNode:
             self.function.symbol.call_space = space
         # 分配实参偏移
         self.set_param_offset()
+        return self
 
     def check_callee(self):
         if not self.call_function.is_extern:
@@ -52,6 +54,11 @@ class CallNode:
     def gen(self):
         ir = CallIR(self.call_function, self.params)
         self.function.gen_ir(ir)
+        size = self.call_function.type.size
+        dst = RegSystem.reg(RegKind.AX, size)
+        return dst
+
+
 
 class FunctionNode:
     def __init__(self):
@@ -102,9 +109,9 @@ class ParameterNode:
         f = self.function.symbol
         p = self.parameter
         if p.match(TokenKind.INTCONST, TokenKind.STRING, TokenKind.DOUBLECONST):
-            s = p.check(f)
+            s = p.check()
         elif p.match(TokenKind.ID):
-            s = p.check(f, self.kind, self.type)
+            s = p.check(self.kind, self.type)
             if self.kind is NodeKind.FORMAL_PARAMETER:
                 f.add_param(s)
         self.parameter = s
@@ -127,6 +134,7 @@ class DeclarationNode:
         type = self.specifier
         for d in self.declarators:
             d.check(type)
+            self.function.symbol.locals.append(d.identifier)
 
     def gen(self):
         for d in self.declarators:
@@ -140,15 +148,16 @@ class DeclaratorNode:
         self.initializer = initializer
 
     def check(self, identifier_type):
-        self.identifier = self.identifier.check(self.function.symbol, self.kind, identifier_type)
+        self.identifier = self.identifier.check(self.kind, identifier_type)
         if self.initializer:
-            self.initializer = self.initializer.check(self.function.symbol)
+            self.initializer = self.initializer.check()
+        return self
 
     def gen(self):
         # TODO: initializer 应该递归gen
         if self.initializer:
             src = self.initializer.gen()
-            ir = AssignIR(self.function.symbol, self.identifier, src)
+            ir = AssignIR(self.identifier, src)
             self.function.gen_ir(ir)
 
 class AssignNode(Node):
@@ -158,12 +167,31 @@ class AssignNode(Node):
         self.function = function
 
     def check(self):
-        self.variable = self.variable.check(self.function)
-        self.value = self.value.check(self.function)
+        self.variable = self.variable.check()
+        self.value = self.value.check()
 
     def gen(self):
         src = self.value.gen()
-        ir = AssignIR(self.function.symbol, self.variable, src)
+        ir = AssignIR(self.variable, src)
+        self.function.gen_ir(ir)
+
+class ReturnNode(Node):
+    def __init__(self, function, operand):
+        self.operand = operand
+        self.function = function
+
+    def check(self):
+        self.operand = self.operand.check()
+
+    def gen(self):
+        # f = self.function.symbol
+        src = self.operand.gen()
+        # type = TypeSystem.max_type(src.type, f.type)
+        # dst = TagSymbol(type)
+        # self.function.symbol.tags.append(dst)
+        # ir = AssignIR(dst, src)
+        type = self.function.symbol.type
+        ir = ReturnIR(type, src)
         self.function.gen_ir(ir)
 
 class IfNode(Node):

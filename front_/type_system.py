@@ -7,7 +7,6 @@ class Type(object):
     def __init__(self, kind, size):
         super(Type, self).__init__()
         self.kind = kind
-        self.child = None
         self.size = size
 
     def match(self, *types):

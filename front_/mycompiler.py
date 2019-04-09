@@ -8,6 +8,7 @@ from front_.util import *
 from front_.myenum import *
 import os
 from front_.emitor import Emit
+from front_.symbol_system import *
 
 
 
@@ -26,7 +27,7 @@ def compile(input_path):
     functions = parser.function_nodes
 
     for f in functions:
-        f.identifier.check(f, NodeKind.FUNCTION, None)
+        check_function(f)
 
     for f in functions:
         f.check()
@@ -47,3 +48,15 @@ def compile(input_path):
     code = e.code
     # log(code)
     return code
+
+
+def check_function(function):
+    f = function
+    ident = f.identifier
+    s = SymbolSystem.find_symbol(ident)
+    if s is not None:
+        raise Exception("重复定义")
+
+    s = FunctionSymbol(f.type, ident.value)
+    SymbolSystem.add(s)
+    f.symbol = s

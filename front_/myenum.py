@@ -146,8 +146,13 @@ class IRKind(IntEnum):
     DIV = auto()
     ADDRESS_OF = auto()
     INDIRECTION = auto()
+    RETURN = auto()
 
 class LevelKind(IntEnum):
     CURRENT = auto()
     OUTEST = auto()
     ALL = auto()
+
+class RegKind(IntEnum):
+    AX = auto()
+    DX = auto()
