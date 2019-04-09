@@ -152,7 +152,6 @@ class FunctionEmit(object):
         dst_addr = dst.access_name()
         left_addr = left.access_name()
         right_addr = right.access_name()
-        # self.emit_load(left, '%eax')
         m = {
             IRKind.ADD: 'addl',
             IRKind.SUB: 'subl',
@@ -160,23 +159,31 @@ class FunctionEmit(object):
             IRKind.DIV: 'divl',
         }
         op = m[ir.kind]
-        # TODO: 加一步检测  减少使用eax的指令
-        code = ''
-        if left.type.match(TypeSystem.INT):
-            code += f'    movl\t{left_addr}, %eax\n'
-        else:
-            code += f'    movzwl\t{left_addr}, %eax\n'
-        if right.type.match(TypeSystem.INT):
-            code += f'    movl\t{right_addr}, %edx\n'
-        else:
-            code += f'    movzwl\t{right_addr}, %edx\n'
-        code += f'    {op}\t%edx, %eax\n'
-        if ir.type.match(TypeSystem.INT):
-            code += f'    movl\t%eax, {dst_addr}\n'
-        else:
-            code += f'    movw\t%ax, {dst_addr}\n'
+        self.emit_mov(left_addr, '%eax', left.type, TypeSystem.INT)
+        self.emit_mov(right_addr, '%edx', right.type, TypeSystem.INT)
+        code = f'    {op}\t%edx, %eax\n'
         self.emit_code(code)
+        self.emit_mov('%eax', dst_addr, TypeSystem.INT, dst.type)
 
+    def emit_mov(self, source_address, destination_address, src_type, dst_type):
+        src = source_address
+        dst = destination_address
+        if src_type.match(TypeSystem.DOUBLE) or dst_type.match(TypeSystem.DOUBLE):
+            code = ''
+            code += f'    fldl\t{src}\n'
+            code += f'    fstpl\t{dst}\n'
+        elif src_type.match(TypeSystem.SHORT) and dst_type.match(TypeSystem.INT):
+            code = f'    movswl\t{src}, {dst}\n'
+        elif src_type.match(TypeSystem.INT) and dst_type.match(TypeSystem.INT):
+            code = f'    movl\t{src}, {dst}\n'
+        elif dst_type.match(TypeSystem.SHORT):
+            # dst_addr 暂时不会是 %ax
+            if src == '%eax':
+                src = '%ax'
+            code = f'    movw\t{src}, {dst}\n'
+        else:
+            raise Exception
+        self.emit_code(code)
 
     def emit_call(self, ir):
         # 生成实参分配空间代码
@@ -186,17 +193,22 @@ class FunctionEmit(object):
         self.emit_code(code)
 
     def emit_param(self, ir):
+        # TODO: 实参和形参的参数要匹配
         for p in ir.params:
             dst_addr = f'{p.offset}(%esp)'
             type = p.parameter.type
-            if type.match(TypeSystem.SHORT):
-                src_addr = p.parameter.access_name()
-                code = ''
-                dst_addr = f'{p.offset}(%esp)'
-                code += f'    movswl\t{src_addr}, %eax\n'
-                code += f'    movl\t%eax, {dst_addr}\n'
-                self.emit_code(code)
-                continue
+            src = p.parameter
+            if ir.function.is_extern:
+                if type.match(TypeSystem.SHORT):
+                    src_addr = src.access_name()
+                    code = ''
+                    dst_addr = f'{p.offset}(%esp)'
+                    code += f'    movswl\t{src_addr}, %eax\n'
+                    code += f'    movl\t%eax, {dst_addr}\n'
+                    self.emit_code(code)
+                    # self.emit_mov(src_addr, '%eax', src.type, TypeSystem.INT)
+                    # self.emit_mov('%eax', dst_addr, TypeSystem.INT, dst.type)
+                    continue
             self.emit_load(p.parameter, dst_addr)
 
     def emit_assign(self, ir):
@@ -206,21 +218,10 @@ class FunctionEmit(object):
         src_addr = src.access_name()
         dst_addr = dst.access_name()
         if src.type.match(TypeSystem.DOUBLE) or dst.type.match(TypeSystem.DOUBLE):
-            self.emit_load(src, dst_addr)
-            return
-        if src.type.match(TypeSystem.SHORT):
-            movop = 'movswl'
-        elif src.type.match(TypeSystem.INT):
-            movop = 'movl'
-        code += f'    {movop}\t{src_addr}, %eax\n'
-        if dst.type.match(TypeSystem.SHORT):
-            movop = 'movw'
-            reg = '%ax'
-        elif dst.type.match(TypeSystem.INT):
-            movop = 'movl'
-            reg = '%eax'
-        code += f'    {movop}\t{reg}, {dst_addr}\n'
-        self.emit_code(code)
+            self.emit_mov(src_addr, dst_addr, src.type, dst.type)
+        else:
+            self.emit_mov(src_addr, '%eax', src.type, TypeSystem.INT)
+            self.emit_mov('%eax', dst_addr, TypeSystem.INT, dst.type)
 
     def emit_load(self, source, destination_addr):
         code = ''

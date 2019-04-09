@@ -22,21 +22,21 @@ _add:
     movl	%eax, 36(%esp)
     movl	36(%esp), %eax
     movw	%ax, 58(%esp)
-    movzwl	60(%esp), %eax
+    movswl	60(%esp), %eax
     movl	$1, %edx
     addl	%edx, %eax
     movw	%ax, 34(%esp)
-    movzwl	34(%esp), %eax
+    movswl	34(%esp), %eax
     movl	$1, %edx
     addl	%edx, %eax
     movw	%ax, 32(%esp)
     movswl	32(%esp), %eax
     movw	%ax, 56(%esp)
     movl	$1, %eax
-    movzwl	60(%esp), %edx
+    movswl	60(%esp), %edx
     addl	%edx, %eax
     movw	%ax, 30(%esp)
-    movzwl	30(%esp), %eax
+    movswl	30(%esp), %eax
     movl	$1, %edx
     addl	%edx, %eax
     movw	%ax, 28(%esp)
@@ -47,47 +47,47 @@ _add:
     addl	%edx, %eax
     movl	%eax, 24(%esp)
     movl	24(%esp), %eax
-    movzwl	60(%esp), %edx
+    movswl	60(%esp), %edx
     addl	%edx, %eax
     movw	%ax, 22(%esp)
     movswl	22(%esp), %eax
     movw	%ax, 52(%esp)
-    movzwl	60(%esp), %eax
-    movzwl	60(%esp), %edx
+    movswl	60(%esp), %eax
+    movswl	60(%esp), %edx
     addl	%edx, %eax
     movw	%ax, 20(%esp)
-    movzwl	20(%esp), %eax
+    movswl	20(%esp), %eax
     movl	$1, %edx
     addl	%edx, %eax
     movw	%ax, 18(%esp)
     movswl	18(%esp), %eax
     movw	%ax, 50(%esp)
     movl	$1, %eax
-    movzwl	60(%esp), %edx
+    movswl	60(%esp), %edx
     addl	%edx, %eax
     movw	%ax, 16(%esp)
-    movzwl	16(%esp), %eax
-    movzwl	60(%esp), %edx
+    movswl	16(%esp), %eax
+    movswl	60(%esp), %edx
     addl	%edx, %eax
     movw	%ax, 14(%esp)
     movswl	14(%esp), %eax
     movw	%ax, 48(%esp)
-    movzwl	60(%esp), %eax
+    movswl	60(%esp), %eax
     movl	$1, %edx
     addl	%edx, %eax
     movw	%ax, 12(%esp)
-    movzwl	12(%esp), %eax
-    movzwl	60(%esp), %edx
+    movswl	12(%esp), %eax
+    movswl	60(%esp), %edx
     addl	%edx, %eax
     movw	%ax, 10(%esp)
     movswl	10(%esp), %eax
     movw	%ax, 46(%esp)
-    movzwl	60(%esp), %eax
-    movzwl	60(%esp), %edx
+    movswl	60(%esp), %eax
+    movswl	60(%esp), %edx
     addl	%edx, %eax
     movw	%ax, 8(%esp)
-    movzwl	8(%esp), %eax
-    movzwl	60(%esp), %edx
+    movswl	8(%esp), %eax
+    movswl	60(%esp), %edx
     addl	%edx, %eax
     movw	%ax, 6(%esp)
     movswl	6(%esp), %eax
@@ -163,21 +163,21 @@ _sub:
     movl	%eax, 36(%esp)
     movl	36(%esp), %eax
     movw	%ax, 58(%esp)
-    movzwl	60(%esp), %eax
+    movswl	60(%esp), %eax
     movl	$1, %edx
     subl	%edx, %eax
     movw	%ax, 34(%esp)
-    movzwl	34(%esp), %eax
+    movswl	34(%esp), %eax
     movl	$1, %edx
     subl	%edx, %eax
     movw	%ax, 32(%esp)
     movswl	32(%esp), %eax
     movw	%ax, 56(%esp)
     movl	$1, %eax
-    movzwl	60(%esp), %edx
+    movswl	60(%esp), %edx
     subl	%edx, %eax
     movw	%ax, 30(%esp)
-    movzwl	30(%esp), %eax
+    movswl	30(%esp), %eax
     movl	$1, %edx
     subl	%edx, %eax
     movw	%ax, 28(%esp)
@@ -188,47 +188,47 @@ _sub:
     subl	%edx, %eax
     movl	%eax, 24(%esp)
     movl	24(%esp), %eax
-    movzwl	60(%esp), %edx
+    movswl	60(%esp), %edx
     subl	%edx, %eax
     movw	%ax, 22(%esp)
     movswl	22(%esp), %eax
     movw	%ax, 52(%esp)
-    movzwl	60(%esp), %eax
-    movzwl	60(%esp), %edx
+    movswl	60(%esp), %eax
+    movswl	60(%esp), %edx
     subl	%edx, %eax
     movw	%ax, 20(%esp)
-    movzwl	20(%esp), %eax
+    movswl	20(%esp), %eax
     movl	$1, %edx
     subl	%edx, %eax
     movw	%ax, 18(%esp)
     movswl	18(%esp), %eax
     movw	%ax, 50(%esp)
     movl	$1, %eax
-    movzwl	60(%esp), %edx
+    movswl	60(%esp), %edx
     subl	%edx, %eax
     movw	%ax, 16(%esp)
-    movzwl	16(%esp), %eax
-    movzwl	60(%esp), %edx
+    movswl	16(%esp), %eax
+    movswl	60(%esp), %edx
     subl	%edx, %eax
     movw	%ax, 14(%esp)
     movswl	14(%esp), %eax
     movw	%ax, 48(%esp)
-    movzwl	60(%esp), %eax
+    movswl	60(%esp), %eax
     movl	$1, %edx
     subl	%edx, %eax
     movw	%ax, 12(%esp)
-    movzwl	12(%esp), %eax
-    movzwl	60(%esp), %edx
+    movswl	12(%esp), %eax
+    movswl	60(%esp), %edx
     subl	%edx, %eax
     movw	%ax, 10(%esp)
     movswl	10(%esp), %eax
     movw	%ax, 46(%esp)
-    movzwl	60(%esp), %eax
-    movzwl	60(%esp), %edx
+    movswl	60(%esp), %eax
+    movswl	60(%esp), %edx
     subl	%edx, %eax
     movw	%ax, 8(%esp)
-    movzwl	8(%esp), %eax
-    movzwl	60(%esp), %edx
+    movswl	8(%esp), %eax
+    movswl	60(%esp), %edx
     subl	%edx, %eax
     movw	%ax, 6(%esp)
     movswl	6(%esp), %eax
@@ -314,21 +314,21 @@ _add_sub:
     movl	%eax, 66(%esp)
     movl	66(%esp), %eax
     movw	%ax, 110(%esp)
-    movzwl	114(%esp), %eax
+    movswl	114(%esp), %eax
     movl	$1, %edx
     subl	%edx, %eax
     movw	%ax, 64(%esp)
-    movzwl	64(%esp), %eax
+    movswl	64(%esp), %eax
     movl	$1, %edx
     addl	%edx, %eax
     movw	%ax, 62(%esp)
     movswl	62(%esp), %eax
     movw	%ax, 108(%esp)
     movl	$1, %eax
-    movzwl	114(%esp), %edx
+    movswl	114(%esp), %edx
     subl	%edx, %eax
     movw	%ax, 60(%esp)
-    movzwl	60(%esp), %eax
+    movswl	60(%esp), %eax
     movl	$1, %edx
     addl	%edx, %eax
     movw	%ax, 58(%esp)
@@ -339,26 +339,26 @@ _add_sub:
     subl	%edx, %eax
     movl	%eax, 54(%esp)
     movl	54(%esp), %eax
-    movzwl	114(%esp), %edx
+    movswl	114(%esp), %edx
     addl	%edx, %eax
     movw	%ax, 52(%esp)
     movswl	52(%esp), %eax
     movw	%ax, 104(%esp)
-    movzwl	114(%esp), %eax
+    movswl	114(%esp), %eax
     movl	$1, %edx
     addl	%edx, %eax
     movw	%ax, 50(%esp)
-    movzwl	50(%esp), %eax
+    movswl	50(%esp), %eax
     movl	$1, %edx
     subl	%edx, %eax
     movw	%ax, 48(%esp)
     movswl	48(%esp), %eax
     movw	%ax, 102(%esp)
     movl	$1, %eax
-    movzwl	114(%esp), %edx
+    movswl	114(%esp), %edx
     addl	%edx, %eax
     movw	%ax, 46(%esp)
-    movzwl	46(%esp), %eax
+    movswl	46(%esp), %eax
     movl	$1, %edx
     subl	%edx, %eax
     movw	%ax, 44(%esp)
@@ -369,87 +369,87 @@ _add_sub:
     addl	%edx, %eax
     movl	%eax, 40(%esp)
     movl	40(%esp), %eax
-    movzwl	114(%esp), %edx
+    movswl	114(%esp), %edx
     subl	%edx, %eax
     movw	%ax, 38(%esp)
     movswl	38(%esp), %eax
     movw	%ax, 98(%esp)
-    movzwl	114(%esp), %eax
-    movzwl	114(%esp), %edx
+    movswl	114(%esp), %eax
+    movswl	114(%esp), %edx
     subl	%edx, %eax
     movw	%ax, 36(%esp)
-    movzwl	36(%esp), %eax
+    movswl	36(%esp), %eax
     movl	$1, %edx
     addl	%edx, %eax
     movw	%ax, 34(%esp)
     movswl	34(%esp), %eax
     movw	%ax, 96(%esp)
     movl	$1, %eax
-    movzwl	114(%esp), %edx
+    movswl	114(%esp), %edx
     subl	%edx, %eax
     movw	%ax, 32(%esp)
-    movzwl	32(%esp), %eax
-    movzwl	114(%esp), %edx
+    movswl	32(%esp), %eax
+    movswl	114(%esp), %edx
     addl	%edx, %eax
     movw	%ax, 30(%esp)
     movswl	30(%esp), %eax
     movw	%ax, 94(%esp)
-    movzwl	114(%esp), %eax
+    movswl	114(%esp), %eax
     movl	$1, %edx
     subl	%edx, %eax
     movw	%ax, 28(%esp)
-    movzwl	28(%esp), %eax
-    movzwl	114(%esp), %edx
+    movswl	28(%esp), %eax
+    movswl	114(%esp), %edx
     addl	%edx, %eax
     movw	%ax, 26(%esp)
     movswl	26(%esp), %eax
     movw	%ax, 92(%esp)
-    movzwl	114(%esp), %eax
-    movzwl	114(%esp), %edx
+    movswl	114(%esp), %eax
+    movswl	114(%esp), %edx
     addl	%edx, %eax
     movw	%ax, 24(%esp)
-    movzwl	24(%esp), %eax
+    movswl	24(%esp), %eax
     movl	$1, %edx
     subl	%edx, %eax
     movw	%ax, 22(%esp)
     movswl	22(%esp), %eax
     movw	%ax, 90(%esp)
     movl	$1, %eax
-    movzwl	114(%esp), %edx
+    movswl	114(%esp), %edx
     addl	%edx, %eax
     movw	%ax, 20(%esp)
-    movzwl	20(%esp), %eax
-    movzwl	114(%esp), %edx
+    movswl	20(%esp), %eax
+    movswl	114(%esp), %edx
     subl	%edx, %eax
     movw	%ax, 18(%esp)
     movswl	18(%esp), %eax
     movw	%ax, 88(%esp)
-    movzwl	114(%esp), %eax
+    movswl	114(%esp), %eax
     movl	$1, %edx
     addl	%edx, %eax
     movw	%ax, 16(%esp)
-    movzwl	16(%esp), %eax
-    movzwl	114(%esp), %edx
+    movswl	16(%esp), %eax
+    movswl	114(%esp), %edx
     subl	%edx, %eax
     movw	%ax, 14(%esp)
     movswl	14(%esp), %eax
     movw	%ax, 86(%esp)
-    movzwl	114(%esp), %eax
-    movzwl	114(%esp), %edx
+    movswl	114(%esp), %eax
+    movswl	114(%esp), %edx
     addl	%edx, %eax
     movw	%ax, 12(%esp)
-    movzwl	12(%esp), %eax
-    movzwl	114(%esp), %edx
+    movswl	12(%esp), %eax
+    movswl	114(%esp), %edx
     subl	%edx, %eax
     movw	%ax, 10(%esp)
     movswl	10(%esp), %eax
     movw	%ax, 84(%esp)
-    movzwl	114(%esp), %eax
-    movzwl	114(%esp), %edx
+    movswl	114(%esp), %eax
+    movswl	114(%esp), %edx
     subl	%edx, %eax
     movw	%ax, 8(%esp)
-    movzwl	8(%esp), %eax
-    movzwl	114(%esp), %edx
+    movswl	8(%esp), %eax
+    movswl	114(%esp), %edx
     addl	%edx, %eax
     movw	%ax, 6(%esp)
     movswl	6(%esp), %eax
@@ -569,68 +569,68 @@ _mul:
     movl	$2, %edx
     imull	%edx, %eax
     movl	%eax, 32(%esp)
-    movzwl	60(%esp), %eax
+    movswl	60(%esp), %eax
     movl	32(%esp), %edx
     imull	%edx, %eax
     movw	%ax, 30(%esp)
     movswl	30(%esp), %eax
     movw	%ax, 56(%esp)
-    movzwl	60(%esp), %eax
+    movswl	60(%esp), %eax
     movl	$2, %edx
     imull	%edx, %eax
     movw	%ax, 28(%esp)
     movl	$2, %eax
-    movzwl	28(%esp), %edx
+    movswl	28(%esp), %edx
     imull	%edx, %eax
     movw	%ax, 26(%esp)
     movswl	26(%esp), %eax
     movw	%ax, 54(%esp)
     movl	$2, %eax
-    movzwl	60(%esp), %edx
+    movswl	60(%esp), %edx
     imull	%edx, %eax
     movw	%ax, 24(%esp)
     movl	$2, %eax
-    movzwl	24(%esp), %edx
+    movswl	24(%esp), %edx
     imull	%edx, %eax
     movw	%ax, 22(%esp)
     movswl	22(%esp), %eax
     movw	%ax, 52(%esp)
-    movzwl	60(%esp), %eax
+    movswl	60(%esp), %eax
     movl	$2, %edx
     imull	%edx, %eax
     movw	%ax, 20(%esp)
-    movzwl	60(%esp), %eax
-    movzwl	20(%esp), %edx
+    movswl	60(%esp), %eax
+    movswl	20(%esp), %edx
     imull	%edx, %eax
     movw	%ax, 18(%esp)
     movswl	18(%esp), %eax
     movw	%ax, 50(%esp)
-    movzwl	60(%esp), %eax
-    movzwl	60(%esp), %edx
+    movswl	60(%esp), %eax
+    movswl	60(%esp), %edx
     imull	%edx, %eax
     movw	%ax, 16(%esp)
     movl	$2, %eax
-    movzwl	16(%esp), %edx
+    movswl	16(%esp), %edx
     imull	%edx, %eax
     movw	%ax, 14(%esp)
     movswl	14(%esp), %eax
     movw	%ax, 48(%esp)
     movl	$2, %eax
-    movzwl	60(%esp), %edx
+    movswl	60(%esp), %edx
     imull	%edx, %eax
     movw	%ax, 12(%esp)
-    movzwl	60(%esp), %eax
-    movzwl	12(%esp), %edx
+    movswl	60(%esp), %eax
+    movswl	12(%esp), %edx
     imull	%edx, %eax
     movw	%ax, 10(%esp)
     movswl	10(%esp), %eax
     movw	%ax, 46(%esp)
-    movzwl	60(%esp), %eax
-    movzwl	60(%esp), %edx
+    movswl	60(%esp), %eax
+    movswl	60(%esp), %edx
     imull	%edx, %eax
     movw	%ax, 8(%esp)
-    movzwl	60(%esp), %eax
-    movzwl	8(%esp), %edx
+    movswl	60(%esp), %eax
+    movswl	8(%esp), %edx
     imull	%edx, %eax
     movw	%ax, 6(%esp)
     movswl	6(%esp), %eax
@@ -738,29 +738,29 @@ _arith:
     movl	%eax, 32(%esp)
     movl	32(%esp), %eax
     movw	%ax, 76(%esp)
-    movzwl	82(%esp), %eax
+    movswl	82(%esp), %eax
     movl	$2, %edx
     imull	%edx, %eax
     movw	%ax, 30(%esp)
-    movzwl	30(%esp), %eax
+    movswl	30(%esp), %eax
     movl	$2, %edx
     addl	%edx, %eax
     movw	%ax, 28(%esp)
-    movzwl	28(%esp), %eax
+    movswl	28(%esp), %eax
     movl	$2, %edx
     addl	%edx, %eax
     movw	%ax, 26(%esp)
     movswl	26(%esp), %eax
     movw	%ax, 74(%esp)
     movl	$2, %eax
-    movzwl	82(%esp), %edx
+    movswl	82(%esp), %edx
     imull	%edx, %eax
     movw	%ax, 24(%esp)
     movl	$2, %eax
-    movzwl	24(%esp), %edx
+    movswl	24(%esp), %edx
     addl	%edx, %eax
     movw	%ax, 22(%esp)
-    movzwl	22(%esp), %eax
+    movswl	22(%esp), %eax
     movl	$2, %edx
     addl	%edx, %eax
     movw	%ax, 20(%esp)
@@ -770,26 +770,26 @@ _arith:
     movl	$2, %edx
     addl	%edx, %eax
     movl	%eax, 16(%esp)
-    movzwl	82(%esp), %eax
+    movswl	82(%esp), %eax
     movl	$2, %edx
     imull	%edx, %eax
     movw	%ax, 14(%esp)
     movl	16(%esp), %eax
-    movzwl	14(%esp), %edx
+    movswl	14(%esp), %edx
     addl	%edx, %eax
     movw	%ax, 12(%esp)
     movswl	12(%esp), %eax
     movw	%ax, 70(%esp)
-    movzwl	82(%esp), %eax
-    movzwl	82(%esp), %edx
+    movswl	82(%esp), %eax
+    movswl	82(%esp), %edx
     imull	%edx, %eax
     movw	%ax, 10(%esp)
-    movzwl	82(%esp), %eax
-    movzwl	10(%esp), %edx
+    movswl	82(%esp), %eax
+    movswl	10(%esp), %edx
     addl	%edx, %eax
     movw	%ax, 8(%esp)
-    movzwl	8(%esp), %eax
-    movzwl	82(%esp), %edx
+    movswl	8(%esp), %eax
+    movswl	82(%esp), %edx
     addl	%edx, %eax
     movw	%ax, 6(%esp)
     movswl	6(%esp), %eax

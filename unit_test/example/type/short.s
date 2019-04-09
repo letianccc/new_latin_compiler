@@ -18,20 +18,20 @@ _main:
     movl	%eax, 28(%esp)
     movl	$4, %eax
     movl	%eax, 24(%esp)
-    movzwl	34(%esp), %eax
-    movzwl	32(%esp), %edx
+    movswl	34(%esp), %eax
+    movswl	32(%esp), %edx
     addl	%edx, %eax
     movw	%ax, 12(%esp)
     movswl	12(%esp), %eax
     movw	%ax, 22(%esp)
-    movzwl	34(%esp), %eax
+    movswl	34(%esp), %eax
     movl	28(%esp), %edx
     addl	%edx, %eax
     movw	%ax, 10(%esp)
     movswl	10(%esp), %eax
     movl	%eax, 18(%esp)
     movl	28(%esp), %eax
-    movzwl	34(%esp), %edx
+    movswl	34(%esp), %edx
     addl	%edx, %eax
     movw	%ax, 8(%esp)
     movswl	8(%esp), %eax
