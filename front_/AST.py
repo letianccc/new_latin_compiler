@@ -12,7 +12,10 @@ class Node(object):
     def __init__(self):
         super(Node, self).__init__()
 
-class CallNode:
+    def check(self):
+        self.function = self.function.symbol
+
+class CallNode(Node):
     def __init__(self, function, call_function, parameters):
         self.function = function
         self.call_function = call_function
@@ -20,20 +23,33 @@ class CallNode:
         self.kind = NodeKind.CALL
 
     def check(self):
+        super().check()
         self.call_function = self.call_function.check(NodeKind.CALL)
 
         for p in self.params:
             p.check()
 
-        # 计算调用最多需要预留的栈空间
-        space = 0
-        for p in self.params:
-            space += p.parameter.type.size
-        if space > self.function.symbol.call_space:
-            self.function.symbol.call_space = space
+        self.allocate_call_space()
         # 分配实参偏移
         self.set_param_offset()
         return self
+
+    def allocate_call_space(self):
+        # 计算调用最多需要预留的栈空间
+        space = 0
+        callee = self.call_function
+        int_size = TypeSystem.INT.size
+        for p in self.params:
+            psize = p.parameter.type.size
+            if callee.is_extern:
+                # printf参数占8位或4位
+                size = max(int_size, psize)
+            else:
+                size = psize
+            space += size
+        current = self.function.call_space
+        self.function.call_space = max(space, current)
+
 
     def check_callee(self):
         if not self.call_function.is_extern:
@@ -60,7 +76,7 @@ class CallNode:
 
 
 
-class FunctionNode:
+class FunctionNode(Node):
     def __init__(self):
         self.kind = NodeKind.FUNCTION
         self.type = None
@@ -94,7 +110,7 @@ class FunctionNode:
     def emit(self):
         ...
 
-class ParameterNode:
+class ParameterNode(Node):
     def __init__(self, function, kind, type, parameter):
         self.function = function
         self.kind = kind
@@ -106,7 +122,8 @@ class ParameterNode:
         self.offset = None
 
     def check(self):
-        f = self.function.symbol
+        super().check()
+        f = self.function
         p = self.parameter
         if p.match(TokenKind.INTCONST, TokenKind.STRING, TokenKind.DOUBLECONST):
             s = p.check()
@@ -120,9 +137,10 @@ class ParameterNode:
     def access_name(self):
         return f'{self.offset}(%esp)'
 
-class DeclarationNode:
+class DeclarationNode(Node):
     def __init__(self, function, specifier):
         self.function = function
+        self.ff = function
         self.specifier = specifier
         self.declarators = []
 
@@ -130,17 +148,18 @@ class DeclarationNode:
         self.declarators.append(declarator)
 
     def check(self):
+        super().check()
         self.specifier = TypeSystem.type(self.specifier.kind)
         type = self.specifier
         for d in self.declarators:
             d.check(type)
-            self.function.symbol.locals.append(d.identifier)
+            self.function.locals.append(d.identifier)
 
     def gen(self):
         for d in self.declarators:
             d.gen()
 
-class DeclaratorNode:
+class DeclaratorNode(Node):
     def __init__(self, function, identifier, initializer):
         self.kind = NodeKind.DECLARATOR
         self.function = function
@@ -148,6 +167,7 @@ class DeclaratorNode:
         self.initializer = initializer
 
     def check(self, identifier_type):
+        super().check()
         self.identifier = self.identifier.check(self.kind, identifier_type)
         if self.initializer:
             self.initializer = self.initializer.check()
@@ -167,6 +187,7 @@ class AssignNode(Node):
         self.function = function
 
     def check(self):
+        super().check()
         self.variable = self.variable.check()
         self.value = self.value.check()
 
@@ -181,16 +202,12 @@ class ReturnNode(Node):
         self.function = function
 
     def check(self):
+        super().check()
         self.operand = self.operand.check()
 
     def gen(self):
-        # f = self.function.symbol
         src = self.operand.gen()
-        # type = TypeSystem.max_type(src.type, f.type)
-        # dst = TagSymbol(type)
-        # self.function.symbol.tags.append(dst)
-        # ir = AssignIR(dst, src)
-        type = self.function.symbol.type
+        type = TypeSystem.INT
         ir = ReturnIR(type, src)
         self.function.gen_ir(ir)
 

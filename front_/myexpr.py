@@ -14,6 +14,7 @@ class ExprNode(Node):
         self.function = function
 
     def check(self):
+        super().check()
         self.left = self.left.check()
         self.right = self.right.check()
         return self
@@ -24,7 +25,7 @@ class ExprNode(Node):
         type = TypeSystem.max_type(left.type, right.type)
         # TODO: 可能需要add symbol
         dst = TagSymbol(type)
-        self.function.symbol.tags.append(dst)
+        self.function.tags.append(dst)
         m = {
             NodeKind.ADD: IRKind.ADD,
             NodeKind.SUB: IRKind.SUB,
@@ -33,7 +34,7 @@ class ExprNode(Node):
         }
         k = m[self.kind]
         ir = ExprIR(k, dst, left, right)
-        self.function.symbol.gen_ir(ir)
+        self.function.gen_ir(ir)
         return dst
 
 class OrNode(Node):
@@ -73,6 +74,7 @@ class UnaryNode(Node):
         self.function = function
 
     def check(self):
+        super().check()
         self.operand = self.operand.check()
         return self
 
@@ -80,16 +82,16 @@ class UnaryNode(Node):
         if self.kind is NodeKind.ADDRESS_OF:
             operand = self.operand.gen()
             dst = TagSymbol(TypeSystem.INT)
-            self.function.symbol.tags.append(dst)
+            self.function.tags.append(dst)
             ir = UnaryIR(IRKind.ADDRESS_OF, dst, operand)
-            self.function.symbol.gen_ir(ir)
+            self.function.gen_ir(ir)
         elif self.kind is NodeKind.INDIRECTION:
             # TODO: 类型的获取需要进一步实现
             operand = self.operand.gen()
             dst = TagSymbol(TypeSystem.INT)
-            self.function.symbol.tags.append(dst)
+            self.function.tags.append(dst)
             ir = UnaryIR(IRKind.INDIRECTION, dst, operand)
-            self.function.symbol.gen_ir(ir)
+            self.function.gen_ir(ir)
         return dst
 
 class ArrayNode(Node):
