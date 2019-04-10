@@ -97,12 +97,13 @@ class TokenKind(IntEnum):
 
 
 class TypeKind(IntEnum):
+    VOID = auto()
+    SHORT = auto()
+    STRING = auto()
+    POINTER = auto()
     INT = auto()
     FLOAT = auto()
     DOUBLE = auto()
-    VOID = auto()
-    STRING = auto()
-    SHORT = auto()
 
 class NodeKind(IntEnum):
     CALL = auto()
@@ -115,12 +116,16 @@ class NodeKind(IntEnum):
     PARAMETER = auto()
     DECLARATOR = auto()
     DECLARATION = auto()
+    DECLARATOR_INITIALIZER = auto()
     ADD = auto()
     SUB = auto()
     MUL = auto()
     DIV = auto()
     ADDRESS_OF = auto()
     INDIRECTION = auto()
+    POINRER = auto()
+    ASSIGN = auto()
+    RETURN = auto()
 
 class BlockKind(IntEnum):
     FUNCTION = auto()

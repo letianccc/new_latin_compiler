@@ -1,13 +1,15 @@
 
 from front_.myenum import *
+from front_.util import *
 
 class Type(object):
     """docstring for Type."""
 
-    def __init__(self, kind, size):
+    def __init__(self, kind, size, sub_type=None):
         super(Type, self).__init__()
         self.kind = kind
         self.size = size
+        self.sub_type = sub_type
 
     def match(self, *types):
         for t in types:
@@ -16,12 +18,13 @@ class Type(object):
         return False
 
 class TypeSystem(object):
+    VOID = Type(TypeKind.VOID, 0)
     SHORT = Type(TypeKind.SHORT, 2)
+    STRING = Type(TypeKind.STRING, 4)
     INT = Type(TypeKind.INT, 4)
     FLOAT = Type(TypeKind.FLOAT, 4)
     DOUBLE = Type(TypeKind.DOUBLE, 8)
-    VOID = Type(TypeKind.VOID, 0)
-    STRING = Type(TypeKind.STRING, 4)
+    POINTER = Type(TypeKind.POINTER, 4)
 
     types = None
     @classmethod
@@ -50,5 +53,12 @@ class TypeSystem(object):
     @classmethod
     def max_type(cls, *types):
         k = max(t.kind for t in types)
+        # if k > TypeKind.DOUBLE:
+        #     raise Exception
         t = cls.type(k)
+        return t
+
+    @classmethod
+    def new(cls, kind, size, sub_type):
+        t = Type(kind, size, sub_type)
         return t

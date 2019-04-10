@@ -23,6 +23,8 @@ class IR:
         self.kind = None
         self.operands = [None, None, None]
         self.op = None
+        # 用于调试   from表示ir由哪个node产生
+        self.from_node = None
 
     def match(self, *kinds):
         for k in kinds:
@@ -32,6 +34,7 @@ class IR:
 
 class ReturnIR(IR):
     def __init__(self, type, operand):
+        super(ReturnIR, self).__init__()
         self.kind = IRKind.RETURN
         self.operand = operand
         self.type = type
@@ -61,6 +64,7 @@ class AssignIR(IR):
 
 class ExprIR(IR):
     def __init__(self, kind, destination, left, right):
+        super(ExprIR, self).__init__()
         self.kind = kind
         self.left = left
         self.right = right
@@ -72,6 +76,7 @@ class ExprIR(IR):
 
 class UnaryIR(IR):
     def __init__(self, kind, destination, operand):
+        super(UnaryIR, self).__init__()
         self.kind = kind
         self.operand = operand
         self.destination = destination

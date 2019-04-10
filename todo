@@ -1,8 +1,12 @@
 
 
 当前：
+实现指针变量
 强制类型转换
 实现swap函数
+
+
+将实参分配到内存上的逻辑从emit_param移到param_node.gen中
 
 check阶段将self.function替换为symbol
 

@@ -5,6 +5,7 @@ from front_.type_system import TypeSystem
 from front_.symbol_system import *
 from front_.ir import *
 from front_.reg_system import *
+from front_.memory import *
 
 class Node(object):
     """docstring for Node."""
@@ -12,8 +13,18 @@ class Node(object):
     def __init__(self):
         super(Node, self).__init__()
 
+    def match(self, *kinds):
+        for k in kinds:
+            if self.kind is k:
+                return True
+        return False
+
     def check(self):
         self.function = self.function.symbol
+
+    def gen_ir(self, ir):
+        ir.from_node = self.kind
+        self.function.gen_ir(ir)
 
 class CallNode(Node):
     def __init__(self, function, call_function, parameters):
@@ -68,8 +79,10 @@ class CallNode(Node):
             offset += size
 
     def gen(self):
+        for p in self.params:
+            p.gen()
         ir = CallIR(self.call_function, self.params)
-        self.function.gen_ir(ir)
+        self.gen_ir(ir)
         size = self.call_function.type.size
         dst = RegSystem.reg(RegKind.AX, size)
         return dst
@@ -104,9 +117,6 @@ class FunctionNode(Node):
             stmt.gen()
         self.symbol.allocate_block_id()
 
-    def gen_ir(self, ir):
-        self.symbol.gen_ir(ir)
-
     def emit(self):
         ...
 
@@ -125,13 +135,23 @@ class ParameterNode(Node):
         super().check()
         f = self.function
         p = self.parameter
-        if p.match(TokenKind.INTCONST, TokenKind.STRING, TokenKind.DOUBLECONST):
-            s = p.check()
-        elif p.match(TokenKind.ID):
+
+        if p.match(TokenKind.ID):
             s = p.check(self.kind, self.type)
             if self.kind is NodeKind.FORMAL_PARAMETER:
                 f.add_param(s)
+        else:
+            s = p.check()
         self.parameter = s
+
+    def gen(self):
+        src = self.parameter
+        src = src.gen()
+        # TODO: 应该在is_extern为True使用max_type， 否则使用callee对应的形参类型
+        dst_type = TypeSystem.max_type(src.type, TypeSystem.INT)
+        dst = MemorySystem.memory('%esp', self.offset, dst_type)
+        ir = AssignIR(dst, src)
+        self.gen_ir(ir)
 
 
     def access_name(self):
@@ -140,9 +160,9 @@ class ParameterNode(Node):
 class DeclarationNode(Node):
     def __init__(self, function, specifier):
         self.function = function
-        self.ff = function
         self.specifier = specifier
         self.declarators = []
+        self.kind = NodeKind.DECLARATION
 
     def add(self, declarator):
         self.declarators.append(declarator)
@@ -153,22 +173,22 @@ class DeclarationNode(Node):
         type = self.specifier
         for d in self.declarators:
             d.check(type)
-            self.function.locals.append(d.identifier)
+            self.function.locals.append(d.declarator)
 
     def gen(self):
         for d in self.declarators:
             d.gen()
 
-class DeclaratorNode(Node):
-    def __init__(self, function, identifier, initializer):
-        self.kind = NodeKind.DECLARATOR
+class DeclaratorInitializerNode(Node):
+    def __init__(self, function, declarator, initializer):
+        self.kind = NodeKind.DECLARATOR_INITIALIZER
         self.function = function
-        self.identifier = identifier
+        self.declarator = declarator
         self.initializer = initializer
 
     def check(self, identifier_type):
         super().check()
-        self.identifier = self.identifier.check(self.kind, identifier_type)
+        self.declarator = self.declarator.check(self.kind, identifier_type)
         if self.initializer:
             self.initializer = self.initializer.check()
         return self
@@ -176,15 +196,40 @@ class DeclaratorNode(Node):
     def gen(self):
         # TODO: initializer 应该递归gen
         if self.initializer:
+            # d = self.declarator.gen()
             src = self.initializer.gen()
-            ir = AssignIR(self.identifier, src)
-            self.function.gen_ir(ir)
+            ir = AssignIR(self.declarator, src)
+            self.gen_ir(ir)
+
+# class DeclaratorNode(Node):
+#     def __init__(self, function, kind):
+#         self.kind = NodeKind.DECLARATOR
+#         self.function = function
+#         self.identifier = identifier
+#         self.initializer = initializer
+
+class PointerNode(Node):
+    def __init__(self, function, declarator):
+        self.kind = NodeKind.POINRER
+        self.function = function
+        self.declarator = declarator
+
+    def check(self, kind, type):
+        d = self.declarator.check(kind, type)
+        d.add_parent_type(TypeKind.POINTER, TypeSystem.INT.size)
+        self.declarator = d
+        return d
+
+    # def gen(self):
+    #     # TODO: 声明的指针变量应该不需要gen
+    #     return self.declarator
 
 class AssignNode(Node):
     def __init__(self, function, variable, value):
         self.variable = variable
         self.value = value
         self.function = function
+        self.kind = NodeKind.ASSIGN
 
     def check(self):
         super().check()
@@ -194,12 +239,13 @@ class AssignNode(Node):
     def gen(self):
         src = self.value.gen()
         ir = AssignIR(self.variable, src)
-        self.function.gen_ir(ir)
+        self.gen_ir(ir)
 
 class ReturnNode(Node):
     def __init__(self, function, operand):
         self.operand = operand
         self.function = function
+        self.kind = NodeKind.RETURN
 
     def check(self):
         super().check()
@@ -209,7 +255,7 @@ class ReturnNode(Node):
         src = self.operand.gen()
         type = TypeSystem.INT
         ir = ReturnIR(type, src)
-        self.function.gen_ir(ir)
+        self.gen_ir(ir)
 
 class IfNode(Node):
     def __init__(self, cond, then_stmts, else_stmts):

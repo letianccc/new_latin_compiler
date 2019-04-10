@@ -2,6 +2,7 @@
 from front_.myenum import *
 from front_.util import *
 from front_.symbol_system import *
+from front_.memory import *
 
 class Emit(object):
     """docstring for Emit."""
@@ -182,44 +183,29 @@ class FunctionEmit(object):
             code = ''
             code += f'    fldl\t{src}\n'
             code += f'    fstpl\t{dst}\n'
-        elif src_type.match(TypeSystem.SHORT) and dst_type.match(TypeSystem.INT):
-            code = f'    movswl\t{src}, {dst}\n'
-        elif src_type.match(TypeSystem.INT) and dst_type.match(TypeSystem.INT):
-            code = f'    movl\t{src}, {dst}\n'
+        elif dst_type.match(TypeSystem.INT):
+            if src_type.match(TypeSystem.SHORT):
+                code = f'    movswl\t{src}, {dst}\n'
+            elif src_type.match(TypeSystem.INT, TypeSystem.POINTER, TypeSystem.STRING):
+                code = f'    movl\t{src}, {dst}\n'
         elif dst_type.match(TypeSystem.SHORT):
             # dst_addr 暂时不会是 %ax
             if src == '%eax':
                 src = '%ax'
             code = f'    movw\t{src}, {dst}\n'
+        elif dst_type.match(TypeSystem.POINTER):
+            if src_type.match(TypeSystem.SHORT):
+                code = f'    movswl\t{src}, {dst}\n'
+            elif src_type.match(TypeSystem.INT, TypeSystem.POINTER, TypeSystem.STRING):
+                code = f'    movl\t{src}, {dst}\n'
         else:
             raise Exception
         self.emit_code(code)
 
     def emit_call(self, ir):
-        # 生成实参分配空间代码
-        self.emit_param(ir)
         function_tag = f'_{ir.function.value}'
         code = f'    call\t{function_tag}\n'
         self.emit_code(code)
-
-    def emit_param(self, ir):
-        # TODO: 实参和形参的参数要匹配
-        for p in ir.params:
-            dst_addr = f'{p.offset}(%esp)'
-            type = p.parameter.type
-            src = p.parameter
-            if ir.function.is_extern:
-                if type.match(TypeSystem.SHORT):
-                    src_addr = src.access_name()
-                    code = ''
-                    dst_addr = f'{p.offset}(%esp)'
-                    code += f'    movswl\t{src_addr}, %eax\n'
-                    code += f'    movl\t%eax, {dst_addr}\n'
-                    self.emit_code(code)
-                    # self.emit_mov(src_addr, '%eax', src.type, TypeSystem.INT)
-                    # self.emit_mov('%eax', dst_addr, TypeSystem.INT, dst.type)
-                    continue
-            self.emit_load(p.parameter, dst_addr)
 
     def emit_assign(self, ir):
         src = ir.operands[1]

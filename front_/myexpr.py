@@ -78,10 +78,14 @@ class UnaryNode(Node):
         self.operand = self.operand.check()
         return self
 
+    @property
+    def type(self):
+        return self.operand.type
+
     def gen(self):
         if self.kind is NodeKind.ADDRESS_OF:
             operand = self.operand.gen()
-            dst = TagSymbol(TypeSystem.INT)
+            dst = TagSymbol(TypeSystem.POINTER)
             self.function.tags.append(dst)
             ir = UnaryIR(IRKind.ADDRESS_OF, dst, operand)
             self.function.gen_ir(ir)
@@ -92,6 +96,8 @@ class UnaryNode(Node):
             self.function.tags.append(dst)
             ir = UnaryIR(IRKind.INDIRECTION, dst, operand)
             self.function.gen_ir(ir)
+        # elif self.kind is NodeKind.POINTER:
+
         return dst
 
 class ArrayNode(Node):

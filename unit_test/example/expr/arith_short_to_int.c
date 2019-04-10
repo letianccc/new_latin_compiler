@@ -13,14 +13,14 @@ void add() {
     short h = a + 30000 + a;
     short i = a + a + a;
     printf("\nadd target\n");
-    printf("value1: %d\n", b);
-    printf("value2: %d\n", c);
-    printf("value3: %d\n", d);
-    printf("value4: %d\n", e);
-    printf("value5: %d\n", f);
-    printf("value6: %d\n", g);
-    printf("value7: %d\n", h);
-    printf("value8: %d\n", i);
+    printf("24464: %d\n", b);
+    printf("24464: %d\n", c);
+    printf("24464: %d\n", d);
+    printf("24464: %d\n", e);
+    printf("24464: %d\n", f);
+    printf("24464: %d\n", g);
+    printf("24464: %d\n", h);
+    printf("24464: %d\n", i);
 }
 
 void mul() {

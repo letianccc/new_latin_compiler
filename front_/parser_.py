@@ -66,7 +66,7 @@ class Parser:
         if parameter_kind is NodeKind.FORMAL_PARAMETER:
             t = self.next_token()
             type = TypeSystem.type(t.kind)
-        param = self.next_token()
+        param = self.parse_expression()
         p = ParameterNode(self.function, parameter_kind, type, param)
         # TODO: 这里要重构
         if parameter_kind is NodeKind.ACTUAL_PARAMETER:
@@ -109,8 +109,6 @@ class Parser:
         return self.parse_statement()
 
     def parse_statement(self):
-        t = self.cur_token()
-
         if self.match(TokenKind.IF):
             stmt = self.if_stmt()
         elif self.match(TokenKind.INT, TokenKind.DOUBLE, TokenKind.SHORT):
@@ -146,33 +144,34 @@ class Parser:
         type = self.next_token()
         node = DeclarationNode(self.function, type)
         while True:
-            d = self.parse_declarator()
+            d = self.parse_declarator_initialer()
             node.add(d)
             if not self.match(TokenKind.COMMA):
                 break
             self.next_token()
         return node
 
-    def parse_declarator(self):
-        ident = self.parse_identifier()
+    def parse_declarator_initialer(self):
+        declarator = self.parse_declarator()
         init = None
         if self.match(TokenKind.ASSIGN):
             self.next_token()
             init = self.parse_expression()
-        d = DeclaratorNode(self.function, ident, init)
+        d = DeclaratorInitializerNode(self.function, declarator, init)
         return d
 
+    def parse_declarator(self):
+        if self.match(TokenKind.MUL):
+            self.expect(TokenKind.MUL)
+            declarator = self.parse_declarator()
+            d = PointerNode(self.function, declarator)
+        elif self.match(TokenKind.ID):
+            d = self.parse_identifier()
+        return d
 
-
-
-        # if self.is_array():
-        #     self.has_array = True
-        #     decl_ = self.decl_array(type)
-        #     self.expect(TokenKind.SEMICOLON)
-        # else:
-        #     decl_ = self.decl_single_variable(type)
-
-        # return decl_
+    # def parse_point_declarator(self):
+    #     self.expect(TokenKind.MUL)
+    #     ident = self.parse_declarator()
 
     def decl_single_variable(self, type):
         ident = self.next_token()

@@ -203,6 +203,9 @@ class IdentifierSymbol(Symbol):
         self.is_formal_param = False
         self.__access_name = None
 
+    def add_parent_type(self, kind, size):
+        self.type = TypeSystem.new(kind, size, self.type)
+
     def access_name(self):
         reg = '%ebp' if self.is_formal_param else '%esp'
         return f'{self.offset}({reg})'

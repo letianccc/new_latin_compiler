@@ -56,13 +56,13 @@ class IdentifierToken(Token):
         self.kind = kind
 
     def check(self, kind=None, type=None):
-        if kind is NodeKind.DECLARATOR or kind is NodeKind.FORMAL_PARAMETER:
+        if kind is NodeKind.DECLARATOR_INITIALIZER or kind is NodeKind.FORMAL_PARAMETER:
             s = SymbolSystem.find_symbol(self, None, LevelKind.CURRENT)
             if s is not None:
                 raise Exception("重复定义")
             s = IdentifierSymbol(type, self.value)
             SymbolSystem.add(s)
-            if kind is NodeKind.DECLARATOR:
+            if kind is NodeKind.DECLARATOR_INITIALIZER:
                 ...
             else:
                 s.is_formal_param = True
