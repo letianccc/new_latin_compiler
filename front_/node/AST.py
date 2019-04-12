@@ -41,13 +41,13 @@ class FunctionNode(Node):
         ...
 
 class ParameterNode(Node):
-    def __init__(self, function, kind, type, parameter):
+    def __init__(self, function, kind, specifier, parameter):
         super(ParameterNode, self).__init__()
         self.function = function
         self.kind = kind
         # 表示实参的变量或常量已经存在，因此有type
         # 表示形参的变量未声明，因此type为None
-        self.type = type
+        self.specifier = specifier
         self.parameter = parameter
         self.index = None
         self.offset = None
@@ -63,11 +63,15 @@ class ParameterNode(Node):
         #         f.add_param(s)
         # else:
         #     s = p.check(self.kind, self.type)
-        s = p.check(self.kind, self.type)
+        s = p.check(self.kind, self.specifier)
         if s.match(SymbolKind.ID):
             if self.kind is NodeKind.FORMAL_PARAMETER:
                 f.add_param(s)
         self.parameter = s
+
+    @property
+    def type(self):
+        return self.parameter.type
 
     def gen(self):
         src = self.parameter

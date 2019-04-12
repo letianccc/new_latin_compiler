@@ -33,6 +33,8 @@ access_name需要重构，找个地方把相关逻辑放一起
 BUG:
 double声明
 
+add_parent_type  改变了ident的类型，
+ident的类型应该保持不变
 
 
 待关注：
