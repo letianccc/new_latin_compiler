@@ -135,25 +135,23 @@ class FunctionEmit(object):
     def emit_indirect_assign(self, ir):
         src = ir.src
         dst = ir.dst
-        src_addr = src.access_name()
-        dst_addr = dst.access_name()
-        ax = RegSystem.reg(RegKind.AX, src.type)
-        ax_addr = ax.access_name()
-        dx = RegSystem.reg(RegKind.DX, src.type)
+        # dst的类型总是POINTER
+        assert dst.type.match(TypeSystem.POINTER)
+        eax = RegSystem.reg(RegKind.AX, dst.type.size)
+        dx = RegSystem.reg(RegKind.DX, src.type.size)
+        self.emit_mov(dst, eax)
+        self.emit_mov(src, dx)
         dx_addr = dx.access_name()
-
-        self.emit_mov(dst_addr, ax_addr, dst.type, ax.type)
-        self.emit_mov(src_addr, dx_addr, src.type, dx.type)
-        self.emit_mov(dx_addr, '(%eax)', dx.type, dst.sub_type())
+        self.emit_mov_value(dx_addr, '(%eax)', dx.type, dst.sub_type())
 
     def emit_return(self, ir):
-        op = ir.operand
-        src = op.access_name()
-        dst = '%eax'
-        dst_type = ir.type
-        self.emit_mov(src, dst, op.type, dst_type)
+        reg_size = 4
+        src = ir.operand
+        eax = RegSystem.reg(RegKind.AX, reg_size)
+        self.emit_mov(src, eax)
 
     def emit_indirection(self, ir):
+        # TODO: src的类型未知  可能是short
         dst = ir.destination
         src = ir.operand
         dst_addr = dst.access_name()
@@ -177,9 +175,11 @@ class FunctionEmit(object):
         dst = ir.destination
         left = ir.left
         right = ir.right
-        dst_addr = dst.access_name()
-        left_addr = left.access_name()
-        right_addr = right.access_name()
+        reg_size = 4
+        eax = RegSystem.reg(RegKind.AX, reg_size)
+        edx = RegSystem.reg(RegKind.DX, reg_size)
+        self.emit_mov(left, eax)
+        self.emit_mov(right, edx)
         m = {
             OperatorKind.ADD: 'addl',
             OperatorKind.SUB: 'subl',
@@ -187,13 +187,18 @@ class FunctionEmit(object):
             OperatorKind.DIV: 'divl',
         }
         op = m[ir.kind]
-        self.emit_mov(left_addr, '%eax', left.type, TypeSystem.INT)
-        self.emit_mov(right_addr, '%edx', right.type, TypeSystem.INT)
         code = f'    {op}\t%edx, %eax\n'
         self.emit_code(code)
-        self.emit_mov('%eax', dst_addr, TypeSystem.INT, dst.type)
+        self.emit_mov(eax, dst)
 
-    def emit_mov(self, source_address, destination_address, src_type, dst_type):
+    def emit_mov(self, source, destination):
+        src = source.access_name()
+        dst = destination.access_name()
+        src_type = source.type
+        dst_type = destination.type
+        self.emit_mov_value(src, dst, src_type, dst_type)
+
+    def emit_mov_value(self, source_address, destination_address, src_type, dst_type):
         src = source_address
         dst = destination_address
         if src_type.match(TypeSystem.DOUBLE) or dst_type.match(TypeSystem.DOUBLE):
@@ -227,14 +232,14 @@ class FunctionEmit(object):
     def emit_assign(self, ir):
         src = ir.operands[1]
         dst = ir.operands[0]
-        code = ''
-        src_addr = src.access_name()
-        dst_addr = dst.access_name()
         if src.type.match(TypeSystem.DOUBLE) or dst.type.match(TypeSystem.DOUBLE):
-            self.emit_mov(src_addr, dst_addr, src.type, dst.type)
+            self.emit_mov(src, dst)
         else:
-            self.emit_mov(src_addr, '%eax', src.type, TypeSystem.INT)
-            self.emit_mov('%eax', dst_addr, TypeSystem.INT, dst.type)
+            reg_size = 4
+            eax = RegSystem.reg(RegKind.AX, reg_size)
+            edx = RegSystem.reg(RegKind.DX, reg_size)
+            self.emit_mov(src, eax)
+            self.emit_mov(eax, dst)
 
     def emit_load(self, source, destination_addr):
         code = ''

@@ -23,6 +23,7 @@ def filepaths(test_dir):
     return ps
 
 def assert_file(test_dir, path, refer_path):
+    log(path)
     code = compile(path)
     with open(refer_path, 'r') as refer:
         refer_lines = refer.read().split('\n')

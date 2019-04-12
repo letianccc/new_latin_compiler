@@ -10,70 +10,6 @@ from front_.reg_system import *
 
 
 
-class ExprNode(Node):
-    def __init__(self, function, kind, left, right):
-        super(ExprNode, self).__init__()
-        self.left = left
-        self.right = right
-        self.kind = kind
-        self.function = function
-
-    def check(self, kind, type):
-        super().check()
-        self.left = self.left.check(kind, type)
-        self.right = self.right.check(kind, type)
-        return self
-
-    def gen(self):
-        left = self.left.gen()
-        right = self.right.gen()
-        type = TypeSystem.max_type(left.type, right.type)
-        # TODO: 可能需要add symbol
-        dst = self.function.new_tag(type)
-        d = Defind(self.kind, dst, left, right)
-        dst.defind = d
-
-        m = {
-            NodeKind.ADD: OperatorKind.ADD,
-            NodeKind.SUB: OperatorKind.SUB,
-            NodeKind.MUL: OperatorKind.MUL,
-            NodeKind.DIV: OperatorKind.DIV,
-        }
-        k = m[self.kind]
-        ir = ExprIR(k, dst, left, right)
-        self.function.gen_ir(ir)
-        return dst
-
-class OrNode(Node):
-    def __init__(self, left, right):
-        self.left = left
-        self.right = right
-        self.operator = '||'
-
-class AndNode(Node):
-    def __init__(self, left, right):
-        self.left = left
-        self.right = right
-        self.operator = '&&'
-
-class EqualNode(Node):
-    def __init__(self, left, right, operator):
-        self.left = left
-        self.right = right
-        self.operator = operator
-
-class RelNode(Node):
-    def __init__(self, left, right, operator):
-        self.left = left
-        self.right = right
-        self.operator = operator
-
-class ArithNode(Node):
-    def __init__(self, left, right, operator):
-        super(ArithNode, self).__init__()
-        self.left = left
-        self.right = right
-        self.operator = operator
 
 class IndirectionNode(Node):
     def __init__(self, function, operand):
@@ -218,6 +154,70 @@ class AssignNode(Node):
             ir = AssignIR(dst, src)
             self.gen_ir(ir)
 
+class ExprNode(Node):
+    def __init__(self, function, kind, left, right):
+        super(ExprNode, self).__init__()
+        self.left = left
+        self.right = right
+        self.kind = kind
+        self.function = function
+
+    def check(self, kind, type):
+        super().check()
+        self.left = self.left.check(kind, type)
+        self.right = self.right.check(kind, type)
+        return self
+
+    def gen(self):
+        left = self.left.gen()
+        right = self.right.gen()
+        type = TypeSystem.max_type(left.type, right.type)
+        # TODO: 可能需要add symbol
+        dst = self.function.new_tag(type)
+        d = Defind(self.kind, dst, left, right)
+        dst.defind = d
+
+        m = {
+            NodeKind.ADD: OperatorKind.ADD,
+            NodeKind.SUB: OperatorKind.SUB,
+            NodeKind.MUL: OperatorKind.MUL,
+            NodeKind.DIV: OperatorKind.DIV,
+        }
+        k = m[self.kind]
+        ir = ExprIR(k, dst, left, right)
+        self.function.gen_ir(ir)
+        return dst
+
+class OrNode(Node):
+    def __init__(self, left, right):
+        self.left = left
+        self.right = right
+        self.operator = '||'
+
+class AndNode(Node):
+    def __init__(self, left, right):
+        self.left = left
+        self.right = right
+        self.operator = '&&'
+
+class EqualNode(Node):
+    def __init__(self, left, right, operator):
+        self.left = left
+        self.right = right
+        self.operator = operator
+
+class RelNode(Node):
+    def __init__(self, left, right, operator):
+        self.left = left
+        self.right = right
+        self.operator = operator
+
+class ArithNode(Node):
+    def __init__(self, left, right, operator):
+        super(ArithNode, self).__init__()
+        self.left = left
+        self.right = right
+        self.operator = operator
 
 class ReturnNode(Node):
     def __init__(self, function, operand):
