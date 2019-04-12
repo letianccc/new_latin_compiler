@@ -62,11 +62,14 @@ class Parser:
         return params
 
     def parse_param(self, parameters, parameter_kind):
-        type = None
+
         if parameter_kind is NodeKind.FORMAL_PARAMETER:
             t = self.next_token()
             type = TypeSystem.type(t.kind)
-        param = self.parse_expression()
+            param = self.parse_declarator()
+        else:
+            type = None
+            param = self.parse_expression()
         p = ParameterNode(self.function, parameter_kind, type, param)
         # TODO: 这里要重构
         if parameter_kind is NodeKind.ACTUAL_PARAMETER:
@@ -130,6 +133,7 @@ class Parser:
         if self.match(TokenKind.ASSIGN):
             self.next_token()
             value = self.parse_expression()
+            variable.left_value = True
             # self.expect(TokenKind.SEMICOLON)
             return AssignNode(self.function, variable, value)
         return variable
@@ -299,6 +303,7 @@ class Parser:
         return expr
 
     def unary(self):
+        # TODO: + -a  - +a  + +a - -a
         if self.match(TokenKind.NOT) or self.match(TokenKind.SUB) \
             or self.match(TokenKind.BITAND) or self.match(TokenKind.MUL):
             # operator = self.next_token().value
@@ -309,7 +314,7 @@ class Parser:
             }
             k = m[t.kind]
             self.next_token()
-            expr = UnaryNode(self.function, k, self.factor())
+            expr = UnaryNode(self.function, k, self.unary())
         else:
             expr = self.factor()
         return expr

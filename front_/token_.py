@@ -24,7 +24,7 @@ class IntConstant(ConstantToken):
         self.value = value
         self.kind = TokenKind.INTCONST
 
-    def check(self):
+    def check(self, kind, type):
         k = SymbolKind.INTCONST
         type = TypeSystem.type(TokenKind.INT)
         s = SymbolSystem.find_symbol(self)
@@ -38,7 +38,7 @@ class DoubleConstant(ConstantToken):
         self.value = value
         self.kind = TokenKind.DOUBLECONST
 
-    def check(self):
+    def check(self, kind, type):
         # TODO: 这部分逻辑可以抽象
         # add_symbol(kind, type, value)
         # type = TypeSystem.type(self.type)
@@ -90,7 +90,7 @@ class StringToken(Token):
         self.value = value
         self.kind = kind
 
-    def check(self):
+    def check(self, kind, type):
         # TODO: 检测最外层
         s = SymbolSystem.find_symbol(self)
         if s is None:

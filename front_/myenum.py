@@ -152,6 +152,7 @@ class IRKind(IntEnum):
     ADDRESS_OF = auto()
     INDIRECTION = auto()
     RETURN = auto()
+    INDIRECTION_ASSIGN = auto()
 
 class LevelKind(IntEnum):
     CURRENT = auto()

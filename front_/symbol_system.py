@@ -114,6 +114,11 @@ class FunctionSymbol(Symbol):
     def gen_ir(self, ir):
         self.cur_block.add_ir(ir)
 
+    def new_tag(self, type):
+        t = TagSymbol(type)
+        self.tags.append(t)
+        return t
+
 class StringSymbol(Symbol):
     index = 0
     """docstring for StringSymbol."""
@@ -206,6 +211,13 @@ class IdentifierSymbol(Symbol):
     def add_parent_type(self, kind, size):
         self.type = TypeSystem.new(kind, size, self.type)
 
+    def sub_type(self):
+        # TODO: sub_type  考虑放到PointerSymbol里面
+        # TODO: 暂时允许返回当前类型  int b = &a; int c = *b; 后面这种情况要报错
+        if self.type.sub_type is None:
+            return self.type
+        return self.type.sub_type
+
     def access_name(self):
         reg = '%ebp' if self.is_formal_param else '%esp'
         return f'{self.offset}({reg})'
@@ -218,6 +230,13 @@ class TagSymbol(Symbol):
         self.kind = SymbolKind.TAG
         self.type = type
         self.offset = None
+        self.defind = None
+
+    def sub_type(self):
+        # TODO: 暂时允许返回当前类型  int b = &a; int c = *b; 后面这种情况要报错
+        if self.type.sub_type is None:
+            return self.type
+        return self.type.sub_type
 
     def access_name(self):
         return f'{self.offset}(%esp)'

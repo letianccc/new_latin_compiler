@@ -3,6 +3,7 @@ from front_.myenum import *
 from front_.util import *
 from front_.symbol_system import *
 from front_.memory import *
+from front_.reg_system import *
 
 class Emit(object):
     """docstring for Emit."""
@@ -125,9 +126,25 @@ class FunctionEmit(object):
             self.emit_indirection(ir)
         elif ir.match(IRKind.RETURN):
             self.emit_return(ir)
+        elif ir.match(IRKind.INDIRECTION_ASSIGN):
+            self.emit_indirect_assign(ir)
 
         else:
             raise Exception
+
+    def emit_indirect_assign(self, ir):
+        src = ir.src
+        dst = ir.dst
+        src_addr = src.access_name()
+        dst_addr = dst.access_name()
+        ax = RegSystem.reg(RegKind.AX, src.type)
+        ax_addr = ax.access_name()
+        dx = RegSystem.reg(RegKind.DX, src.type)
+        dx_addr = dx.access_name()
+
+        self.emit_mov(dst_addr, ax_addr, dst.type, ax.type)
+        self.emit_mov(src_addr, dx_addr, src.type, dx.type)
+        self.emit_mov(dx_addr, '(%eax)', dx.type, dst.sub_type())
 
     def emit_return(self, ir):
         op = ir.operand

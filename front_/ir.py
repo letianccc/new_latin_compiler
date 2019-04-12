@@ -62,6 +62,14 @@ class AssignIR(IR):
         self.operands[1] = source1
         self.operands[2] = source2
 
+class IndirectionAssignIR(IR):
+    def __init__(self, destination, source):
+        super(IndirectionAssignIR, self).__init__()
+        self.kind = IRKind.INDIRECTION_ASSIGN
+        self.dst = destination
+        self.src = source
+
+
 class ExprIR(IR):
     def __init__(self, kind, destination, left, right):
         super(ExprIR, self).__init__()

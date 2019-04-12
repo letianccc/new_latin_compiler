@@ -6,12 +6,14 @@ from front_.symbol_system import *
 from front_.ir import *
 from front_.reg_system import *
 from front_.memory import *
+from front_.defind import *
 
 class Node(object):
     """docstring for Node."""
 
     def __init__(self):
         super(Node, self).__init__()
+        self.left_value = False
 
     def match(self, *kinds):
         for k in kinds:
@@ -28,12 +30,13 @@ class Node(object):
 
 class CallNode(Node):
     def __init__(self, function, call_function, parameters):
+        super(CallNode, self).__init__()
         self.function = function
         self.call_function = call_function
         self.params = parameters
         self.kind = NodeKind.CALL
 
-    def check(self):
+    def check(self, kind, type):
         super().check()
         self.call_function = self.call_function.check(NodeKind.CALL)
 
@@ -91,6 +94,7 @@ class CallNode(Node):
 
 class FunctionNode(Node):
     def __init__(self):
+        super(FunctionNode, self).__init__()
         self.kind = NodeKind.FUNCTION
         self.type = None
         self.identifier = None
@@ -107,7 +111,7 @@ class FunctionNode(Node):
         for p in self.params:
             p.check()
         for stmt in self.statements:
-            stmt.check()
+            stmt.check(self.kind, self.type)
         SymbolSystem.quit()
 
     def gen(self):
@@ -122,6 +126,7 @@ class FunctionNode(Node):
 
 class ParameterNode(Node):
     def __init__(self, function, kind, type, parameter):
+        super(ParameterNode, self).__init__()
         self.function = function
         self.kind = kind
         # 表示实参的变量或常量已经存在，因此有type
@@ -136,12 +141,16 @@ class ParameterNode(Node):
         f = self.function
         p = self.parameter
 
-        if p.match(TokenKind.ID):
-            s = p.check(self.kind, self.type)
+        # if p.match(TokenKind.ID):
+        #     s = p.check(self.kind, self.type)
+        #     if self.kind is NodeKind.FORMAL_PARAMETER:
+        #         f.add_param(s)
+        # else:
+        #     s = p.check(self.kind, self.type)
+        s = p.check(self.kind, self.type)
+        if s.match(SymbolKind.ID):
             if self.kind is NodeKind.FORMAL_PARAMETER:
                 f.add_param(s)
-        else:
-            s = p.check()
         self.parameter = s
 
     def gen(self):
@@ -159,6 +168,7 @@ class ParameterNode(Node):
 
 class DeclarationNode(Node):
     def __init__(self, function, specifier):
+        super(DeclarationNode, self).__init__()
         self.function = function
         self.specifier = specifier
         self.declarators = []
@@ -167,7 +177,7 @@ class DeclarationNode(Node):
     def add(self, declarator):
         self.declarators.append(declarator)
 
-    def check(self):
+    def check(self, kind, type):
         super().check()
         self.specifier = TypeSystem.type(self.specifier.kind)
         type = self.specifier
@@ -181,6 +191,7 @@ class DeclarationNode(Node):
 
 class DeclaratorInitializerNode(Node):
     def __init__(self, function, declarator, initializer):
+        super(DeclaratorInitializerNode, self).__init__()
         self.kind = NodeKind.DECLARATOR_INITIALIZER
         self.function = function
         self.declarator = declarator
@@ -190,7 +201,11 @@ class DeclaratorInitializerNode(Node):
         super().check()
         self.declarator = self.declarator.check(self.kind, identifier_type)
         if self.initializer:
-            self.initializer = self.initializer.check()
+            # TODO: type暂时为None
+            self.initializer = self.initializer.check(None, None)
+            d = Defind(NodeKind.ASSIGN, self.declarator, self.initializer)
+            self.declarator.defind = d
+
         return self
 
     def gen(self):
@@ -210,6 +225,7 @@ class DeclaratorInitializerNode(Node):
 
 class PointerNode(Node):
     def __init__(self, function, declarator):
+        super(PointerNode, self).__init__()
         self.kind = NodeKind.POINRER
         self.function = function
         self.declarator = declarator
@@ -226,30 +242,43 @@ class PointerNode(Node):
 
 class AssignNode(Node):
     def __init__(self, function, variable, value):
+        super(AssignNode, self).__init__()
         self.variable = variable
         self.value = value
         self.function = function
         self.kind = NodeKind.ASSIGN
 
-    def check(self):
+    def check(self, kind, type):
         super().check()
-        self.variable = self.variable.check()
-        self.value = self.value.check()
+        self.variable = self.variable.check(self.kind, None)
+        self.value = self.value.check(self.kind, None)
+        d = Defind(NodeKind.ASSIGN, self.variable, self.value)
+        self.variable.defind = d
 
     def gen(self):
-        src = self.value.gen()
-        ir = AssignIR(self.variable, src)
-        self.gen_ir(ir)
+        if self.variable.match(NodeKind.INDIRECTION):
+            dst = self.variable.gen()
+            src = self.value.gen()
+            dst = dst.defind.src1
+            ir = IndirectionAssignIR(dst, src)
+            self.gen_ir(ir)
+        else:
+            dst = self.variable.gen()
+            src = self.value.gen()
+            ir = AssignIR(dst, src)
+            self.gen_ir(ir)
+
 
 class ReturnNode(Node):
     def __init__(self, function, operand):
+        super(ReturnNode, self).__init__()
         self.operand = operand
         self.function = function
         self.kind = NodeKind.RETURN
 
-    def check(self):
+    def check(self, kind, type):
         super().check()
-        self.operand = self.operand.check()
+        self.operand = self.operand.check(kind, type)
 
     def gen(self):
         src = self.operand.gen()
