@@ -31,7 +31,6 @@ _main:
     movl	%eax, 0(%esp)
     call	_printf
     movl	36(%esp), %eax
-    movl	%eax, %eax
     movl	(%eax), %eax
     movl	%eax, 20(%esp)
     movl	20(%esp), %eax
@@ -40,7 +39,6 @@ _main:
     movl	%eax, 0(%esp)
     call	_printf
     movl	32(%esp), %eax
-    movl	%eax, %eax
     movl	(%eax), %eax
     movl	%eax, 16(%esp)
     movl	16(%esp), %eax
@@ -49,11 +47,9 @@ _main:
     movl	%eax, 0(%esp)
     call	_printf
     movl	32(%esp), %eax
-    movl	%eax, %eax
     movl	(%eax), %eax
     movl	%eax, 12(%esp)
     movl	12(%esp), %eax
-    movl	%eax, %eax
     movl	(%eax), %eax
     movl	%eax, 8(%esp)
     movl	8(%esp), %eax

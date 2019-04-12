@@ -11,6 +11,7 @@ sys.path.append(parent)
 from front_.mycompiler import compile
 from front_.util import *
 from unit_test.util import *
+import traceback
 
 def _main_():
     test_dir = r'C:\code\new_latin_compiler\unit_test\example'
@@ -18,10 +19,11 @@ def _main_():
     for cfile, sfile in paths:
         try:
             assert_file(test_dir, cfile, sfile)
-        except Exception:
+        except Exception as e:
             path = os.path.relpath(cfile, test_dir)
             log(path)
-            raise Exception
+            traceback.print_exc()
+            # raise Exception
 
 
 _main_()

@@ -74,7 +74,8 @@ class ParameterNode(Node):
         src = src.gen()
         # TODO: 应该在is_extern为True使用max_type， 否则使用callee对应的形参类型
         dst_type = TypeSystem.max_type(src.type, TypeSystem.INT)
-        dst = MemorySystem.memory('%esp', self.offset, dst_type)
+        pos = f'{self.offset}(%esp)'
+        dst = MemorySystem.new(pos, dst_type)
         ir = AssignIR(dst, src)
         self.gen_ir(ir)
 

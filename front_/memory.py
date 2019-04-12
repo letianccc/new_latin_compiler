@@ -5,15 +5,13 @@
 class Memory(object):
     """docstring for Memory."""
 
-    def __init__(self, reg, offset, type):
+    def __init__(self, access_name, type):
         super(Memory, self).__init__()
-        self.reg = reg
-        self.offset = offset
+        self.__access_name = access_name
         self.type = type
 
     def access_name(self):
-        s = f'{self.offset}({self.reg})'
-        return s
+        return self.__access_name
 
 
 class MemorySystem(object):
@@ -23,6 +21,6 @@ class MemorySystem(object):
         super(MemorySystem, self).__init__()
 
     @classmethod
-    def memory(cls, reg, offset, type):
-        m = Memory(reg, offset, type)
+    def new(cls, access_name, type):
+        m = Memory(access_name, type)
         return m

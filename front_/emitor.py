@@ -16,13 +16,16 @@ class Emit(object):
 
     def execute(self):
         self.allocate()
-        self.start()
         for f in self.functions:
             fe = FunctionEmit(f)
             fe.execute()
             self.emit_code(fe.code)
         self.emit_string()
         self.emit_double()
+        if self.code == '':
+            return
+        else:
+            self.code = '//by latin\n\n' + self.code
 
     def emit_string(self):
         code = ''
@@ -73,11 +76,6 @@ class Emit(object):
             for p in func.params:
                 p.offset = offset
                 offset += p.type.size
-
-
-    def start(self):
-        code = '//by latin\n\n'
-        self.emit_code(code)
 
     def emit_double(self):
         doubles = SymbolSystem.double_constants()
@@ -144,22 +142,17 @@ class FunctionEmit(object):
         dx_addr = dx.access_name()
         self.emit_mov_value(dx_addr, '(%eax)', dx.type, dst.sub_type())
 
-    def emit_return(self, ir):
-        reg_size = 4
-        src = ir.operand
-        eax = RegSystem.reg(RegKind.AX, reg_size)
-        self.emit_mov(src, eax)
-
     def emit_indirection(self, ir):
         # TODO: src的类型未知  可能是short
         dst = ir.destination
         src = ir.operand
         dst_addr = dst.access_name()
-        self.emit_load(src, '%eax')
-        code = ''
-        code += f'    movl\t(%eax), %eax\n'
-        code += f'    movl\t%eax, {dst_addr}\n'
-        self.emit_code(code)
+        eax = RegSystem.reg(RegKind.AX, src.type.size)
+        self.emit_mov(src, eax)
+        pos = '(%eax)'
+        target = MemorySystem.new(pos, dst.type)
+        self.emit_mov(target, eax)
+        self.emit_mov(eax, dst)
 
     def emit_address_of(self, ir):
         dst = ir.destination
@@ -191,39 +184,6 @@ class FunctionEmit(object):
         self.emit_code(code)
         self.emit_mov(eax, dst)
 
-    def emit_mov(self, source, destination):
-        src = source.access_name()
-        dst = destination.access_name()
-        src_type = source.type
-        dst_type = destination.type
-        self.emit_mov_value(src, dst, src_type, dst_type)
-
-    def emit_mov_value(self, source_address, destination_address, src_type, dst_type):
-        src = source_address
-        dst = destination_address
-        if src_type.match(TypeSystem.DOUBLE) or dst_type.match(TypeSystem.DOUBLE):
-            code = ''
-            code += f'    fldl\t{src}\n'
-            code += f'    fstpl\t{dst}\n'
-        elif dst_type.match(TypeSystem.INT):
-            if src_type.match(TypeSystem.SHORT):
-                code = f'    movswl\t{src}, {dst}\n'
-            elif src_type.match(TypeSystem.INT, TypeSystem.POINTER, TypeSystem.STRING):
-                code = f'    movl\t{src}, {dst}\n'
-        elif dst_type.match(TypeSystem.SHORT):
-            # dst_addr 暂时不会是 %ax
-            if src == '%eax':
-                src = '%ax'
-            code = f'    movw\t{src}, {dst}\n'
-        elif dst_type.match(TypeSystem.POINTER):
-            if src_type.match(TypeSystem.SHORT):
-                code = f'    movswl\t{src}, {dst}\n'
-            elif src_type.match(TypeSystem.INT, TypeSystem.POINTER, TypeSystem.STRING):
-                code = f'    movl\t{src}, {dst}\n'
-        else:
-            raise Exception
-        self.emit_code(code)
-
     def emit_call(self, ir):
         function_tag = f'_{ir.function.value}'
         code = f'    call\t{function_tag}\n'
@@ -237,20 +197,43 @@ class FunctionEmit(object):
         else:
             reg_size = 4
             eax = RegSystem.reg(RegKind.AX, reg_size)
-            edx = RegSystem.reg(RegKind.DX, reg_size)
             self.emit_mov(src, eax)
             self.emit_mov(eax, dst)
 
-    def emit_load(self, source, destination_addr):
-        code = ''
-        src_addr = source.access_name()
-        dst_addr = destination_addr
-        if source.type.match(TypeSystem.DOUBLE):
-            code += f'    fldl\t{src_addr}\n'
-            code += f'    fstpl\t{dst_addr}\n'
+    def emit_return(self, ir):
+        reg_size = 4
+        src = ir.operand
+        eax = RegSystem.reg(RegKind.AX, reg_size)
+        self.emit_mov(src, eax)
+
+    def emit_mov(self, source, destination):
+        src = source.access_name()
+        dst = destination.access_name()
+        src_type = source.type
+        dst_type = destination.type
+        self.emit_mov_value(src, dst, src_type, dst_type)
+
+    def emit_mov_value(self, source_address, destination_address, src_type, dst_type):
+        src = source_address
+        dst = destination_address
+
+        if src_type.match(TypeSystem.DOUBLE) or dst_type.match(TypeSystem.DOUBLE):
+            code = ''
+            code += f'    fldl\t{src}\n'
+            code += f'    fstpl\t{dst}\n'
+
+        elif src_type.size == 4 and dst_type.size == 4:
+            code = f'    movl\t{src}, {dst}\n'
+        elif src_type.match(TypeSystem.SHORT) and dst_type.size == 4:
+            code = f'    movswl\t{src}, {dst}\n'
+        elif dst_type.match(TypeSystem.SHORT):
+            if src == '%eax':
+                src = '%ax'
+            if src == '%edx':
+                src = '%dx'
+            code = f'    movw\t{src}, {dst}\n'
         else:
-            code += f'    movl\t{src_addr}, %eax\n'
-            code += f'    movl\t%eax, {dst_addr}\n'
+            raise Exception
         self.emit_code(code)
 
     def reserve_space(self):
