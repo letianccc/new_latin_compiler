@@ -75,44 +75,6 @@ class ArithNode(Node):
         self.right = right
         self.operator = operator
 
-class UnaryNode(Node):
-    def __init__(self, function, kind, operand):
-        super(UnaryNode, self).__init__()
-        self.kind = kind
-        self.operand = operand
-        self.function = function
-
-    def check(self, kind, type):
-        super().check()
-        self.operand = self.operand.check(kind, type)
-        return self
-
-    @property
-    def type(self):
-        return self.operand.type
-
-    def gen(self):
-        if self.kind is NodeKind.ADDRESS_OF:
-            operand = self.operand.gen()
-
-            dst = self.function.new_tag(TypeSystem.POINTER)
-            d = Defind(NodeKind.ADDRESS_OF, dst, operand)
-            dst.defind = d
-            ir = UnaryIR(OperatorKind.ADDRESS_OF, dst, operand)
-            self.function.gen_ir(ir)
-        elif self.kind is NodeKind.INDIRECTION:
-            # TODO: 类型的获取需要进一步实现
-            operand = self.operand.gen()
-            # TODO: 这里src的获取可以包装为id symbol的方法
-            type = operand.sub_type()
-            dst = self.function.new_tag(type)
-            d = Defind(NodeKind.INDIRECTION, dst, operand)
-            dst.defind = d
-
-            ir = UnaryIR(OperatorKind.INDIRECTION, dst, operand)
-            self.function.gen_ir(ir)
-        return dst
-
 class IndirectionNode(Node):
     def __init__(self, function, operand):
         super(IndirectionNode, self).__init__()

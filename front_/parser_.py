@@ -3,7 +3,6 @@ from front_.node.AST import *
 from front_.myenum import *
 from front_.type_system import TypeSystem
 # from front_.mysymbol import *
-from front_.myexpr import *
 from front_.node.expression_node import *
 
 
