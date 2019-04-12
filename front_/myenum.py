@@ -108,9 +108,6 @@ class TypeKind(IntEnum):
 class NodeKind(IntEnum):
     CALL = auto()
     FUNCTION = auto()
-    SEQ = auto()
-    STMT = auto()
-    PRINTF = auto()
     ACTUAL_PARAMETER = auto()
     FORMAL_PARAMETER = auto()
     PARAMETER = auto()
@@ -123,9 +120,22 @@ class NodeKind(IntEnum):
     DIV = auto()
     ADDRESS_OF = auto()
     INDIRECTION = auto()
-    POINRER = auto()
+    POINTER_DECLARATOR = auto()
     ASSIGN = auto()
     RETURN = auto()
+
+class OperatorKind(IntEnum):
+    CALL = auto()
+    ADD = auto()
+    SUB = auto()
+    MUL = auto()
+    DIV = auto()
+    ADDRESS_OF = auto()
+    INDIRECTION = auto()
+    RETURN = auto()
+    ASSIGN = auto()
+    INDIRECTION_ASSIGN = auto()
+
 
 class BlockKind(IntEnum):
     FUNCTION = auto()
@@ -141,18 +151,6 @@ class SymbolKind(IntEnum):
     INTCONST = auto()
     DOUBLECONST = auto()
     TAG = auto()
-
-class IRKind(IntEnum):
-    CALL = auto()
-    ASSIGN = auto()
-    ADD = auto()
-    SUB = auto()
-    MUL = auto()
-    DIV = auto()
-    ADDRESS_OF = auto()
-    INDIRECTION = auto()
-    RETURN = auto()
-    INDIRECTION_ASSIGN = auto()
 
 class LevelKind(IntEnum):
     CURRENT = auto()

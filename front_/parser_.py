@@ -1,9 +1,10 @@
 from front_.lexer_ import Lexer
-from front_.AST import *
+from front_.node.AST import *
 from front_.myenum import *
 from front_.type_system import TypeSystem
 # from front_.mysymbol import *
 from front_.myexpr import *
+from front_.node.expression_node import *
 
 
 class Parser:
@@ -12,8 +13,16 @@ class Parser:
         self.tokens = tokens
         self.index = 0
         self.function = None
+        self.init_constructor()
         self.AST = self.parse_functions()
         self.function_nodes = self.AST
+
+    def init_constructor(self):
+        self.constructors = {
+            TokenKind.BITAND: AddressOfNode,
+            TokenKind.MUL: IndirectionNode,
+        }
+
 
     def parse_functions(self):
         fs = []
@@ -168,7 +177,7 @@ class Parser:
         if self.match(TokenKind.MUL):
             self.expect(TokenKind.MUL)
             declarator = self.parse_declarator()
-            d = PointerNode(self.function, declarator)
+            d = PointerDeclaratorNode(self.function, declarator)
         elif self.match(TokenKind.ID):
             d = self.parse_identifier()
         return d
@@ -312,9 +321,13 @@ class Parser:
                 TokenKind.BITAND: NodeKind.ADDRESS_OF,
                 TokenKind.MUL: NodeKind.INDIRECTION,
             }
-            k = m[t.kind]
             self.next_token()
-            expr = UnaryNode(self.function, k, self.unary())
+            Class = self.constructors[t.kind]
+            expr = Class(self.function, self.unary())
+            # if t.kind is TokenKind.BITAND:
+            #     expr = AddressOfNode(self.function, self.unary())
+            # elif t.kind is TokenKind.MUL:
+            #     expr = IndirectionNode(self.function, self.unary())
         else:
             expr = self.factor()
         return expr

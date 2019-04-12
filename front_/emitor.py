@@ -114,19 +114,19 @@ class FunctionEmit(object):
         self.pop_stack()
 
     def emit(self, ir):
-        if ir.match(IRKind.CALL):
+        if ir.match(OperatorKind.CALL):
             self.emit_call(ir)
-        elif ir.match(IRKind.ASSIGN):
+        elif ir.match(OperatorKind.ASSIGN):
             self.emit_assign(ir)
-        elif ir.match(IRKind.ADD, IRKind.SUB, IRKind.MUL, IRKind.DIV):
+        elif ir.match(OperatorKind.ADD, OperatorKind.SUB, OperatorKind.MUL, OperatorKind.DIV):
             self.emit_arith(ir)
-        elif ir.match(IRKind.ADDRESS_OF):
+        elif ir.match(OperatorKind.ADDRESS_OF):
             self.emit_address_of(ir)
-        elif ir.match(IRKind.INDIRECTION):
+        elif ir.match(OperatorKind.INDIRECTION):
             self.emit_indirection(ir)
-        elif ir.match(IRKind.RETURN):
+        elif ir.match(OperatorKind.RETURN):
             self.emit_return(ir)
-        elif ir.match(IRKind.INDIRECTION_ASSIGN):
+        elif ir.match(OperatorKind.INDIRECTION_ASSIGN):
             self.emit_indirect_assign(ir)
 
         else:
@@ -181,10 +181,10 @@ class FunctionEmit(object):
         left_addr = left.access_name()
         right_addr = right.access_name()
         m = {
-            IRKind.ADD: 'addl',
-            IRKind.SUB: 'subl',
-            IRKind.MUL: 'imull',
-            IRKind.DIV: 'divl',
+            OperatorKind.ADD: 'addl',
+            OperatorKind.SUB: 'subl',
+            OperatorKind.MUL: 'imull',
+            OperatorKind.DIV: 'divl',
         }
         op = m[ir.kind]
         self.emit_mov(left_addr, '%eax', left.type, TypeSystem.INT)
@@ -291,18 +291,18 @@ class FunctionEmit(object):
     #     if source2 is not None:
     #         src2 = source2.access_name()
     #     m = {
-    #         IRKind.ADDRESS_OF:  f'    leal\t{src1}, %eax\n'
+    #         OperatorKind.ADDRESS_OF:  f'    leal\t{src1}, %eax\n'
     #                             f'    movl\t%eax, {dst}\n',
-    #         IRKind.INDIRECTION: f'    movl\t{src1}, %eax\n'
+    #         OperatorKind.INDIRECTION: f'    movl\t{src1}, %eax\n'
     #                             f'    movl\t(%eax), %eax\n'
     #                             f'    movl\t%eax, {dst}\n',
-    #         IRKind.ADD:         f'    movl\t{src1}, %eax\n'
+    #         OperatorKind.ADD:         f'    movl\t{src1}, %eax\n'
     #                             f'    addl\t{src2}, %eax\n'
     #                             f'    movl\t%eax, {dst}\n',
-    #         IRKind.SUB:         f'    movl\t{src1}, %eax\n'
+    #         OperatorKind.SUB:         f'    movl\t{src1}, %eax\n'
     #                             f'    subl\t{src2}, %eax\n'
     #                             f'    movl\t%eax, {dst}\n',
-    #         IRKind.MUL:         f'    movl\t{src1}, %eax\n'
+    #         OperatorKind.MUL:         f'    movl\t{src1}, %eax\n'
     #                             f'    imull\t{src2}, %eax\n'
     #                             f'    movl\t%eax, {dst}\n',
     #

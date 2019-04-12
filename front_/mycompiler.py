@@ -9,7 +9,7 @@ from front_.myenum import *
 import os
 from front_.emitor import Emit
 from front_.symbol_system import *
-
+from front_.node.AST import Node
 
 
 def compile(input_path):
