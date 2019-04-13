@@ -29,27 +29,27 @@ _main:
     movl	%eax, 48(%esp)
     movl	48(%esp), %eax
     movl	%eax, 4(%esp)
-    movl	$LC0, %eax
+    movl	$LC1, %eax
     movl	%eax, 0(%esp)
     call	_printf
     fldl	FLOAT0
     fstpl	28(%esp)
     fldl	28(%esp)
     fstpl	4(%esp)
-    movl	$LC1, %eax
+    movl	$LC2, %eax
     movl	%eax, 0(%esp)
     call	_printf
     fldl	FLOAT1
     fstpl	4(%esp)
-    movl	$LC1, %eax
+    movl	$LC3, %eax
     movl	%eax, 0(%esp)
     call	_printf
     movl	$5, %eax
     movl	%eax, 4(%esp)
-    movl	$LC0, %eax
+    movl	$LC4, %eax
     movl	%eax, 0(%esp)
     call	_printf
-    movl	$LC2, %eax
+    movl	$LC5, %eax
     movl	%eax, 0(%esp)
     call	_printf
     movl	$2, %eax
@@ -102,27 +102,27 @@ _func1:
     movl	%eax, 48(%esp)
     movl	48(%esp), %eax
     movl	%eax, 4(%esp)
-    movl	$LC0, %eax
+    movl	$LC1, %eax
     movl	%eax, 0(%esp)
     call	_printf
     fldl	FLOAT0
     fstpl	28(%esp)
     fldl	28(%esp)
     fstpl	4(%esp)
-    movl	$LC1, %eax
+    movl	$LC2, %eax
     movl	%eax, 0(%esp)
     call	_printf
     fldl	FLOAT1
     fstpl	4(%esp)
-    movl	$LC1, %eax
+    movl	$LC3, %eax
     movl	%eax, 0(%esp)
     call	_printf
     movl	$5, %eax
     movl	%eax, 4(%esp)
-    movl	$LC0, %eax
+    movl	$LC4, %eax
     movl	%eax, 0(%esp)
     call	_printf
-    movl	$LC2, %eax
+    movl	$LC5, %eax
     movl	%eax, 0(%esp)
     call	_printf
     movl	%ebp, %esp
@@ -150,7 +150,7 @@ _func2:
     call	_printf
     movl	24(%ebp), %eax
     movl	%eax, 4(%esp)
-    movl	$LC0, %eax
+    movl	$LC1, %eax
     movl	%eax, 0(%esp)
     call	_printf
     movl	8(%esp), %eax
@@ -197,11 +197,17 @@ _func4:
     popl	%ebp
     ret
 LC0:
-    .string	"value: %d\n"
+    .string	"target 1: %d\n"
 LC1:
-    .string	"value: %f\n"
+    .string	"target 2: %d\n"
 LC2:
-    .string	"value: None\n"
+    .string	"target 3.5 : %f\n"
+LC3:
+    .string	"target 4.5 : %f\n"
+LC4:
+    .string	"target 5   : %d\n"
+LC5:
+    .string	"target None: None\n"
 FLOAT0:
     .long	0
     .long	1074528256

@@ -1,0 +1,15 @@
+target 1: 1
+target 2: 2
+target 3.5 : 3.500000
+target 4.5 : 4.500000
+target 5   : 5
+target None: None
+target 1: 1
+target 2: 2
+target 3.5 : 3.500000
+target 4.5 : 4.500000
+target 5   : 5
+target None: None
+target 1: 1
+target 2: 2
+target 1: 1

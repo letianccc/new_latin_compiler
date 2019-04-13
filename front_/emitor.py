@@ -146,6 +146,7 @@ class FunctionEmit(object):
         # TODO: src的类型未知  可能是short
         dst = ir.destination
         src = ir.operand
+        assert src.type.match(TypeSystem.POINTER)
         dst_addr = dst.access_name()
         eax = RegSystem.reg(RegKind.AX, src.type.size)
         self.emit_mov(src, eax)
@@ -157,6 +158,7 @@ class FunctionEmit(object):
     def emit_address_of(self, ir):
         dst = ir.destination
         src = ir.operand
+        assert dst.type.match(TypeSystem.POINTER)
         src_addr = src.access_name()
         dst_addr = dst.access_name()
         code = ''
@@ -168,6 +170,23 @@ class FunctionEmit(object):
         dst = ir.destination
         left = ir.left
         right = ir.right
+
+        if left.type.match(TypeSystem.DOUBLE) or right.type.match(TypeSystem.DOUBLE):
+            left_addr = left.access_name()
+            right_addr = right.access_name()
+            dst_addr = dst.access_name()
+            m = {
+                OperatorKind.ADD: 'faddl',
+                OperatorKind.SUB: 'fsubl',
+                OperatorKind.MUL: 'fmull',
+                OperatorKind.DIV: 'divl',
+            }
+            op = m[ir.kind]
+            code = f'    fldl\t{left_addr}\n'\
+                   f'    {op}\t{right_addr}\n'\
+                   f'    fstpl\t{dst_addr}\n'
+            self.emit_code(code)
+            return
         reg_size = 4
         eax = RegSystem.reg(RegKind.AX, reg_size)
         edx = RegSystem.reg(RegKind.DX, reg_size)

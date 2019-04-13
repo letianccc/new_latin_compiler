@@ -27,22 +27,22 @@ _main:
     call	_printf
     movl	20(%esp), %eax
     movl	%eax, 4(%esp)
-    movl	$LC1, %eax
+    movl	$LC0, %eax
     movl	%eax, 0(%esp)
     call	_printf
     movl	12(%esp), %eax
     movl	%eax, 4(%esp)
-    movl	$LC2, %eax
+    movl	$LC0, %eax
     movl	%eax, 0(%esp)
     call	_printf
     movl	16(%esp), %eax
     movl	%eax, 4(%esp)
-    movl	$LC3, %eax
+    movl	$LC1, %eax
     movl	%eax, 0(%esp)
     call	_printf
     movl	8(%esp), %eax
     movl	%eax, 4(%esp)
-    movl	$LC4, %eax
+    movl	$LC2, %eax
     movl	%eax, 0(%esp)
     call	_printf
     call	_getchar
@@ -53,12 +53,8 @@ _main:
     popl	%ebp
     ret
 LC0:
-    .string	"a: %d\n"
+    .string	"target 1: %d\n"
 LC1:
-    .string	"b: %d\n"
+    .string	"target 2: %d\n"
 LC2:
-    .string	"d: %d\n"
-LC3:
-    .string	"c: %d\n"
-LC4:
-    .string	"e: %d\n"
+    .string	"target 3: %d\n"

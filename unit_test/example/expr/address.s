@@ -26,11 +26,6 @@ _main:
     movl	$LC0, %eax
     movl	%eax, 0(%esp)
     call	_printf
-    movl	20(%esp), %eax
-    movl	%eax, 4(%esp)
-    movl	$LC1, %eax
-    movl	%eax, 0(%esp)
-    call	_printf
     movl	16(%esp), %eax
     movl	%eax, 4(%esp)
     movl	$LC0, %eax
@@ -45,5 +40,3 @@ _main:
     ret
 LC0:
     .string	"target 1: %d\n"
-LC1:
-    .string	"pointer : %d\n"

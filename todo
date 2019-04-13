@@ -2,43 +2,27 @@
 
 当前：
 
-根据exe文件执行结果进行测试
 
-创建用于参考的输出结果
-
-short 指针 多维
 assign  initializer 合并
 
 null 的汇编表示
 
 强制类型转换
-实现swap函数
 
-*b = 1
-
-
-
-**b = 1
-t = *b
-*t = 1
 
 待做：
 
 
-将形参与局部变量的声明合并
 
 
 
-实现double  加减乘法，返回值
+实现double  返回值
 
 access_name需要重构，找个地方把相关逻辑放一起
 需要把部分逻辑从emit过程转移到gen过程，即增加中间代码
 
 BUG:
 double声明
-
-add_parent_type  改变了ident的类型，
-ident的类型应该保持不变
 
 
 待关注：

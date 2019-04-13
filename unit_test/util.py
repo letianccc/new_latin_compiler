@@ -3,14 +3,17 @@
 import os
 from front_.mycompiler import compile
 from front_.util import *
-
+import subprocess
 
 
 def filepaths(test_dir):
     ps = []
-    kinds = os.listdir(test_dir)
-    for k in kinds:
-        kind_dir = os.path.join(test_dir, k)
+    old = os.getcwd()
+    os.chdir(test_dir)
+    paths = [ os.path.abspath(name) for name in os.listdir(test_dir)]
+    kinds = filter(os.path.isdir, paths)
+    for kind_dir in kinds:
+        # kind_dir = os.path.join(test_dir, k)
         files = os.listdir(kind_dir)
         x = lambda path: path.endswith('.c')
         cfiles = filter(x, files)
@@ -20,19 +23,55 @@ def filepaths(test_dir):
             sfile = os.path.join(kind_dir, sfile)
             pair = (cfile, sfile)
             ps.append(pair)
+    os.chdir(old)
     return ps
 
-def assert_file(test_dir, path, refer_path):
-    log(path)
-    code = compile(path)
+def write_code(cfile, sfile):
+    code = compile(cfile)
+    with open(sfile, 'w') as f:
+        f.write(code)
+
+def test_sfile(tmp_path, refer_path):
     with open(refer_path, 'r') as refer:
-        refer_lines = refer.read().split('\n')
-        lines = code.split('\n')
-        for index, refer_line in enumerate(refer_lines):
-            line = lines[index]
-            if refer_line != line:
-                # path = os.path.relpath(path, test_dir)
-                # log(path)
-                log(f'{index}: expect({refer_line})')
-                log(f'{index}: code  ({line})')
-                raise Exception
+        with open(tmp_path, 'r') as tmp:
+            refer_lines = refer.read().split('\n')
+            lines = tmp.read().split('\n')
+            for index, refer_line in enumerate(refer_lines):
+                line = lines[index]
+                if refer_line != line:
+                    # path = os.path.relpath(path, test_dir)
+                    # log(path)
+                    log(f'{index}: expect({refer_line})')
+                    log(f'{index}: code  ({line})')
+                    raise Exception
+
+def assert_file(test_dir, cpath, refer_spath, check_exefile, check_sfile):
+    # log(cpath)
+    tmp_spath = fr'{test_dir}\tmp.s'
+    exe_path = tmp_spath[:-2]
+    out_refer = cpath[:-1] + 'out'
+    tmpout_path = fr'{test_dir}\tmp.out'
+    write_code(cpath, tmp_spath)
+    exist = os.path.isfile(out_refer)
+    if check_exefile and exist:
+        out = execute_sfile(tmp_spath, exe_path)
+        out = out.replace('\r', '')
+        with open(out_refer, 'r') as refer:
+            expect = refer.read()
+            assert out == expect
+    if check_sfile:
+        test_sfile(tmp_spath, refer_spath)
+
+def execute_sfile(spath, exe_path):
+    generate_execute_file(spath, exe_path)
+    out = execute_exefile(exe_path)
+    return out
+
+def execute_exefile(executable_path):
+    p = subprocess.run(executable_path, input=b'a', capture_output=True)
+    out = p.stdout
+    out = out.decode()
+    return out
+
+def generate_execute_file(spath, exe_path):
+    subprocess.run(['gcc', '-o', exe_path, spath], check=True)

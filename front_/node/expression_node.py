@@ -21,6 +21,7 @@ class IndirectionNode(Node):
     def check(self, kind, type):
         super().check()
         self.operand = self.operand.check(kind, type)
+        assert self.operand.type.match(TypeSystem.POINTER)
         return self
 
     @property
@@ -49,14 +50,13 @@ class AddressOfNode(Node):
     def check(self, kind, type):
         super().check()
         op = self.operand.check(kind, type)
-        # TODO: AddressOfNode PointerDeclaratorNode 可以考虑提取出来
-        op.add_parent_type(TypeKind.POINTER, TypeSystem.INT.size)
         self.operand = op
         return self
 
     @property
     def type(self):
-        return self.operand.type
+        t = TypeSystem.new(TypeKind.POINTER, TypeSystem.POINTER.size, self.operand.type)
+        return t
 
     def gen(self):
         operand = self.operand.gen()
