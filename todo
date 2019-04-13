@@ -2,6 +2,10 @@
 
 当前：
 
+根据exe文件执行结果进行测试
+
+创建用于参考的输出结果
+
 short 指针 多维
 assign  initializer 合并
 

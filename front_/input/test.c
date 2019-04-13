@@ -1,72 +1,28 @@
-// 
-//
-// void swap1(short a, short b) {
-//     short c;
-//     c = a;
-//     a = b;
-//     b = c;
-// }
-//
-// void swap2(short *a, short *b) {
-//     short c;
-//     c = *a;
-//     *a = *b;
-//     *b = c;
-// }
-//
-// void swap() {
-//     short a = 1;
-//     short b = 2;
-//     swap1(a, b);
-//     printf("target 1: %d\n", a);
-//     printf("target 2: %d\n", b);
-//     swap2(&a, &b);
-//     printf("target 2: %d\n", a);
-//     printf("target 1: %d\n", b);
-// }
-//
-// void func1(short *a) {
-//     printf("target 1: %d\n", *a);
-// }
-//
-// void pass_pointer() {
-//     short a = 1;
-//     short *b = &a;
-//     func1(b);
-// }
-//
-//
-// void mul_indirect_assign() {
-//     short a = 1;
-//     short *b = &a;
-//     short **c = &b;
-//     printf("target 1: %d\n", a);
-//     printf("target 1: %d\n", *b);
-//     printf("target 1: %d\n", **c);
-//     **c = 2;
-//     printf("target 2: %d\n", a);
-//     printf("target 2: %d\n", *b);
-//     printf("target 2: %d\n", **c);
-// }
 
-void func() {
-    short a = 70000;
-    short *b = &a;
-    printf("target 4464: %d\n", a);
-    printf("target 4464: %d\n", *b);
-    int c = 80000;
-    *b = c;
-    printf("target 14464: %d\n", a);
-    printf("target 14464: %d\n", *b);
+
+void int_to_short() {
+    int a = 70000;
+    short b = a;
+    short c = 70000;
+    printf("target 4464: %d\n", b);
+    printf("target 4464: %d\n", c);
+}
+
+void mix_add() {
+    short a = 1;
+    short b = 2;
+    int c = 3;
+    int d = 4;
+    short e = a + b;
+    int f = a + c;
+    int g = c + a;
+    printf("target 3: %d\n", e);
+    printf("target 4: %d\n", f);
+    printf("target 4: %d\n", g);
 }
 
 void main() {
-    func();
-    // pass_pointer();
-    //
-    // swap();
-    //
-    // mul_indirect_assign();
+    int_to_short();
+    mix_add();
     getchar();
-
 }
