@@ -126,6 +126,8 @@ class FunctionEmit(object):
             self.emit_return(ir)
         elif ir.match(OperatorKind.INDIRECTION_ASSIGN):
             self.emit_indirect_assign(ir)
+        elif ir.match(OperatorKind.CAST):
+            self.emit_cast(ir)
 
         else:
             raise Exception
@@ -224,6 +226,17 @@ class FunctionEmit(object):
         src = ir.operand
         eax = RegSystem.reg(RegKind.AX, reg_size)
         self.emit_mov(src, eax)
+
+    def emit_cast(self, ir):
+        dst = ir.destination
+        src = ir.source
+        if SymbolSystem.is_numeric(src):
+            self.emit_mov(src, dst)
+        else:
+            size = dst.type.size
+            eax = RegSystem.reg(RegKind.AX, size)
+            self.emit_mov(src, eax)
+            self.emit_mov(eax, dst)
 
     def emit_mov(self, source, destination):
         src = source.access_name()

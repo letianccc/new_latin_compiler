@@ -2,12 +2,19 @@
 
 当前：
 
+check(self, kind, type)  kind type 尽量去掉
+
+Defind  kind  从NodeKind改为OPKIND
+
+short 有符号  应该计算15位的值  需要检查一下测试用例
+
+强制类型转换  double
 
 assign  initializer 合并
 
 null 的汇编表示
 
-强制类型转换
+
 
 
 待做：

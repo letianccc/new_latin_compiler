@@ -10,6 +10,29 @@ from front_.reg_system import *
 
 
 
+class CastNode(Node):
+    def __init__(self, function, type, expression):
+        super(CastNode, self).__init__()
+        self.kind = NodeKind.CAST
+        self.function = function
+        self.expression = expression
+        self.type = type
+
+    def check(self, kind, type):
+        super().check()
+        self.type = self.type.check(type)
+        self.expression = self.expression.check(kind, type)
+        return self
+
+    def gen(self):
+        src = self.expression.gen()
+        dst = self.function.new_tag(self.type)
+        d = Defind(NodeKind.CAST, dst, src)
+        dst.defind = d
+        ir = CastIR(dst, src)
+        self.function.gen_ir(ir)
+        return dst
+
 
 class IndirectionNode(Node):
     def __init__(self, function, operand):

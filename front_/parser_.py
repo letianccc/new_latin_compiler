@@ -163,6 +163,12 @@ class Parser:
             self.next_token()
         return node
 
+    def parse_type(self):
+        type = self.next_token()
+        d = self.parse_declarator(True)
+        n = TypeNode(self.function, type, d)
+        return n
+
     def parse_declarator_initialer(self):
         declarator = self.parse_declarator()
         init = None
@@ -172,13 +178,17 @@ class Parser:
         d = DeclaratorInitializerNode(self.function, declarator, init)
         return d
 
-    def parse_declarator(self):
+    def parse_declarator(self, parse_type=False):
         if self.match(TokenKind.MUL):
             self.expect(TokenKind.MUL)
-            declarator = self.parse_declarator()
-            d = PointerDeclaratorNode(self.function, declarator)
+            d = self.parse_declarator()
+            d = PointerDeclaratorNode(self.function, d)
         elif self.match(TokenKind.ID):
+            if parse_type is True:
+                raise Exception
             d = self.parse_identifier()
+        elif parse_type is True:
+            return None
         return d
 
     # def parse_point_declarator(self):
@@ -323,10 +333,16 @@ class Parser:
             self.next_token()
             Class = self.constructors[t.kind]
             expr = Class(self.function, self.unary())
-            # if t.kind is TokenKind.BITAND:
-            #     expr = AddressOfNode(self.function, self.unary())
-            # elif t.kind is TokenKind.MUL:
-            #     expr = IndirectionNode(self.function, self.unary())
+        elif self.match(TokenKind.LPAREN):
+            self.next_token()
+            t = self.cur_token()
+            if not TypeSystem.is_type_prefix(t.kind):
+                expr = self.parse_expression()
+            else:
+                type = self.parse_type()
+                self.expect(TokenKind.RPAREN)
+                expr = self.unary()
+                expr = CastNode(self.function, type, expr)
         else:
             expr = self.factor()
         return expr

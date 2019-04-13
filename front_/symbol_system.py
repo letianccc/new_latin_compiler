@@ -55,6 +55,12 @@ class SymbolSystem(object):
         cls.constants = GlobalField()
         cls.strings = GlobalField()
 
+    @classmethod
+    def is_numeric(self, symbol):
+        k = symbol.kind
+        r = k is SymbolKind.DOUBLECONST or k is SymbolKind.INTCONST
+        return r
+
 class Symbol(object):
     """docstring for Symbol."""
 

@@ -123,6 +123,8 @@ class NodeKind(IntEnum):
     POINTER_DECLARATOR = auto()
     ASSIGN = auto()
     RETURN = auto()
+    TYPE = auto()
+    CAST = auto()
 
 class OperatorKind(IntEnum):
     CALL = auto()
@@ -135,6 +137,7 @@ class OperatorKind(IntEnum):
     RETURN = auto()
     ASSIGN = auto()
     INDIRECTION_ASSIGN = auto()
+    CAST = auto()
 
 
 class BlockKind(IntEnum):

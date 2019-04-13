@@ -152,14 +152,41 @@ class PointerDeclaratorNode(Node):
         self.declarator = declarator
 
     def check(self, kind, type):
-        d = self.declarator.check(kind, type)
-        d.add_parent_type(TypeKind.POINTER, TypeSystem.INT.size)
-        self.declarator = d
-        return d
+        if self.declarator is not None:
+            d = self.declarator.check(kind, type)
+            d.add_parent_type(TypeKind.POINTER, TypeSystem.POINTER.size)
+            self.declarator = d
+            return d
+        else:
+            # TODO: 这部分逻辑最好用另一个类实现
+            type = TypeSystem.new(TypeKind.POINTER, TypeSystem.POINTER.size, type)
+            return type
+
 
     # def gen(self):
     #     # TODO: 声明的指针变量应该不需要gen
     #     return self.declarator
+
+class TypeNode(Node):
+    def __init__(self, function, specifier, declarator):
+        super(TypeNode, self).__init__()
+        self.function = function
+        self.specifier = specifier
+        self.declarator = declarator
+        self.kind = NodeKind.TYPE
+
+    def check(self, type):
+        super().check()
+        self.specifier = TypeSystem.type(self.specifier.kind)
+        type = self.specifier
+        # int * 类型  返回Pointer类型
+        if self.declarator is not None:
+            type = self.declarator.check(None, type)
+        return type
+
+    def gen(self):
+        for d in self.declarators:
+            d.gen()
 
 
 class IfNode(Node):

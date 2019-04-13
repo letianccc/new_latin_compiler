@@ -2,49 +2,26 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="b1dbd57b-b472-49a9-8b6a-0d663c99e023" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/front_/a.exe" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/front_/test.exe" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/unit_test/example/decl/decl.out" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/unit_test/example/decl/mul_pointer.out" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/unit_test/example/expr/address.out" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/unit_test/example/pointer/short.c" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/unit_test/example/pointer/short.s" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/unit_test/example/return/return.out" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/unit_test/example/test/test1.out" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/unit_test/example/tmp.exe" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/unit_test/example/tmp.out" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/unit_test/example/tmp.s" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/unit_test/example/type/short.out" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/front_/emitor.py" beforeDir="false" afterPath="$PROJECT_DIR$/front_/emitor.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/front_/input/a.exe" beforeDir="false" afterPath="$PROJECT_DIR$/front_/input/a.exe" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/front_/input/hello.c" beforeDir="false" afterPath="$PROJECT_DIR$/front_/input/hello.c" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/front_/input/hello.exe" beforeDir="false" afterPath="$PROJECT_DIR$/front_/input/hello.exe" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/front_/input/hello.s" beforeDir="false" afterPath="$PROJECT_DIR$/front_/input/hello.s" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/front_/input/test.c" beforeDir="false" afterPath="$PROJECT_DIR$/front_/input/test.c" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/front_/input/test.exe" beforeDir="false" afterPath="$PROJECT_DIR$/front_/input/test.exe" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/front_/input/test.s" beforeDir="false" afterPath="$PROJECT_DIR$/front_/input/test.s" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/front_/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/front_/main.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/front_/ir.py" beforeDir="false" afterPath="$PROJECT_DIR$/front_/ir.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/front_/myenum.py" beforeDir="false" afterPath="$PROJECT_DIR$/front_/myenum.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/front_/node/AST.py" beforeDir="false" afterPath="$PROJECT_DIR$/front_/node/AST.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/front_/node/expression_node.py" beforeDir="false" afterPath="$PROJECT_DIR$/front_/node/expression_node.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/test.py" beforeDir="false" afterPath="$PROJECT_DIR$/test.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/front_/parser_.py" beforeDir="false" afterPath="$PROJECT_DIR$/front_/parser_.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/front_/symbol_system.py" beforeDir="false" afterPath="$PROJECT_DIR$/front_/symbol_system.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/front_/type_system.py" beforeDir="false" afterPath="$PROJECT_DIR$/front_/type_system.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/todo" beforeDir="false" afterPath="$PROJECT_DIR$/todo" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/unit_test/example/decl/decl.c" beforeDir="false" afterPath="$PROJECT_DIR$/unit_test/example/decl/decl.c" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/unit_test/example/decl/decl.s" beforeDir="false" afterPath="$PROJECT_DIR$/unit_test/example/decl/decl.s" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/unit_test/example/decl/mul_pointer.c" beforeDir="false" afterPath="$PROJECT_DIR$/unit_test/example/decl/mul_pointer.c" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/unit_test/example/decl/mul_pointer.s" beforeDir="false" afterPath="$PROJECT_DIR$/unit_test/example/decl/mul_pointer.s" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/unit_test/example/expr/address.c" beforeDir="false" afterPath="$PROJECT_DIR$/unit_test/example/expr/address.c" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/unit_test/example/expr/address.s" beforeDir="false" afterPath="$PROJECT_DIR$/unit_test/example/expr/address.s" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/unit_test/example/expr/arith.c" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/unit_test/example/expr/arith.s" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/unit_test/example/expr/arith_short.c" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/unit_test/example/expr/arith_short.s" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/unit_test/example/expr/arith_short_to_int.c" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/unit_test/example/expr/arith_short_to_int.s" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/unit_test/example/function/return.c" beforeDir="false" afterPath="$PROJECT_DIR$/unit_test/example/return/return.c" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/unit_test/example/function/return.s" beforeDir="false" afterPath="$PROJECT_DIR$/unit_test/example/return/return.s" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/unit_test/example/test/test1.c" beforeDir="false" afterPath="$PROJECT_DIR$/unit_test/example/test/test1.c" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/unit_test/example/test/test1.s" beforeDir="false" afterPath="$PROJECT_DIR$/unit_test/example/test/test1.s" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/unit_test/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/unit_test/main.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/unit_test/util.py" beforeDir="false" afterPath="$PROJECT_DIR$/unit_test/util.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/unit_test/example/expr/arith0.c" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/unit_test/example/expr/arith0.s" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/unit_test/example/tmp.exe" beforeDir="false" afterPath="$PROJECT_DIR$/unit_test/example/tmp.exe" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -53,18 +30,18 @@
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
   <component name="CoverageDataManager">
-    <SUITE FILE_PATH="coverage/new_latin_compiler$main.coverage" NAME="main Coverage Results" MODIFIED="1555155450634" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/front_" />
+    <SUITE FILE_PATH="coverage/new_latin_compiler$main.coverage" NAME="main Coverage Results" MODIFIED="1555170865825" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/front_" />
     <SUITE FILE_PATH="coverage/new_latin_compiler$main__1_.coverage" NAME="main Coverage Results" MODIFIED="1554908653705" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/front_" />
     <SUITE FILE_PATH="coverage/new_latin_compiler$test.coverage" NAME="test Coverage Results" MODIFIED="1555121547758" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
-    <SUITE FILE_PATH="coverage/new_latin_compiler$main_1_.coverage" NAME="main(1) Coverage Results" MODIFIED="1555155558413" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/unit_test" />
+    <SUITE FILE_PATH="coverage/new_latin_compiler$main_1_.coverage" NAME="main(1) Coverage Results" MODIFIED="1555170921583" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/unit_test" />
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/front_/parser_.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="127">
-              <caret line="133" selection-start-line="133" selection-end-line="133" />
+            <state relative-caret-position="73">
+              <caret line="184" selection-start-line="184" selection-end-line="184" />
               <folding>
                 <element signature="e#0#31#0" expanded="true" />
               </folding>
@@ -73,10 +50,34 @@
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/front_/main.py">
+        <entry file="file://$PROJECT_DIR$/front_/node/expression_node.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="440">
-              <caret line="21" selection-start-line="21" selection-end-line="21" />
+            <state relative-caret-position="161">
+              <caret line="199" selection-start-line="199" selection-end-line="199" />
+              <folding>
+                <element signature="e#2#27#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/front_/ir.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="73">
+              <caret line="35" column="8" selection-start-line="35" selection-start-column="8" selection-end-line="35" selection-end-column="8" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/front_/node/AST.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="44">
+              <caret line="110" selection-start-line="110" selection-end-line="110" />
+              <folding>
+                <element signature="e#1#26#0" expanded="true" />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -84,8 +85,8 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/front_/emitor.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="95">
-              <caret line="186" column="45" selection-start-line="186" selection-start-column="45" selection-end-line="186" selection-end-column="45" />
+            <state relative-caret-position="84">
+              <caret line="232" selection-start-line="232" selection-end-line="232" />
               <folding>
                 <element signature="e#245#365#0" />
                 <element signature="e#745#993#0" />
@@ -109,34 +110,13 @@
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/front_/node/AST.py">
+        <entry file="file://$PROJECT_DIR$/front_/mycompiler.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="2200">
-              <caret line="105" selection-start-line="105" selection-end-line="105" />
+            <state relative-caret-position="44">
+              <caret line="39" selection-start-line="39" selection-end-line="39" />
               <folding>
-                <element signature="e#1#26#0" expanded="true" />
+                <element signature="e#1#32#0" expanded="true" />
               </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/test.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="22">
-              <caret line="2" selection-start-line="2" selection-end-line="2" />
-              <folding>
-                <element signature="e#0#9#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/front_/token_.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1782">
-              <caret line="83" selection-start-line="83" selection-end-line="83" />
             </state>
           </provider>
         </entry>
@@ -154,15 +134,6 @@
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$USER_HOME$/AppData/Local/Programs/Python/Python37/Lib/subprocess.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="10362">
-              <caret line="471" selection-start-line="471" selection-end-line="471" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/unit_test/main.py">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="506">
@@ -175,7 +146,7 @@
         <entry file="file://$PROJECT_DIR$/front_/symbol_system.py">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="1034">
-              <caret line="78" selection-start-line="78" selection-end-line="78" />
+              <caret line="84" selection-start-line="84" selection-end-line="84" />
               <folding>
                 <element signature="e#257#563#0" />
                 <element signature="e#1063#1102#0" />
@@ -224,14 +195,14 @@
         <option value="$PROJECT_DIR$/front_/myexpr.py" />
         <option value="$PROJECT_DIR$/front_/AST.py" />
         <option value="$PROJECT_DIR$/front_/mycompiler.py" />
-        <option value="$PROJECT_DIR$/front_/node/expression_node.py" />
         <option value="$PROJECT_DIR$/front_/parser_.py" />
-        <option value="$PROJECT_DIR$/front_/node/AST.py" />
         <option value="$PROJECT_DIR$/front_/token_.py" />
         <option value="$PROJECT_DIR$/test.py" />
         <option value="$PROJECT_DIR$/unit_test/main.py" />
         <option value="$PROJECT_DIR$/front_/main.py" />
         <option value="$PROJECT_DIR$/unit_test/util.py" />
+        <option value="$PROJECT_DIR$/front_/node/AST.py" />
+        <option value="$PROJECT_DIR$/front_/node/expression_node.py" />
         <option value="$PROJECT_DIR$/front_/emitor.py" />
       </list>
     </option>
@@ -381,7 +352,7 @@
       <updated>1554899109047</updated>
       <workItem from="1554899114736" duration="7498000" />
       <workItem from="1554908790386" duration="48718000" />
-      <workItem from="1555136561600" duration="5006000" />
+      <workItem from="1555136561600" duration="10759000" />
     </task>
     <task id="LOCAL-00001" summary="增加利用exe文件进行测试的逻辑">
       <created>1555136202150</created>
@@ -397,11 +368,18 @@
       <option name="project" value="LOCAL" />
       <updated>1555136251379</updated>
     </task>
-    <option name="localTasksCounter" value="3" />
+    <task id="LOCAL-00003" summary="增加double的加减乘实现">
+      <created>1555155717993</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1555155717994</updated>
+    </task>
+    <option name="localTasksCounter" value="4" />
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="61222000" />
+    <option name="totallyTimeSpent" value="66975000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -414,19 +392,20 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="-7" y="-7" width="1295" height="695" extended-state="6" />
+    <editor active="true" />
     <layout>
       <window_info content_ui="combo" id="Project" order="0" sideWeight="0.4991119" visible="true" weight="0.16329831" />
       <window_info id="Structure" order="1" sideWeight="0.5008881" side_tool="true" weight="0.16087309" />
       <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" />
-      <window_info anchor="bottom" id="Run" order="2" weight="0.3463588" />
-      <window_info anchor="bottom" id="Debug" order="3" weight="0.55950266" />
+      <window_info active="true" anchor="bottom" id="Run" order="2" visible="true" weight="0.5222025" />
+      <window_info anchor="bottom" id="Debug" order="3" weight="0.41740674" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
       <window_info anchor="bottom" id="TODO" order="6" weight="0.3285968" />
       <window_info anchor="bottom" id="Docker" order="7" show_stripe_button="false" />
-      <window_info active="true" anchor="bottom" id="Version Control" order="8" visible="true" weight="0.49023092" />
+      <window_info anchor="bottom" id="Version Control" order="8" weight="0.49023092" />
       <window_info anchor="bottom" id="Database Changes" order="9" />
       <window_info anchor="bottom" id="Event Log" order="10" side_tool="true" />
       <window_info anchor="bottom" id="Terminal" order="11" weight="0.3285968" />
@@ -483,14 +462,15 @@
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="增加利用exe文件进行测试的逻辑" />
-    <option name="LAST_COMMIT_MESSAGE" value="增加利用exe文件进行测试的逻辑" />
+    <MESSAGE value="增加double的加减乘实现" />
+    <option name="LAST_COMMIT_MESSAGE" value="增加double的加减乘实现" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
       <breakpoints>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/front_/parser_.py</url>
-          <line>359</line>
+          <line>375</line>
           <option name="timeStamp" value="18" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
@@ -505,18 +485,13 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/front_/emitor.py</url>
-          <line>137</line>
+          <line>139</line>
           <option name="timeStamp" value="32" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/front_/emitor.py</url>
-          <line>213</line>
-          <option name="timeStamp" value="35" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/front_/node/AST.py</url>
-          <line>129</line>
-          <option name="timeStamp" value="39" />
+          <line>232</line>
+          <option name="timeStamp" value="40" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>
@@ -540,20 +515,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/front_/ir.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="97">
-          <caret line="66" column="33" selection-start-line="66" selection-start-column="33" selection-end-line="66" selection-end-column="33" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$USER_HOME$/AppData/Local/Programs/Python/Python37/Lib/enum.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="97">
-          <caret line="347" selection-start-line="347" selection-end-line="347" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/front_/myexpr.py" />
     <entry file="file://$PROJECT_DIR$/front_/AST.py" />
     <entry file="file://$PROJECT_DIR$/front_/node/node.py">
@@ -566,29 +527,10 @@
     <entry file="file://$PROJECT_DIR$/front_/node/statement_node.py">
       <provider selected="true" editor-type-id="text-editor" />
     </entry>
-    <entry file="file://$PROJECT_DIR$/front_/node/expression_node.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="88">
-          <caret line="4" column="27" selection-start-line="4" selection-start-column="27" selection-end-line="4" selection-end-column="27" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/front_/reg_system.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="89">
           <caret line="36" column="40" selection-start-line="36" selection-start-column="40" selection-end-line="36" selection-end-column="40" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/front_/mycompiler.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="57">
-          <caret line="46" selection-start-line="46" selection-end-line="46" />
-          <folding>
-            <element signature="e#1#32#0" expanded="true" />
-            <element signature="e#692#749#0" />
-            <element signature="e#964#1181#0" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -603,16 +545,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="440">
           <caret line="21" selection-start-line="21" selection-end-line="21" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/front_/node/AST.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="2200">
-          <caret line="105" selection-start-line="105" selection-end-line="105" />
-          <folding>
-            <element signature="e#1#26#0" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -650,7 +582,7 @@
     <entry file="file://$PROJECT_DIR$/front_/symbol_system.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="1034">
-          <caret line="78" selection-start-line="78" selection-end-line="78" />
+          <caret line="84" selection-start-line="84" selection-end-line="84" />
           <folding>
             <element signature="e#257#563#0" />
             <element signature="e#1063#1102#0" />
@@ -685,18 +617,62 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/front_/parser_.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="127">
-          <caret line="133" selection-start-line="133" selection-end-line="133" />
+        <state relative-caret-position="73">
+          <caret line="184" selection-start-line="184" selection-end-line="184" />
           <folding>
             <element signature="e#0#31#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
+    <entry file="file://$USER_HOME$/AppData/Local/Programs/Python/Python37/Lib/enum.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="81">
+          <caret line="347" selection-start-line="347" selection-end-line="347" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/front_/ir.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="73">
+          <caret line="35" column="8" selection-start-line="35" selection-start-column="8" selection-end-line="35" selection-end-column="8" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/front_/mycompiler.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="44">
+          <caret line="39" selection-start-line="39" selection-end-line="39" />
+          <folding>
+            <element signature="e#1#32#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/front_/node/AST.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="44">
+          <caret line="110" selection-start-line="110" selection-end-line="110" />
+          <folding>
+            <element signature="e#1#26#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/front_/node/expression_node.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="161">
+          <caret line="199" selection-start-line="199" selection-end-line="199" />
+          <folding>
+            <element signature="e#2#27#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/front_/emitor.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="95">
-          <caret line="186" column="45" selection-start-line="186" selection-start-column="45" selection-end-line="186" selection-end-column="45" />
+        <state relative-caret-position="84">
+          <caret line="232" selection-start-line="232" selection-end-line="232" />
           <folding>
             <element signature="e#245#365#0" />
             <element signature="e#745#993#0" />

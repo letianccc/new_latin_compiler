@@ -1,0 +1,57 @@
+
+add target: 3
+value1: 3
+value2: 3
+value3: 3
+value4: 3
+value5: 3
+value6: 3
+value7: 3
+value8: 3
+
+sub target: -1
+value1: -1
+value2: -1
+value3: -1
+value4: -1
+value5: -1
+value6: -1
+value7: -1
+value8: -1
+
+add and sub target: 1
+value1: 1
+value2: 1
+value3: 1
+value4: 1
+value5: 1
+value6: 1
+value7: 1
+value8: 1
+value9: 1
+value10: 1
+value11: 1
+value12: 1
+value13: 1
+value14: 1
+value15: 1
+value16: 1
+
+mul target: 8
+value1: 8
+value2: 8
+value3: 8
+value4: 8
+value5: 8
+value6: 8
+value7: 8
+value8: 8
+
+arith target: 8
+value1: 8
+value2: 8
+value3: 8
+value4: 8
+value5: 8
+value6: 8
+value7: 8

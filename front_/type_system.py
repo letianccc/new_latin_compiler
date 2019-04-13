@@ -27,9 +27,12 @@ class TypeSystem(object):
     POINTER = Type(TypeKind.POINTER, 4)
 
     types = None
+
     @classmethod
     def init(cls):
-        cls.types = {
+        cls.types = [cls.VOID, cls.SHORT, cls.STRING, cls.INT, cls.FLOAT, cls.DOUBLE,
+        cls.POINTER]
+        cls.type_map = {
             TokenKind.INT: cls.INT,
             TokenKind.FLOAT: cls.FLOAT,
             TokenKind.DOUBLE: cls.DOUBLE,
@@ -45,10 +48,11 @@ class TypeSystem(object):
             TypeKind.SHORT: cls.SHORT,
 
         }
+        cls.numeric_types = [cls.SHORT, cls.INT, cls.FLOAT, cls.DOUBLE]
 
     @classmethod
     def type(cls, token_kind):
-        return cls.types[token_kind]
+        return cls.type_map[token_kind]
 
     @classmethod
     def max_type(cls, *types):
@@ -62,3 +66,13 @@ class TypeSystem(object):
     def new(cls, kind, size, sub_type):
         t = Type(kind, size, sub_type)
         return t
+
+    @classmethod
+    def is_type_prefix(cls, kind):
+        t = cls.type_map.get(kind)
+        return t is not None
+
+    # @classmethod
+    # def is_numeric(cls, type):
+    #     r = type in cls.numeric_types
+    #     return r

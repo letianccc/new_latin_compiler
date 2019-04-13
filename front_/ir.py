@@ -32,6 +32,14 @@ class IR:
                 return True
         return False
 
+class CastIR(IR):
+    def __init__(self, destination, source):
+        super(CastIR, self).__init__()
+        self.kind = OperatorKind.CAST
+        self.destination = destination
+        self.source = source
+
+
 class ReturnIR(IR):
     def __init__(self, type, operand):
         super(ReturnIR, self).__init__()
