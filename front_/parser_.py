@@ -23,7 +23,6 @@ class Parser:
             TokenKind.MUL: IndirectionNode,
         }
 
-
     def parse_functions(self):
         fs = []
         while not self.match(TokenKind.EOF):
@@ -71,25 +70,20 @@ class Parser:
         return params
 
     def parse_param(self, parameters, parameter_kind):
-
-        if parameter_kind is NodeKind.FORMAL_PARAMETER:
+        if parameter_kind is NodeKind.ACTUAL_PARAMETER:
+            p = self.parse_expression()
+        else:
             t = self.next_token()
             type = TypeSystem.type(t.kind)
             param = self.parse_declarator()
-        else:
-            type = None
-            param = self.parse_expression()
-        p = ParameterNode(self.function, parameter_kind, type, param)
-        # TODO: 这里要重构
-        if parameter_kind is NodeKind.ACTUAL_PARAMETER:
-            parameters.insert(0, p)
-        else:
-            parameters.append(p)
+            p = ParameterNode(self.function, type, param)
+        parameters.append(p)
 
     def parse_call(self, variable):
         params = self.parse_parameters(NodeKind.ACTUAL_PARAMETER)
         # self.expect(TokenKind.SEMICOLON)
-        n = CallNode(self.function, variable, params)
+        f = FunctionToken(variable.value)
+        n = CallNode(self.function, f, params)
         self.function.call_nodes.append(n)
         return n
 

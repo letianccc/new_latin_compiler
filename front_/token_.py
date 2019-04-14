@@ -24,7 +24,7 @@ class IntConstant(ConstantToken):
         self.value = value
         self.kind = TokenKind.INTCONST
 
-    def check(self, kind, type):
+    def check(self):
         k = SymbolKind.INTCONST
         type = TypeSystem.type(TokenKind.INT)
         s = SymbolSystem.find_symbol(self)
@@ -38,7 +38,7 @@ class DoubleConstant(ConstantToken):
         self.value = value
         self.kind = TokenKind.DOUBLECONST
 
-    def check(self, kind, type):
+    def check(self):
         # TODO: 这部分逻辑可以抽象
         # add_symbol(kind, type, value)
         # type = TypeSystem.type(self.type)
@@ -55,32 +55,26 @@ class IdentifierToken(Token):
         self.value = value
         self.kind = kind
 
-    def check(self, kind=None, type=None):
-        if kind is NodeKind.DECLARATOR_INITIALIZER or kind is NodeKind.FORMAL_PARAMETER:
-            s = SymbolSystem.find_symbol(self, None, LevelKind.CURRENT)
-            if s is not None:
-                raise Exception("重复定义")
-            s = IdentifierSymbol(type, self.value)
-            SymbolSystem.add(s)
-            if kind is NodeKind.DECLARATOR_INITIALIZER:
-                ...
-            else:
-                s.is_formal_param = True
-
-        elif kind is NodeKind.CALL:
-            # TODO: 检测最外层作用域标识符是否存在
-            # TODO: 检测是否有声明保留函数 printf
-            s = SymbolSystem.find_symbol(self)
-            if s is None:
-                v = self.value
-                type = TypeSystem.VOID
-                s = FunctionSymbol(type, v, True)
-                SymbolSystem.add(s)
-            return s
-
+    def check(self):
         s = SymbolSystem.find_symbol(self)
         if s is None:
             raise Exception("缺少声明")
+        return s
+
+class FunctionToken(Token):
+    def __init__(self, value):
+        self.value = value
+        self.kind = TokenKind.FUNCTION
+
+    def check(self):
+        # TODO: 检测最外层作用域标识符是否存在
+        # TODO: 检测是否有声明保留函数 printf
+        s = SymbolSystem.find_symbol(self)
+        if s is None:
+            v = self.value
+            type = TypeSystem.VOID
+            s = FunctionSymbol(type, v, True)
+            SymbolSystem.add(s)
         return s
 
 class DeclaratorToken(Token):
@@ -88,26 +82,20 @@ class DeclaratorToken(Token):
         self.value = value
         self.kind = TokenKind.DECLARATOR
 
-    def check(self, type=None):
+    def check(self, type):
         s = SymbolSystem.find_symbol(self, None, LevelKind.CURRENT)
         if s is not None:
             raise Exception("重复定义")
         s = IdentifierSymbol(type, self.value)
         SymbolSystem.add(s)
         return s
-        # if kind is NodeKind.DECLARATOR_INITIALIZER:
-        #     ...
-        # else:
-        #     # TODO: 这个属性不应该是IdSymbol的属性
-        #     s.is_formal_param = True
-
 
 class StringToken(Token):
     def __init__(self, kind, value=None):
         self.value = value
         self.kind = kind
 
-    def check(self, kind, type):
+    def check(self):
         # TODO: 检测最外层
         s = SymbolSystem.find_symbol(self)
         if s is None:

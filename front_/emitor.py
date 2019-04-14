@@ -87,24 +87,29 @@ class Emit(object):
                 name = f'{offset}(%ebp)'
                 p.set_access_name(name)
                 offset += p.type.size
-            # 为call指令参数分配空间
 
-            for node in func.call_nodes:
-                offset = 0
-                for p in reversed(node.params):
-                    p.offset = offset
-                    name = f'{offset}(%esp)'
-                    p.set_access_name(name)
-                    size = p.parameter.type.size
-                    offset += size
+    def stack_space(self, function):
+        func = function
+        space = 0
+        for local in func.locals:
+            space += local.type.size
+        for tag in func.tags:
+            space += tag.type.size
+        # 计算call最大使用空间
+        m = map(call_space, func.call_nodes)
+        max_call_space = max(m)
+        space += max_call_space
+        func.reverse_space = space
+        return space
 
     def call_space(self, call_node):
-        # 计算调用最多需要预留的栈空间
+        # 计算一个调用最多需要使用的栈空间
         space = 0
         callee = call_node.call_function
+        # TODO: 暂时是int_size
         int_size = TypeSystem.INT.size
         for p in call_node.params:
-            psize = p.parameter.type.size
+            psize = p.type.size
             if callee.is_extern:
                 # printf参数占8位或4位
                 size = max(int_size, psize)
@@ -112,8 +117,6 @@ class Emit(object):
                 size = psize
             space += size
         return space
-        # current = self.function.call_space
-        # self.function.call_space = max(space, current)
 
     def emit_double(self):
         doubles = SymbolSystem.double_constants()
@@ -250,33 +253,22 @@ class FunctionEmit(object):
         self.emit_code(code)
 
     def emit_params(self, ir):
-        space = 0
+        offset = 0
         for p in ir.params:
             dst_type = TypeSystem.max_type(p.type, TypeSystem.INT)
-            space += dst_type.size
-        offset = space
-        for p in ir.params:
-            src = p
-            dst_type = TypeSystem.max_type(src.type, TypeSystem.INT)
-            offset -= dst_type.size
             pos = f'{offset}(%esp)'
-            # pos = p.access_name()
+            offset += dst_type.size
             dst = MemorySystem.new(pos, dst_type)
-            # ir = AssignIR(dst, src)
-            # self.gen_ir(ir)
-            if src.type.match(TypeSystem.DOUBLE) or dst.type.match(TypeSystem.DOUBLE):
-                self.emit_mov(src, dst)
-            else:
-                reg_size = 4
-                eax = RegSystem.reg(RegKind.AX, reg_size)
-                self.emit_mov(src, eax)
-                self.emit_mov(eax, dst)
-            # offse t += dst_type.size
-
+            self.assign_core(dst, p)
 
     def emit_assign(self, ir):
         src = ir.operands[1]
         dst = ir.operands[0]
+        self.assign_core(dst, src)
+
+    def assign_core(self, destination, source):
+        dst = destination
+        src = source
         if src.type.match(TypeSystem.DOUBLE) or dst.type.match(TypeSystem.DOUBLE):
             self.emit_mov(src, dst)
         else:
@@ -284,6 +276,7 @@ class FunctionEmit(object):
             eax = RegSystem.reg(RegKind.AX, reg_size)
             self.emit_mov(src, eax)
             self.emit_mov(eax, dst)
+
 
     def emit_return(self, ir):
         reg_size = 4
@@ -297,10 +290,7 @@ class FunctionEmit(object):
         if SymbolSystem.is_numeric(src):
             self.emit_mov(src, dst)
         else:
-            size = dst.type.size
-            eax = RegSystem.reg(RegKind.AX, size)
-            self.emit_mov(src, eax)
-            self.emit_mov(eax, dst)
+            self.assign_core(dst, src)
 
     def emit_mov(self, source, destination):
         src = source.access_name()

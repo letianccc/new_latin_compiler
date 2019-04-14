@@ -11,7 +11,6 @@ short 有符号  应该计算15位的值  需要检查一下测试用例
 
 强制类型转换  double
 
-assign  initializer 合并
 
 null 的汇编表示
 
@@ -34,7 +33,6 @@ double声明
 
 
 待关注：
-把1赋值给double类型的变量，1是什么类型？ double还是int？
 
 assert 报错 工具
 

@@ -94,6 +94,7 @@ class TokenKind(IntEnum):
     NEWLINE = auto()
     EOF = auto()
     DECLARATOR = auto()
+    FUNCTION = auto()
 
 
 

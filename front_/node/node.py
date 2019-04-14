@@ -1,6 +1,7 @@
 
 
 from front_.myenum import *
+from front_.util import *
 
 
 
@@ -28,6 +29,9 @@ class Node(object):
         return False
 
     def check(self):
+        if getattr(self.function, 'symbol') is None:
+            ...
+        # log(self.function.identifier.value)
         self.function = self.function.symbol
 
     def gen_ir(self, ir):

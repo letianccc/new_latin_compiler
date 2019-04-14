@@ -18,10 +18,10 @@ class CastNode(Node):
         self.expression = expression
         self.type = type
 
-    def check(self, kind, type):
+    def check(self):
         super().check()
-        self.type = self.type.check(type)
-        self.expression = self.expression.check(kind, type)
+        self.type = self.type.check()
+        self.expression = self.expression.check()
         return self
 
     def gen(self):
@@ -41,9 +41,9 @@ class IndirectionNode(Node):
         self.operand = operand
         self.function = function
 
-    def check(self, kind, type):
+    def check(self):
         super().check()
-        self.operand = self.operand.check(kind, type)
+        self.operand = self.operand.check()
         assert self.operand.type.match(TypeSystem.POINTER)
         return self
 
@@ -69,17 +69,13 @@ class AddressOfNode(Node):
         self.kind = NodeKind.ADDRESS_OF
         self.operand = operand
         self.function = function
+        self.type = None
 
-    def check(self, kind, type):
+    def check(self):
         super().check()
-        op = self.operand.check(kind, type)
-        self.operand = op
+        self.operand = self.operand.check()
+        self.type = TypeSystem.pointer(self.operand.type)
         return self
-
-    @property
-    def type(self):
-        t = TypeSystem.new(TypeKind.POINTER, TypeSystem.POINTER.size, self.operand.type)
-        return t
 
     def gen(self):
         operand = self.operand.gen()
@@ -98,34 +94,17 @@ class CallNode(Node):
         self.params = parameters
         self.kind = NodeKind.CALL
 
-    def check(self, kind, type):
+
+    def check(self):
+
         super().check()
-        self.call_function = self.call_function.check(NodeKind.CALL)
+        self.call_function = self.call_function.check()
 
+        params = []
         for p in self.params:
-            p.check()
-
-        # self.allocate_call_space()
-        # 分配实参偏移
-        # self.set_param_offset()
+            params.append(p.check())
+        self.params = params
         return self
-
-    def allocate_call_space(self):
-        # 计算调用最多需要预留的栈空间
-        space = 0
-        callee = self.call_function
-        int_size = TypeSystem.INT.size
-        for p in self.params:
-            psize = p.parameter.type.size
-            if callee.is_extern:
-                # printf参数占8位或4位
-                size = max(int_size, psize)
-            else:
-                size = psize
-            space += size
-        current = self.function.call_space
-        self.function.call_space = max(space, current)
-
 
     def check_callee(self):
         if not self.call_function.is_extern:
@@ -134,25 +113,14 @@ class CallNode(Node):
             # TODO: 检测参数兼容性
 
 
-    def set_param_offset(self):
-        # TODO: 这部分逻辑要移到emit中
-        # FIXME: 这部分逻辑可以删掉 因为在emit allocate已经实现过
-        size = 0
-        offset = 0
-        for p in reversed(self.params):
-            p.offset = offset
-            size = p.parameter.type.size
-            offset += size
-
     def gen(self):
         params = []
         for p in self.params:
             src = p.gen()
             params.append(src)
-
         ir = CallIR(self.call_function, params)
         self.gen_ir(ir)
-        size = self.call_function.type.size
+        size = TypeSystem.INT.size
         dst = RegSystem.reg(RegKind.AX, size)
         return dst
 
@@ -164,10 +132,10 @@ class AssignNode(Node):
         self.function = function
         self.kind = NodeKind.ASSIGN
 
-    def check(self, kind, type):
+    def check(self):
         super().check()
-        self.variable = self.variable.check(self.kind, None)
-        self.value = self.value.check(self.kind, None)
+        self.variable = self.variable.check()
+        self.value = self.value.check()
         d = Defind(NodeKind.ASSIGN, self.variable, self.value)
         self.variable.defind = d
 
@@ -192,10 +160,10 @@ class ExprNode(Node):
         self.kind = kind
         self.function = function
 
-    def check(self, kind, type):
+    def check(self):
         super().check()
-        self.left = self.left.check(kind, type)
-        self.right = self.right.check(kind, type)
+        self.left = self.left.check()
+        self.right = self.right.check()
         return self
 
     def gen(self):
@@ -256,9 +224,9 @@ class ReturnNode(Node):
         self.function = function
         self.kind = NodeKind.RETURN
 
-    def check(self, kind, type):
+    def check(self):
         super().check()
-        self.operand = self.operand.check(kind, type)
+        self.operand = self.operand.check()
 
     def gen(self):
         src = self.operand.gen()

@@ -27,7 +27,7 @@ class FunctionNode(Node):
         for p in self.params:
             p.check()
         for stmt in self.statements:
-            stmt.check(self.kind, self.type)
+            stmt.check()
         SymbolSystem.quit()
 
     def gen(self):
@@ -41,62 +41,22 @@ class FunctionNode(Node):
         ...
 
 class ParameterNode(Node):
-    def __init__(self, function, kind, specifier, parameter):
+    def __init__(self, function, specifier, parameter):
         super(ParameterNode, self).__init__()
-        self.function = function
-        self.kind = kind
-        # 表示实参的变量或常量已经存在，因此有type
-        # 表示形参的变量未声明，因此type为None
+        self.kind = NodeKind.FORMAL_PARAMETER
         self.specifier = specifier
+        self.function = function
         self.parameter = parameter
-        self.index = None
-        self.offset = None
-        self.__access_name = None
 
     def check(self):
         super().check()
-        f = self.function
-        p = self.parameter
-
-        # if p.match(TokenKind.ID):
-        #     s = p.check(self.kind, self.type)
-        #     if self.kind is NodeKind.FORMAL_PARAMETER:
-        #         f.add_param(s)
-        # else:
-        #     s = p.check(self.kind, self.type)
-        if self.kind is not NodeKind.FORMAL_PARAMETER:
-            s = p.check(self.kind, self.specifier)
-        else:
-            s = p.check(self.specifier)
-        if s.match(SymbolKind.ID):
-            if self.kind is NodeKind.FORMAL_PARAMETER:
-                f.add_param(s)
+        s = self.parameter.check(self.specifier)
         self.parameter = s
-
-    @property
-    def type(self):
-        return self.parameter.type
+        self.function.add_param(s)
 
     def gen(self):
-        src = self.parameter
-        src = src.gen()
-        return src
-
-        # TODO: 应该在is_extern为True使用max_type， 否则使用callee对应的形参类型
-        dst_type = TypeSystem.max_type(src.type, TypeSystem.INT)
-        pos = f'{self.offset}(%esp)'
-        dst = MemorySystem.new(pos, dst_type)
-        ir = AssignIR(dst, src)
-        self.gen_ir(ir)
-
-
-    def access_name(self):
-        # return f'{self.offset}(%esp)'
-        return self.__access_name
-
-    def set_access_name(self, access_name):
-        self.__access_name = access_name
-
+        p = self.parameter.gen()
+        return p
 
 class DeclarationNode(Node):
     def __init__(self, function, specifier):
@@ -109,7 +69,7 @@ class DeclarationNode(Node):
     def add(self, declarator):
         self.declarators.append(declarator)
 
-    def check(self, kind, type):
+    def check(self):
         super().check()
         self.specifier = TypeSystem.type(self.specifier.kind)
         type = self.specifier
@@ -134,7 +94,7 @@ class DeclaratorInitializerNode(Node):
         self.declarator = self.declarator.check(identifier_type)
         if self.initializer:
             # TODO: type暂时为None
-            self.initializer = self.initializer.check(None, None)
+            self.initializer = self.initializer.check()
             d = Defind(NodeKind.ASSIGN, self.declarator, self.initializer)
             self.declarator.defind = d
 
@@ -148,13 +108,6 @@ class DeclaratorInitializerNode(Node):
             ir = AssignIR(self.declarator, src)
             self.gen_ir(ir)
 
-# class DeclaratorNode(Node):
-#     def __init__(self, function, kind):
-#         self.kind = NodeKind.DECLARATOR
-#         self.function = function
-#         self.identifier = identifier
-#         self.initializer = initializer
-
 class PointerDeclaratorNode(Node):
     def __init__(self, function, declarator):
         super(PointerDeclaratorNode, self).__init__()
@@ -163,20 +116,14 @@ class PointerDeclaratorNode(Node):
         self.declarator = declarator
 
     def check(self, type):
+        type = TypeSystem.pointer(type)
         if self.declarator is not None:
             d = self.declarator.check(type)
-            d.add_parent_type(TypeKind.POINTER, TypeSystem.POINTER.size)
             self.declarator = d
             return d
         else:
             # TODO: 这部分逻辑最好用另一个类实现
-            type = TypeSystem.new(TypeKind.POINTER, TypeSystem.POINTER.size, type)
             return type
-
-
-    # def gen(self):
-    #     # TODO: 声明的指针变量应该不需要gen
-    #     return self.declarator
 
 class TypeNode(Node):
     def __init__(self, function, specifier, declarator):
@@ -186,13 +133,13 @@ class TypeNode(Node):
         self.declarator = declarator
         self.kind = NodeKind.TYPE
 
-    def check(self, type):
+    def check(self):
         super().check()
         self.specifier = TypeSystem.type(self.specifier.kind)
         type = self.specifier
         # int * 类型  返回Pointer类型
         if self.declarator is not None:
-            type = self.declarator.check(None, type)
+            type = self.declarator.check(type)
         return type
 
     def gen(self):

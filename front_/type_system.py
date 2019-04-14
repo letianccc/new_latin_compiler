@@ -72,7 +72,7 @@ class TypeSystem(object):
         t = cls.type_map.get(kind)
         return t is not None
 
-    # @classmethod
-    # def is_numeric(cls, type):
-    #     r = type in cls.numeric_types
-    #     return r
+    @classmethod
+    def pointer(self, type):
+        t = TypeSystem.new(TypeKind.POINTER, TypeSystem.POINTER.size, type)
+        return t

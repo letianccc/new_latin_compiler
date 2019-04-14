@@ -1,9 +1,10 @@
 #include<stdio.h>
 
-
+short func() {
+    return 1;
+}
 void main() {
-    int a = 70000;
-    short b = 1;
-    int c = (int)b + a;
+    int b = 2;
+    int a = b + func();
     getchar();
 }

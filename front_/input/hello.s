@@ -1,5 +1,13 @@
 	.file	"hello.c"
 	.text
+	.globl	_func
+	.def	_func;	.scl	2;	.type	32;	.endef
+_func:
+	pushl	%ebp
+	movl	%esp, %ebp
+	movl	$1, %eax
+	popl	%ebp
+	ret
 	.def	___main;	.scl	2;	.type	32;	.endef
 	.globl	_main
 	.def	_main;	.scl	2;	.type	32;	.endef
@@ -9,12 +17,12 @@ _main:
 	andl	$-16, %esp
 	subl	$16, %esp
 	call	___main
-	movl	$70000, 12(%esp)
-	movw	$1, 10(%esp)
-	movswl	10(%esp), %edx
+	movl	$2, 12(%esp)
+	call	_func
+	movswl	%ax, %edx
 	movl	12(%esp), %eax
 	addl	%edx, %eax
-	movl	%eax, 4(%esp)
+	movl	%eax, 8(%esp)
 	call	_getchar
 	nop
 	leave

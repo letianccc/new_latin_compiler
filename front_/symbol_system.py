@@ -26,7 +26,7 @@ class SymbolSystem(object):
             s = cls.constants.find_symbol(t, type, level_kind)
         elif t.match(TokenKind.STRING):
             s = cls.strings.find_symbol(t, type, level_kind)
-        elif t.match(TokenKind.ID) or t.match(TokenKind.DECLARATOR):
+        elif t.match(TokenKind.ID) or t.match(TokenKind.DECLARATOR) or t.match(TokenKind.FUNCTION):
             s = cls.identifiers.find_symbol(t, type, level_kind)
         return s
 
@@ -215,19 +215,12 @@ class IdentifierSymbol(Symbol):
         self.is_formal_param = False
         self.__access_name = None
 
-    def add_parent_type(self, kind, size):
-        self.type = TypeSystem.new(kind, size, self.type)
-
     def sub_type(self):
         # TODO: sub_type  考虑放到PointerSymbol里面
         # TODO: 暂时允许返回当前类型  int b = &a; int c = *b; 后面这种情况要报错
         if self.type.sub_type is None:
             return self.type
         return self.type.sub_type
-
-    # def access_name(self):
-    #     reg = '%ebp' if self.is_formal_param else '%esp'
-    #     return f'{self.offset}({reg})'
 
     def access_name(self):
         return self.__access_name
