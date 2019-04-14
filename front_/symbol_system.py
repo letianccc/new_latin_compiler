@@ -26,7 +26,7 @@ class SymbolSystem(object):
             s = cls.constants.find_symbol(t, type, level_kind)
         elif t.match(TokenKind.STRING):
             s = cls.strings.find_symbol(t, type, level_kind)
-        elif t.match(TokenKind.ID):
+        elif t.match(TokenKind.ID) or t.match(TokenKind.DECLARATOR):
             s = cls.identifiers.find_symbol(t, type, level_kind)
         return s
 
@@ -96,6 +96,7 @@ class FunctionSymbol(Symbol):
         self.is_extern = is_extern
         # self.max_actual_param = 0
         self.call_space = 0
+        self.call_nodes = None
         # reverse_space 包括局部变量与调用参数所需要的全部空间
         self.reverse_space = 0
         self.tags = []
@@ -224,9 +225,15 @@ class IdentifierSymbol(Symbol):
             return self.type
         return self.type.sub_type
 
+    # def access_name(self):
+    #     reg = '%ebp' if self.is_formal_param else '%esp'
+    #     return f'{self.offset}({reg})'
+
     def access_name(self):
-        reg = '%ebp' if self.is_formal_param else '%esp'
-        return f'{self.offset}({reg})'
+        return self.__access_name
+
+    def set_access_name(self, access_name):
+        self.__access_name = access_name
 
 class TagSymbol(Symbol):
     """docstring for IdentifierSymbol."""

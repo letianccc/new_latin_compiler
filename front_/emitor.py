@@ -57,7 +57,14 @@ class Emit(object):
                 space += local.type.size
             for tag in func.tags:
                 space += tag.type.size
-            space += func.call_space
+            # 计算call最大使用空间
+            max_space = 0
+            for node in func.call_nodes:
+                s = self.call_space(node)
+                if s > max_space:
+                    max_space = s
+
+            space += max_space
             func.reverse_space = space
             # 为局部变量分配偏移
             sp = space
@@ -65,7 +72,9 @@ class Emit(object):
                 local.index = index
                 size = local.type.size
                 sp -= size
-                local.offset = sp
+                name = f'{sp}(%esp)'
+                local.set_access_name(name)
+                # local.offset = sp
             # 为中间变量分配偏移
             for tag in func.tags:
                 sp -= tag.type.size
@@ -74,8 +83,37 @@ class Emit(object):
             # +5  要跳过 返回地址，ebp,ebx,esi,edi 寻址到第一个传递过来的值
             offset = 5 * 4
             for p in func.params:
-                p.offset = offset
+                # p.offset = offset
+                name = f'{offset}(%ebp)'
+                p.set_access_name(name)
                 offset += p.type.size
+            # 为call指令参数分配空间
+
+            for node in func.call_nodes:
+                offset = 0
+                for p in reversed(node.params):
+                    p.offset = offset
+                    name = f'{offset}(%esp)'
+                    p.set_access_name(name)
+                    size = p.parameter.type.size
+                    offset += size
+
+    def call_space(self, call_node):
+        # 计算调用最多需要预留的栈空间
+        space = 0
+        callee = call_node.call_function
+        int_size = TypeSystem.INT.size
+        for p in call_node.params:
+            psize = p.parameter.type.size
+            if callee.is_extern:
+                # printf参数占8位或4位
+                size = max(int_size, psize)
+            else:
+                size = psize
+            space += size
+        return space
+        # current = self.function.call_space
+        # self.function.call_space = max(space, current)
 
     def emit_double(self):
         doubles = SymbolSystem.double_constants()
@@ -206,9 +244,35 @@ class FunctionEmit(object):
         self.emit_mov(eax, dst)
 
     def emit_call(self, ir):
+        self.emit_params(ir)
         function_tag = f'_{ir.function.value}'
         code = f'    call\t{function_tag}\n'
         self.emit_code(code)
+
+    def emit_params(self, ir):
+        space = 0
+        for p in ir.params:
+            dst_type = TypeSystem.max_type(p.type, TypeSystem.INT)
+            space += dst_type.size
+        offset = space
+        for p in ir.params:
+            src = p
+            dst_type = TypeSystem.max_type(src.type, TypeSystem.INT)
+            offset -= dst_type.size
+            pos = f'{offset}(%esp)'
+            # pos = p.access_name()
+            dst = MemorySystem.new(pos, dst_type)
+            # ir = AssignIR(dst, src)
+            # self.gen_ir(ir)
+            if src.type.match(TypeSystem.DOUBLE) or dst.type.match(TypeSystem.DOUBLE):
+                self.emit_mov(src, dst)
+            else:
+                reg_size = 4
+                eax = RegSystem.reg(RegKind.AX, reg_size)
+                self.emit_mov(src, eax)
+                self.emit_mov(eax, dst)
+            # offse t += dst_type.size
+
 
     def emit_assign(self, ir):
         src = ir.operands[1]

@@ -93,6 +93,7 @@ class TokenKind(IntEnum):
     POUND = auto()
     NEWLINE = auto()
     EOF = auto()
+    DECLARATOR = auto()
 
 
 
@@ -125,6 +126,7 @@ class NodeKind(IntEnum):
     RETURN = auto()
     TYPE = auto()
     CAST = auto()
+
 
 class OperatorKind(IntEnum):
     CALL = auto()

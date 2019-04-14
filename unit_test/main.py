@@ -17,7 +17,7 @@ def _main_():
     test_dir = r'C:\code\new_latin_compiler\unit_test\example'
     paths = filepaths(test_dir)
     check_exefile = True
-    check_sfile = True
+    check_sfile = False
     for cfile, sfile in paths:
         if os.stat(sfile).st_size == 0:
             continue

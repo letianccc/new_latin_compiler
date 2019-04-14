@@ -4,6 +4,7 @@ from front_.myenum import *
 from front_.type_system import TypeSystem
 # from front_.mysymbol import *
 from front_.node.expression_node import *
+from front_.token_ import *
 
 
 class Parser:
@@ -187,6 +188,8 @@ class Parser:
             if parse_type is True:
                 raise Exception
             d = self.parse_identifier()
+            # TODO: kind可能需要改变
+            d = DeclaratorToken(d.value)
         elif parse_type is True:
             return None
         return d

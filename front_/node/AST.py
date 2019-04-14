@@ -51,6 +51,7 @@ class ParameterNode(Node):
         self.parameter = parameter
         self.index = None
         self.offset = None
+        self.__access_name = None
 
     def check(self):
         super().check()
@@ -63,7 +64,10 @@ class ParameterNode(Node):
         #         f.add_param(s)
         # else:
         #     s = p.check(self.kind, self.type)
-        s = p.check(self.kind, self.specifier)
+        if self.kind is not NodeKind.FORMAL_PARAMETER:
+            s = p.check(self.kind, self.specifier)
+        else:
+            s = p.check(self.specifier)
         if s.match(SymbolKind.ID):
             if self.kind is NodeKind.FORMAL_PARAMETER:
                 f.add_param(s)
@@ -76,6 +80,8 @@ class ParameterNode(Node):
     def gen(self):
         src = self.parameter
         src = src.gen()
+        return src
+
         # TODO: 应该在is_extern为True使用max_type， 否则使用callee对应的形参类型
         dst_type = TypeSystem.max_type(src.type, TypeSystem.INT)
         pos = f'{self.offset}(%esp)'
@@ -85,7 +91,12 @@ class ParameterNode(Node):
 
 
     def access_name(self):
-        return f'{self.offset}(%esp)'
+        # return f'{self.offset}(%esp)'
+        return self.__access_name
+
+    def set_access_name(self, access_name):
+        self.__access_name = access_name
+
 
 class DeclarationNode(Node):
     def __init__(self, function, specifier):
@@ -120,7 +131,7 @@ class DeclaratorInitializerNode(Node):
 
     def check(self, identifier_type):
         super().check()
-        self.declarator = self.declarator.check(self.kind, identifier_type)
+        self.declarator = self.declarator.check(identifier_type)
         if self.initializer:
             # TODO: type暂时为None
             self.initializer = self.initializer.check(None, None)
@@ -151,9 +162,9 @@ class PointerDeclaratorNode(Node):
         self.function = function
         self.declarator = declarator
 
-    def check(self, kind, type):
+    def check(self, type):
         if self.declarator is not None:
-            d = self.declarator.check(kind, type)
+            d = self.declarator.check(type)
             d.add_parent_type(TypeKind.POINTER, TypeSystem.POINTER.size)
             self.declarator = d
             return d

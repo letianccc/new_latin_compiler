@@ -105,9 +105,9 @@ class CallNode(Node):
         for p in self.params:
             p.check()
 
-        self.allocate_call_space()
+        # self.allocate_call_space()
         # 分配实参偏移
-        self.set_param_offset()
+        # self.set_param_offset()
         return self
 
     def allocate_call_space(self):
@@ -136,6 +136,7 @@ class CallNode(Node):
 
     def set_param_offset(self):
         # TODO: 这部分逻辑要移到emit中
+        # FIXME: 这部分逻辑可以删掉 因为在emit allocate已经实现过
         size = 0
         offset = 0
         for p in reversed(self.params):
@@ -144,9 +145,12 @@ class CallNode(Node):
             offset += size
 
     def gen(self):
+        params = []
         for p in self.params:
-            p.gen()
-        ir = CallIR(self.call_function, self.params)
+            src = p.gen()
+            params.append(src)
+
+        ir = CallIR(self.call_function, params)
         self.gen_ir(ir)
         size = self.call_function.type.size
         dst = RegSystem.reg(RegKind.AX, size)

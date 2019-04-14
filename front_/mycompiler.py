@@ -34,6 +34,8 @@ def compile(input_path):
     for f in functions:
         for node in f.call_nodes:
             node.check_callee()
+    for f in functions:
+        f.symbol.call_nodes = f.call_nodes
 
 
     for f in functions:

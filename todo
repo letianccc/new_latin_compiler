@@ -2,6 +2,9 @@
 
 当前：
 
+emit_assign 的逻辑可以提取出来  其他emit也会用到
+
+
 check(self, kind, type)  kind type 尽量去掉
 
 Defind  kind  从NodeKind改为OPKIND

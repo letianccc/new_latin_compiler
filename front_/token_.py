@@ -83,6 +83,23 @@ class IdentifierToken(Token):
             raise Exception("缺少声明")
         return s
 
+class DeclaratorToken(Token):
+    def __init__(self, value):
+        self.value = value
+        self.kind = TokenKind.DECLARATOR
+
+    def check(self, type=None):
+        s = SymbolSystem.find_symbol(self, None, LevelKind.CURRENT)
+        if s is not None:
+            raise Exception("重复定义")
+        s = IdentifierSymbol(type, self.value)
+        SymbolSystem.add(s)
+        return s
+        # if kind is NodeKind.DECLARATOR_INITIALIZER:
+        #     ...
+        # else:
+        #     # TODO: 这个属性不应该是IdSymbol的属性
+        #     s.is_formal_param = True
 
 
 class StringToken(Token):
