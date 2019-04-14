@@ -1,10 +1,11 @@
 #include<stdio.h>
 
-short func() {
-    return 1;
-}
 void main() {
-    int b = 2;
-    int a = b + func();
+    short a = 2;
+    short b = 2;
+    if (a > b) {
+        b = 3;
+    }
+    printf("target 4: %d\n", b);
     getchar();
 }

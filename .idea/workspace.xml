@@ -1,7 +1,26 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="b1dbd57b-b472-49a9-8b6a-0d663c99e023" name="Default Changelist" comment="" />
+    <list default="true" id="b1dbd57b-b472-49a9-8b6a-0d663c99e023" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/front_/emitor.py" beforeDir="false" afterPath="$PROJECT_DIR$/front_/emitor.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/front_/input/a.exe" beforeDir="false" afterPath="$PROJECT_DIR$/front_/input/a.exe" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/front_/input/hello.c" beforeDir="false" afterPath="$PROJECT_DIR$/front_/input/hello.c" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/front_/input/hello.s" beforeDir="false" afterPath="$PROJECT_DIR$/front_/input/hello.s" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/front_/input/test.c" beforeDir="false" afterPath="$PROJECT_DIR$/front_/input/test.c" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/front_/input/test.exe" beforeDir="false" afterPath="$PROJECT_DIR$/front_/input/test.exe" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/front_/input/test.s" beforeDir="false" afterPath="$PROJECT_DIR$/front_/input/test.s" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/front_/ir.py" beforeDir="false" afterPath="$PROJECT_DIR$/front_/ir.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/front_/myenum.py" beforeDir="false" afterPath="$PROJECT_DIR$/front_/myenum.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/front_/node/AST.py" beforeDir="false" afterPath="$PROJECT_DIR$/front_/node/AST.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/front_/node/expression_node.py" beforeDir="false" afterPath="$PROJECT_DIR$/front_/node/expression_node.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/front_/parser_.py" beforeDir="false" afterPath="$PROJECT_DIR$/front_/parser_.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/front_/symbol_system.py" beforeDir="false" afterPath="$PROJECT_DIR$/front_/symbol_system.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/todo" beforeDir="false" afterPath="$PROJECT_DIR$/todo" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/unit_test/example/tmp.exe" beforeDir="false" afterPath="$PROJECT_DIR$/unit_test/example/tmp.exe" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/unit_test/example/tmp.s" beforeDir="false" afterPath="$PROJECT_DIR$/unit_test/example/tmp.s" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/unit_test/parser_.py" beforeDir="false" afterPath="$PROJECT_DIR$/unit_test/parser_.py" afterDir="false" />
+    </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -9,39 +28,21 @@
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
   <component name="CoverageDataManager">
-    <SUITE FILE_PATH="coverage/new_latin_compiler$main.coverage" NAME="main Coverage Results" MODIFIED="1555213646959" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/front_" />
+    <SUITE FILE_PATH="coverage/new_latin_compiler$main.coverage" NAME="main Coverage Results" MODIFIED="1555255693407" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/front_" />
     <SUITE FILE_PATH="coverage/new_latin_compiler$main__1_.coverage" NAME="main Coverage Results" MODIFIED="1554908653705" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/front_" />
     <SUITE FILE_PATH="coverage/new_latin_compiler$test.coverage" NAME="test Coverage Results" MODIFIED="1555121547758" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
-    <SUITE FILE_PATH="coverage/new_latin_compiler$main_1_.coverage" NAME="main(1) Coverage Results" MODIFIED="1555228155987" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/unit_test" />
+    <SUITE FILE_PATH="coverage/new_latin_compiler$main_1_.coverage" NAME="main(1) Coverage Results" MODIFIED="1555255816149" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/unit_test" />
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/front_/parser_.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="132">
-              <caret line="6" selection-start-line="6" selection-end-line="6" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/front_/node/expression_node.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="2288">
-              <caret line="104" column="12" selection-start-line="104" selection-start-column="12" selection-end-line="104" selection-end-column="12" />
+            <state relative-caret-position="90">
+              <caret line="233" column="37" selection-start-line="233" selection-start-column="37" selection-end-line="233" selection-end-column="37" />
               <folding>
-                <element signature="e#2#27#0" expanded="true" />
+                <element signature="e#0#31#0" expanded="true" />
               </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/front_/ir.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="748">
-              <caret line="35" column="8" selection-start-line="35" selection-start-column="8" selection-end-line="35" selection-end-column="8" />
             </state>
           </provider>
         </entry>
@@ -49,8 +50,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/front_/node/AST.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1166">
-              <caret line="53" column="24" selection-start-line="53" selection-start-column="24" selection-end-line="53" selection-end-column="24" />
+            <state relative-caret-position="61">
+              <caret line="174" column="36" selection-start-line="174" selection-start-column="36" selection-end-line="174" selection-end-column="36" />
               <folding>
                 <element signature="e#1#26#0" expanded="true" />
               </folding>
@@ -59,18 +60,85 @@
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/front_/ir.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="98">
+              <caret line="45" column="32" selection-start-line="45" selection-start-column="32" selection-end-line="45" selection-end-column="32" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/front_/node/node.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="185">
+              <caret line="37" column="18" selection-start-line="37" selection-start-column="18" selection-end-line="37" selection-end-column="18" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/front_/emitor.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="5280">
-              <caret line="262" selection-start-line="262" selection-end-line="262" />
+            <state relative-caret-position="90">
+              <caret line="336" selection-start-line="336" selection-end-line="336" />
               <folding>
                 <element signature="e#245#365#0" />
                 <element signature="e#745#993#0" />
                 <element signature="e#814#964#0" />
                 <element signature="e#904#964#0" />
-                <element signature="e#1027#1078#0" />
-                <element signature="e#1118#1294#0" />
-                <element signature="e#1236#1294#0" />
+                <element signature="e#1027#1108#0" />
+                <element signature="e#1460#1636#0" />
+                <element signature="e#1578#1636#0" />
+                <element signature="e#1676#2948#0" />
+                <element signature="e#1746#2948#0" />
+                <element signature="e#2040#2133#0" />
+                <element signature="e#2324#2526#0" />
+                <element signature="e#2601#2652#0" />
+                <element signature="e#2665#2676#0" />
+                <element signature="e#2810#2948#0" />
+                <element signature="e#2995#3352#0" />
+                <element signature="e#3399#3814#0" />
+                <element signature="e#3591#3793#0" />
+                <element signature="e#3660#3720#0" />
+                <element signature="e#3851#4150#0" />
+                <element signature="e#3932#4150#0" />
+                <element signature="e#4191#4208#0" />
+                <element signature="e#4319#4456#0" />
+                <element signature="e#4489#4695#0" />
+                <element signature="e#4624#4670#0" />
+                <element signature="e#4729#5628#0" />
+                <element signature="e#5667#5754#0" />
+                <element signature="e#5606#5973#0" />
+                <element signature="e#5167#5555#0" />
+                <element signature="e#5601#5994#0" />
+                <element signature="e#6039#6351#0" />
+                <element signature="e#6391#7590#0" />
+                <element signature="e#6559#7099#0" />
+                <element signature="e#6692#6878#0" />
+                <element signature="e#6926#7047#0" />
+                <element signature="e#7300#7464#0" />
+                <element signature="e#7629#7770#0" />
+                <element signature="e#7811#8075#0" />
+                <element signature="e#7862#8075#0" />
+                <element signature="e#8116#8200#0" />
+                <element signature="e#8258#8580#0" />
+                <element signature="e#8442#8580#0" />
+                <element signature="e#8622#8741#0" />
+                <element signature="e#8780#8954#0" />
+                <element signature="e#9297#10044#0" />
+                <element signature="e#9448#9540#0" />
+                <element signature="e#9823#9973#0" />
+                <element signature="e#10083#10207#0" />
+                <element signature="e#10253#10386#0" />
+                <element signature="e#10260#10357#0" />
+                <element signature="e#10422#10674#0" />
+                <element signature="e#10431#10645#0" />
+                <element signature="e#10709#11046#0" />
+                <element signature="e#10727#10757#0" />
+                <element signature="e#10820#11017#0" />
+                <element signature="e#11087#11104#0" />
+                <element signature="e#11110#11178#0" />
               </folding>
             </state>
           </provider>
@@ -79,8 +147,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/front_/token_.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1914">
-              <caret line="89" column="27" selection-start-line="89" selection-start-column="27" selection-end-line="89" selection-end-column="27" />
+            <state relative-caret-position="49">
+              <caret line="73" selection-start-line="73" selection-end-line="73" />
             </state>
           </provider>
         </entry>
@@ -88,8 +156,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/front_/mycompiler.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1034">
-              <caret line="47" selection-start-line="47" selection-end-line="47" />
+            <state relative-caret-position="34">
+              <caret line="28" selection-start-line="28" selection-end-line="28" />
               <folding>
                 <element signature="e#1#32#0" expanded="true" />
               </folding>
@@ -98,22 +166,10 @@
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/unit_test/util.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1430">
-              <caret line="68" selection-start-line="68" selection-end-line="68" />
-              <folding>
-                <element signature="e#2#11#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/unit_test/main.py">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="133">
-              <caret line="21" column="27" lean-forward="true" selection-start-line="21" selection-start-column="27" selection-end-line="21" selection-end-column="27" />
+              <caret line="21" column="26" selection-start-line="21" selection-start-column="26" selection-end-line="21" selection-end-column="26" />
             </state>
           </provider>
         </entry>
@@ -140,6 +196,7 @@
       <find>DeclaratorInitializerNode</find>
       <find>emit_indirect_assign</find>
       <find>emit_cast</find>
+      <find>IfNode</find>
     </findStrings>
     <replaceStrings>
       <replace>self.declarator</replace>
@@ -152,7 +209,6 @@
     <option name="CHANGED_PATHS">
       <list>
         <option value="$PROJECT_DIR$/front_/type_system.py" />
-        <option value="$PROJECT_DIR$/front_/ir.py" />
         <option value="$PROJECT_DIR$/front_/myexpr.py" />
         <option value="$PROJECT_DIR$/front_/AST.py" />
         <option value="$PROJECT_DIR$/front_/mycompiler.py" />
@@ -161,11 +217,12 @@
         <option value="$PROJECT_DIR$/unit_test/util.py" />
         <option value="$PROJECT_DIR$/front_/node/expression_node.py" />
         <option value="$PROJECT_DIR$/front_/emitor.py" />
-        <option value="$PROJECT_DIR$/front_/parser_.py" />
         <option value="$PROJECT_DIR$/front_/token_.py" />
-        <option value="$PROJECT_DIR$/front_/node/AST.py" />
         <option value="$PROJECT_DIR$/front_/symbol_system.py" />
         <option value="$PROJECT_DIR$/unit_test/main.py" />
+        <option value="$PROJECT_DIR$/front_/parser_.py" />
+        <option value="$PROJECT_DIR$/front_/ir.py" />
+        <option value="$PROJECT_DIR$/front_/node/AST.py" />
       </list>
     </option>
   </component>
@@ -180,7 +237,6 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
-      <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
           <expand>
@@ -202,6 +258,7 @@
           <select />
         </subPane>
       </pane>
+      <pane id="Scope" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -316,6 +373,7 @@
       <workItem from="1554908790386" duration="48718000" />
       <workItem from="1555136561600" duration="17417000" />
       <workItem from="1555227288457" duration="695000" />
+      <workItem from="1555228058242" duration="6811000" />
     </task>
     <task id="LOCAL-00001" summary="增加利用exe文件进行测试的逻辑">
       <created>1555136202150</created>
@@ -349,7 +407,7 @@
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="74328000" />
+    <option name="totallyTimeSpent" value="81139000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -363,22 +421,22 @@
   <component name="ToolWindowManager">
     <frame x="-7" y="-7" width="1295" height="695" extended-state="6" />
     <layout>
-      <window_info content_ui="combo" id="Project" order="0" sideWeight="0.4991119" visible="true" weight="0.16572352" />
+      <window_info content_ui="combo" id="Project" order="0" sideWeight="0.4991119" visible="true" weight="0.16814874" />
       <window_info id="Structure" order="1" sideWeight="0.5008881" side_tool="true" weight="0.16087309" />
       <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" />
-      <window_info active="true" anchor="bottom" id="Run" order="2" visible="true" weight="0.5222025" />
-      <window_info anchor="bottom" id="Debug" order="3" weight="0.7300178" />
+      <window_info active="true" anchor="bottom" id="Run" order="2" visible="true" weight="0.5381883" />
+      <window_info anchor="bottom" id="Debug" order="3" weight="0.6483126" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
       <window_info anchor="bottom" id="TODO" order="6" weight="0.3285968" />
       <window_info anchor="bottom" id="Docker" order="7" show_stripe_button="false" />
-      <window_info active="true" anchor="bottom" id="Version Control" order="8" visible="true" weight="0.49023092" />
+      <window_info anchor="bottom" id="Version Control" order="8" weight="0.4884547" />
       <window_info anchor="bottom" id="Database Changes" order="9" />
       <window_info anchor="bottom" id="Event Log" order="10" side_tool="true" />
       <window_info anchor="bottom" id="Terminal" order="11" weight="0.3285968" />
-      <window_info anchor="bottom" id="Python Console" order="12" />
+      <window_info anchor="bottom" id="Python Console" order="12" weight="0.3285968" />
       <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
       <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
       <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
@@ -440,38 +498,38 @@
       <breakpoints>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/front_/parser_.py</url>
-          <line>372</line>
+          <line>373</line>
           <option name="timeStamp" value="18" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/front_/token_.py</url>
-          <line>73</line>
-          <option name="timeStamp" value="19" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/front_/token_.py</url>
-          <line>61</line>
-          <option name="timeStamp" value="23" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/front_/emitor.py</url>
-          <line>180</line>
+          <line>221</line>
           <option name="timeStamp" value="32" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/front_/emitor.py</url>
-          <line>289</line>
+          <line>330</line>
           <option name="timeStamp" value="40" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/front_/mycompiler.py</url>
-          <line>47</line>
-          <option name="timeStamp" value="41" />
+          <url>file://$PROJECT_DIR$/front_/emitor.py</url>
+          <line>154</line>
+          <option name="timeStamp" value="42" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/front_/emitor.py</url>
-          <line>145</line>
-          <option name="timeStamp" value="42" />
+          <line>203</line>
+          <option name="timeStamp" value="44" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/front_/emitor.py</url>
+          <line>18</line>
+          <option name="timeStamp" value="45" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/front_/node/AST.py</url>
+          <line>172</line>
+          <option name="timeStamp" value="46" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>
@@ -497,13 +555,6 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/front_/myexpr.py" />
     <entry file="file://$PROJECT_DIR$/front_/AST.py" />
-    <entry file="file://$PROJECT_DIR$/front_/node/node.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="286">
-          <caret line="13" lean-forward="true" selection-start-line="13" selection-end-line="13" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/front_/node/statement_node.py">
       <provider selected="true" editor-type-id="text-editor" />
     </entry>
@@ -538,13 +589,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$USER_HOME$/AppData/Local/Programs/Python/Python37/Lib/enum.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="81">
-          <caret line="347" selection-start-line="347" selection-end-line="347" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$USER_HOME$/AppData/Local/Programs/Python/Python37/Lib/subprocess.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="100">
@@ -552,69 +596,12 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/front_/parser_.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="132">
-          <caret line="6" selection-start-line="6" selection-end-line="6" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/front_/node/expression_node.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="2288">
+        <state relative-caret-position="2200">
           <caret line="104" column="12" selection-start-line="104" selection-start-column="12" selection-end-line="104" selection-end-column="12" />
           <folding>
             <element signature="e#2#27#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/front_/ir.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="748">
-          <caret line="35" column="8" selection-start-line="35" selection-start-column="8" selection-end-line="35" selection-end-column="8" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/front_/node/AST.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1166">
-          <caret line="53" column="24" selection-start-line="53" selection-start-column="24" selection-end-line="53" selection-end-column="24" />
-          <folding>
-            <element signature="e#1#26#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/front_/emitor.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="5280">
-          <caret line="262" selection-start-line="262" selection-end-line="262" />
-          <folding>
-            <element signature="e#245#365#0" />
-            <element signature="e#745#993#0" />
-            <element signature="e#814#964#0" />
-            <element signature="e#904#964#0" />
-            <element signature="e#1027#1078#0" />
-            <element signature="e#1118#1294#0" />
-            <element signature="e#1236#1294#0" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/front_/token_.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1914">
-          <caret line="89" column="27" selection-start-line="89" selection-start-column="27" selection-end-line="89" selection-end-column="27" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/front_/mycompiler.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1034">
-          <caret line="47" selection-start-line="47" selection-end-line="47" />
-          <folding>
-            <element signature="e#1#32#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -642,7 +629,130 @@
     <entry file="file://$PROJECT_DIR$/unit_test/main.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="133">
-          <caret line="21" column="27" lean-forward="true" selection-start-line="21" selection-start-column="27" selection-end-line="21" selection-end-column="27" />
+          <caret line="21" column="26" selection-start-line="21" selection-start-column="26" selection-end-line="21" selection-end-column="26" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/front_/parser_.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="90">
+          <caret line="233" column="37" selection-start-line="233" selection-start-column="37" selection-end-line="233" selection-end-column="37" />
+          <folding>
+            <element signature="e#0#31#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/front_/node/node.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="185">
+          <caret line="37" column="18" selection-start-line="37" selection-start-column="18" selection-end-line="37" selection-end-column="18" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/front_/mycompiler.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="34">
+          <caret line="28" selection-start-line="28" selection-end-line="28" />
+          <folding>
+            <element signature="e#1#32#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/front_/token_.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="49">
+          <caret line="73" selection-start-line="73" selection-end-line="73" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$USER_HOME$/AppData/Local/Programs/Python/Python37/Lib/enum.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="543">
+          <caret line="347" selection-start-line="347" selection-end-line="347" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/front_/ir.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="98">
+          <caret line="45" column="32" selection-start-line="45" selection-start-column="32" selection-end-line="45" selection-end-column="32" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/front_/node/AST.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="61">
+          <caret line="174" column="36" selection-start-line="174" selection-start-column="36" selection-end-line="174" selection-end-column="36" />
+          <folding>
+            <element signature="e#1#26#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/front_/emitor.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="90">
+          <caret line="336" selection-start-line="336" selection-end-line="336" />
+          <folding>
+            <element signature="e#245#365#0" />
+            <element signature="e#745#993#0" />
+            <element signature="e#814#964#0" />
+            <element signature="e#904#964#0" />
+            <element signature="e#1027#1108#0" />
+            <element signature="e#1460#1636#0" />
+            <element signature="e#1578#1636#0" />
+            <element signature="e#1676#2948#0" />
+            <element signature="e#1746#2948#0" />
+            <element signature="e#2040#2133#0" />
+            <element signature="e#2324#2526#0" />
+            <element signature="e#2601#2652#0" />
+            <element signature="e#2665#2676#0" />
+            <element signature="e#2810#2948#0" />
+            <element signature="e#2995#3352#0" />
+            <element signature="e#3399#3814#0" />
+            <element signature="e#3591#3793#0" />
+            <element signature="e#3660#3720#0" />
+            <element signature="e#3851#4150#0" />
+            <element signature="e#3932#4150#0" />
+            <element signature="e#4191#4208#0" />
+            <element signature="e#4319#4456#0" />
+            <element signature="e#4489#4695#0" />
+            <element signature="e#4624#4670#0" />
+            <element signature="e#4729#5628#0" />
+            <element signature="e#5667#5754#0" />
+            <element signature="e#5606#5973#0" />
+            <element signature="e#5167#5555#0" />
+            <element signature="e#5601#5994#0" />
+            <element signature="e#6039#6351#0" />
+            <element signature="e#6391#7590#0" />
+            <element signature="e#6559#7099#0" />
+            <element signature="e#6692#6878#0" />
+            <element signature="e#6926#7047#0" />
+            <element signature="e#7300#7464#0" />
+            <element signature="e#7629#7770#0" />
+            <element signature="e#7811#8075#0" />
+            <element signature="e#7862#8075#0" />
+            <element signature="e#8116#8200#0" />
+            <element signature="e#8258#8580#0" />
+            <element signature="e#8442#8580#0" />
+            <element signature="e#8622#8741#0" />
+            <element signature="e#8780#8954#0" />
+            <element signature="e#9297#10044#0" />
+            <element signature="e#9448#9540#0" />
+            <element signature="e#9823#9973#0" />
+            <element signature="e#10083#10207#0" />
+            <element signature="e#10253#10386#0" />
+            <element signature="e#10260#10357#0" />
+            <element signature="e#10422#10674#0" />
+            <element signature="e#10431#10645#0" />
+            <element signature="e#10709#11046#0" />
+            <element signature="e#10727#10757#0" />
+            <element signature="e#10820#11017#0" />
+            <element signature="e#11087#11104#0" />
+            <element signature="e#11110#11178#0" />
+          </folding>
         </state>
       </provider>
     </entry>

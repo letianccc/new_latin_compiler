@@ -1,9 +1,11 @@
 
+已做：
+
 
 当前：
 
-emit_assign 的逻辑可以提取出来  其他emit也会用到
-
+if 模块
+short compare
 
 Defind  kind  从NodeKind改为OPKIND
 

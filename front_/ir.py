@@ -6,17 +6,25 @@ from front_.type_system import *
 
 class Block:
     # id_pool = 0
-    def __init__(self):
+    def __init__(self, kind=BlockKind.GENERAL):
         # self.statements = stmts
         # self.id = Block.id_pool
         # Block.id_pool += 1
         self.irs = []
-        self.kind = None
+        self.kind = kind
         self.symbol = None
         self.index = None
+        self.__access_name = None
 
     def add_ir(self, ir):
         self.irs.append(ir)
+
+    def access_name(self):
+        return self.__access_name
+
+    def set_access_name(self, access_name):
+        self.__access_name = access_name
+
 
 class IR:
     def __init__(self):
@@ -32,13 +40,27 @@ class IR:
                 return True
         return False
 
+class ConditionalJumpIR(IR):
+    def __init__(self, operator, left, right, block):
+        super(ConditionalJumpIR, self).__init__()
+        self.kind = OperatorKind.CONDITIONAL_JUMP
+        self.operator = operator
+        self.left = left
+        self.right = right
+        self.block = block
+
+class JumpIR(IR):
+    def __init__(self, block):
+        super(JumpIR, self).__init__()
+        self.kind = OperatorKind.JUMP
+        self.block = block
+
 class CastIR(IR):
     def __init__(self, destination, source):
         super(CastIR, self).__init__()
         self.kind = OperatorKind.CAST
         self.destination = destination
         self.source = source
-
 
 class ReturnIR(IR):
     def __init__(self, type, operand):

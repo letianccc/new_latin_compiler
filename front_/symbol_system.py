@@ -102,21 +102,13 @@ class FunctionSymbol(Symbol):
         self.tags = []
         self.strings = []
         self.locals = []
-        b = Block()
-        b.kind = BlockKind.FUNCTION
+        b = Block(BlockKind.FUNCTION)
         self.cur_block = b
         self.blocks = [b]
 
     def add_param(self, parameter):
         parameter.index = len(self.params)
         self.params.append(parameter)
-
-    def allocate_block_id(self):
-        index = 0
-        for b in self.blocks:
-            if b.kind is BlockKind.GENERAL:
-                b.index = index
-                index += 1
 
     def gen_ir(self, ir):
         self.cur_block.add_ir(ir)
@@ -125,6 +117,12 @@ class FunctionSymbol(Symbol):
         t = TagSymbol(type)
         self.tags.append(t)
         return t
+
+    def change_block(self, block):
+        self.cur_block = block
+
+    def add_block(self, block):
+        self.blocks.append(block)
 
 class StringSymbol(Symbol):
     index = 0

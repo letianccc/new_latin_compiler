@@ -186,6 +186,16 @@ class ExprNode(Node):
         self.function.gen_ir(ir)
         return dst
 
+    def not_node(self):
+        if self.match(NodeKind.EQUAL):
+            k = NodeKind.UNEQUAL
+        elif self.match(NodeKind.UNEQUAL):
+            k = NodeKind.EQUAL
+        else:
+            raise Exception
+        n = ExprNode(self.function, k, self.left, self.right)
+        return n
+
 class OrNode(Node):
     def __init__(self, left, right):
         self.left = left
@@ -233,7 +243,6 @@ class ReturnNode(Node):
         type = TypeSystem.INT
         ir = ReturnIR(type, src)
         self.gen_ir(ir)
-
 
 class ArrayNode(Node):
     def __init__(self, variable, index):

@@ -127,6 +127,9 @@ class NodeKind(IntEnum):
     RETURN = auto()
     TYPE = auto()
     CAST = auto()
+    EQUAL = auto()
+    UNEQUAL = auto()
+    IF = auto()
 
 
 class OperatorKind(IntEnum):
@@ -141,7 +144,10 @@ class OperatorKind(IntEnum):
     ASSIGN = auto()
     INDIRECTION_ASSIGN = auto()
     CAST = auto()
-
+    CONDITIONAL_JUMP = auto()
+    JUMP = auto()
+    EQUAL = auto()
+    UNEQUAL = auto()
 
 class BlockKind(IntEnum):
     FUNCTION = auto()

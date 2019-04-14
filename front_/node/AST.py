@@ -31,11 +31,12 @@ class FunctionNode(Node):
         SymbolSystem.quit()
 
     def gen(self):
-        if self.statements is None:
-            return
+        # if self.statements is None:
+        #     return
         for stmt in self.statements:
             stmt.gen()
-        self.symbol.allocate_block_id()
+        # TODO: 应该放到emit中
+        # self.symbol.allocate_block_id()
 
     def emit(self):
         ...
@@ -146,12 +147,71 @@ class TypeNode(Node):
         for d in self.declarators:
             d.gen()
 
-
 class IfNode(Node):
-    def __init__(self, cond, then_stmts, else_stmts):
+    def __init__(self, function, cond, then_stmts, else_stmts):
+        self.function = function
         self.cond = cond
-        self.then = then_stmts
-        self.else_ = else_stmts
+        self.then_stmts = then_stmts
+        self.else_stmts = else_stmts
+        self.kind = NodeKind.IF
+
+    def check(self):
+        super().check()
+        self.cond.check()
+        SymbolSystem.enter()
+        for stmt in self.then_stmts:
+            stmt.check()
+        SymbolSystem.quit()
+        SymbolSystem.enter()
+        for stmt in self.else_stmts:
+            stmt.check()
+        SymbolSystem.quit()
+
+    def gen(self):
+        then_block = Block()
+        next_block = Block()
+        cond = self.cond.not_node()
+
+        if len(self.else_stmts) == 0:
+            self.gen_conditional_jump(cond, next_block, then_block)
+            self.gen_block(then_block, self.then_stmts)
+            self.function.add_block(then_block)
+        else:
+            else_block = Block()
+            self.gen_block(else_block, self.else_stmts)
+            self.gen_conditional_jump(cond, else_block, then_block)
+            self.gen_block(then_block, self.then_stmts)
+            self.gen_jump(next_block)
+            self.gen_block(else_block, self.else_stmts)
+            self.function.add_block(then_block)
+            self.function.add_block(else_block)
+        self.function.add_block(next_block)
+        self.function.change_block(next_block)
+
+    def gen_block(self, block, statements):
+        self.function.change_block(block)
+        for stmt in statements:
+            stmt.gen()
+
+    def gen_conditional_jump(self, condition_node, true_block, false_block):
+        if condition_node.match(NodeKind.EQUAL, NodeKind.UNEQUAL):
+            cond = condition_node
+            left = cond.left.gen()
+            right = cond.right.gen()
+            if condition_node.match(NodeKind.EQUAL):
+                k = OperatorKind.EQUAL
+            else:
+                k = OperatorKind.UNEQUAL
+            ir = ConditionalJumpIR(k, left, right, true_block)
+            self.gen_ir(ir)
+        else:
+            raise Exception
+
+    def gen_jump(self, block):
+        ir = JumpIR(block)
+        self.gen_ir(ir)
+
+
 
 class WhileNode(Node):
     def __init__(self, cond, suite):

@@ -8,7 +8,6 @@ from front_.token_ import *
 
 
 class Parser:
-
     def __init__(self, tokens):
         self.tokens = tokens
         self.index = 0
@@ -115,8 +114,10 @@ class Parser:
         return self.parse_statement()
 
     def parse_statement(self):
+        # TODO: 有的直接返回 有的匹配分号  最好重构一下
         if self.match(TokenKind.IF):
-            stmt = self.if_stmt()
+            stmt = self.parse_if()
+            return stmt
         elif self.match(TokenKind.INT, TokenKind.DOUBLE, TokenKind.SHORT):
             stmt = self.parse_declaration()
         elif self.match(TokenKind.WHILE):
@@ -219,18 +220,18 @@ class Parser:
         suite = self.block_()
         return While(cond, suite)
 
-    def if_stmt(self):
-        self.expect('if')
+    def parse_if(self):
+        self.expect(TokenKind.IF)
         self.expect(TokenKind.LPAREN)
         cond = self.bool_()
         self.expect(TokenKind.RPAREN)
         then_stmts = self.block_()
         if self.match(TokenKind.ELSE):
-            self.expect('else')
+            self.expect(TokenKind.ELSE)
             else_stmts = self.block_()
         else:
-            else_stmts = None
-        return If(cond, then_stmts, else_stmts)
+            else_stmts = []
+        return IfNode(self.function, cond, then_stmts, else_stmts)
 
     def is_array(self):
         t = self.tokens[self.index + 1]
@@ -277,10 +278,15 @@ class Parser:
 
     def equal(self):
         expr = self.rel()
-
         while self.match(TokenKind.EQUAL) or self.match(TokenKind.UNEQUAL):
-            operator = self.next_token().value
-            expr = ExprNode(expr, self.rel(), operator)
+            m = {
+                TokenKind.EQUAL: NodeKind.EQUAL,
+                TokenKind.UNEQUAL: NodeKind.UNEQUAL,
+            }
+            t = self.cur_token()
+            k = m[t.kind]
+            self.next_token()
+            expr = ExprNode(self.function, k, expr, self.rel())
         return expr
 
     def rel(self):
@@ -321,12 +327,7 @@ class Parser:
         # TODO: + -a  - +a  + +a - -a
         if self.match(TokenKind.NOT) or self.match(TokenKind.SUB) \
             or self.match(TokenKind.BITAND) or self.match(TokenKind.MUL):
-            # operator = self.next_token().value
             t = self.cur_token()
-            m = {
-                TokenKind.BITAND: NodeKind.ADDRESS_OF,
-                TokenKind.MUL: NodeKind.INDIRECTION,
-            }
             self.next_token()
             Class = self.constructors[t.kind]
             expr = Class(self.function, self.unary())

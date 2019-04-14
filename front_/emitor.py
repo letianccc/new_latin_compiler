@@ -37,8 +37,20 @@ class Emit(object):
         self.emit_code(code)
 
     def allocate(self):
+        self.allocate_block()
         self.allocate_float()
         self.allocate_stack()
+
+    def allocate_block(self):
+        index = 0
+        for f in self.functions:
+            for b in f.blocks:
+                if b.kind is BlockKind.GENERAL:
+                    b.index = index
+                    name = f'L{index}'
+                    b.set_access_name(name)
+                    index += 1
+
 
     def allocate_float(self):
         # TODO: 待重构
@@ -132,7 +144,6 @@ class Emit(object):
     def emit_code(self, code):
         self.code += code
 
-
 class FunctionEmit(object):
     """docstring for FunctionEmit."""
 
@@ -148,6 +159,10 @@ class FunctionEmit(object):
         self.reserve_space()
 
         for b in self.function.blocks:
+            if b.kind is BlockKind.GENERAL:
+                name = b.access_name()
+                code = f'{name}:\n'
+                self.emit_code(code)
             for ir in b.irs:
                 self.emit(ir)
         self.pop_stack()
@@ -169,9 +184,35 @@ class FunctionEmit(object):
             self.emit_indirect_assign(ir)
         elif ir.match(OperatorKind.CAST):
             self.emit_cast(ir)
+        elif ir.match(OperatorKind.CONDITIONAL_JUMP):
+            self.emit_conditional_jump(ir)
+        elif ir.match(OperatorKind.JUMP):
+            self.emit_jump(ir)
 
         else:
             raise Exception
+
+    def emit_jump(self, ir):
+        b = ir.block.access_name()
+        code = f'    jmp {b}\n'
+        self.emit_code(code)
+
+    def emit_conditional_jump(self, ir):
+        code = ''
+        b = ir.block
+        b = b.access_name()
+        if ir.operator is OperatorKind.UNEQUAL:
+            op = 'jne'
+        else:
+            op = 'je'
+        size = 4
+        eax = RegSystem.reg(RegKind.AX, size)
+        self.emit_mov(ir.left, eax)
+        left = ir.right.access_name()
+        right = eax.access_name()
+        code += f'    cmpl\t{left}, {right}\n'
+        code += f'    {op} {b}\n'
+        self.emit_code(code)
 
     def emit_indirect_assign(self, ir):
         src = ir.src

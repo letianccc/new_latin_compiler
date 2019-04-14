@@ -66,8 +66,8 @@ def case9(code):
     node = root
 
     cond = node.cond
-    then = node.then
-    else_ = node.else_
+    then = node.then_block
+    else_ = node.else_block
 
     assert(node.__class__.__name__ == 'If')
     assert(cond.__class__.__name__ == 'Equal')
@@ -133,8 +133,8 @@ def parser_case2(code):
 def parser_case3(code):
     root = setup(code)
     cond = root.cond
-    then = root.then
-    else_ = root.else_
+    then = root.then_block
+    else_ = root.else_block
     assert(root.__class__.__name__ == 'If')
     assert(cond.__class__.__name__ == 'Equal')
     assert(cond.left.value == 'a')
@@ -149,7 +149,7 @@ def parser_case3(code):
 def parser_case4(code):
     root = setup(code)
     cond = root.cond
-    then = root.then
+    then = root.then_block
     assert(root.__class__.__name__ == 'If')
     assert(cond.__class__.__name__ == 'Equal')
     assert(cond.left.value == 'a')
@@ -186,7 +186,7 @@ def parser_case5(code):
     assert(right.right.value == '4')
     assert(right.operator == '==')
 
-    node = if_.then
+    node = if_.then_block
     stmt = node.stmt
     assert(node.__class__.__name__ == 'Seq')
     assert(stmt.__class__.__name__ == 'DeclNode')
@@ -329,8 +329,8 @@ def case8(code):
     node = node.next_stmt
 
     cond = node.cond
-    then = node.then
-    else_ = node.else_
+    then = node.then_block
+    else_ = node.else_block
 
     assert(node.__class__.__name__ == 'If')
     assert(cond.__class__.__name__ == 'Equal')
