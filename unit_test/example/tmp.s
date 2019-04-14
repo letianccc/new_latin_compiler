@@ -16,15 +16,15 @@ _int_to_short:
     movw	%ax, 10(%esp)
     movl	$70000, %eax
     movw	%ax, 8(%esp)
+    movl	$LC0, %eax
+    movl	%eax, 0(%esp)
     movswl	10(%esp), %eax
     movl	%eax, 4(%esp)
+    call	_printf
     movl	$LC0, %eax
     movl	%eax, 0(%esp)
-    call	_printf
     movswl	8(%esp), %eax
     movl	%eax, 4(%esp)
-    movl	$LC0, %eax
-    movl	%eax, 0(%esp)
     call	_printf
     movl	%ebp, %esp
     popl	%edi
@@ -68,20 +68,20 @@ _mix_add:
     movl	%eax, 8(%esp)
     movl	8(%esp), %eax
     movl	%eax, 18(%esp)
-    movswl	26(%esp), %eax
-    movl	%eax, 4(%esp)
     movl	$LC1, %eax
     movl	%eax, 0(%esp)
+    movswl	26(%esp), %eax
+    movl	%eax, 4(%esp)
     call	_printf
+    movl	$LC2, %eax
+    movl	%eax, 0(%esp)
     movl	22(%esp), %eax
     movl	%eax, 4(%esp)
+    call	_printf
     movl	$LC2, %eax
     movl	%eax, 0(%esp)
-    call	_printf
     movl	18(%esp), %eax
     movl	%eax, 4(%esp)
-    movl	$LC2, %eax
-    movl	%eax, 0(%esp)
     call	_printf
     movl	%ebp, %esp
     popl	%edi
