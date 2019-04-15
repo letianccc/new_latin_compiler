@@ -1,11 +1,12 @@
 #include<stdio.h>
 
 void main() {
-    short a = 2;
-    short b = 2;
-    if (a > b) {
+    double a = 1.5;
+    double b = 1.5;
+    if (a == b) {
         b = 3;
     }
-    printf("target 4: %d\n", b);
+    printf("target 3: %d\n", b);
+
     getchar();
 }

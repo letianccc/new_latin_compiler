@@ -32,6 +32,8 @@ def write_code(cfile, sfile):
         f.write(code)
 
 def test_sfile(tmp_path, refer_path):
+    if os.stat(refer_path).st_size == 0:
+        return
     with open(refer_path, 'r') as refer:
         with open(tmp_path, 'r') as tmp:
             refer_lines = refer.read().split('\n')
@@ -59,7 +61,8 @@ def assert_file(test_dir, cpath, refer_spath, check_exefile, check_sfile):
         with open(out_refer, 'r') as refer:
             expect = refer.read()
             assert out == expect
-    if check_sfile:
+    exist = os.path.isfile(refer_spath)
+    if check_sfile and exist:
         test_sfile(tmp_spath, refer_spath)
 
 def execute_sfile(spath, exe_path):

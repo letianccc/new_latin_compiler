@@ -205,14 +205,47 @@ class FunctionEmit(object):
             op = 'jne'
         else:
             op = 'je'
-        size = 4
-        eax = RegSystem.reg(RegKind.AX, size)
-        self.emit_mov(ir.left, eax)
-        left = ir.right.access_name()
-        right = eax.access_name()
-        code += f'    cmpl\t{left}, {right}\n'
-        code += f'    {op} {b}\n'
+        left = ir.left
+        right = ir.right
+
+        if SymbolSystem.is_numeric(left) and SymbolSystem.is_numeric(right):
+            # 数字目前都是int，没有short
+            eax = RegSystem.EAX
+            self.emit_mov(right, eax)
+            self.emit_compare_core('cmpl', op, left, eax, b)
+        elif SymbolSystem.is_numeric(left) or SymbolSystem.is_numeric(right):
+            if SymbolSystem.is_numeric(right):
+                left = ir.right
+                right = ir.left
+            if right.type.match(TypeSystem.INT):
+                self.emit_compare_core('cmpl', op, left, right, b)
+            elif right.type.match(TypeSystem.SHORT):
+                self.emit_compare_core('cmpw', op, left, right, b)
+        else:
+            if left.type.match(TypeSystem.INT) and right.type.match(TypeSystem.INT):
+                eax = RegSystem.EAX
+                self.emit_mov(left, eax)
+                self.emit_compare_core('cmpl', op, eax, right, b)
+            elif left.type.match(TypeSystem.SHORT) and right.type.match(TypeSystem.SHORT):
+                eax = RegSystem.EAX
+                self.emit_mov(left, eax, False)
+                self.emit_compare_core('cmpw', op, RegSystem.AX, right, b)
+            else:
+                if left.type.match(TypeSystem.INT) and right.type.match(TypeSystem.SHORT):
+                    left = ir.right
+                    right = ir.left
+                eax = RegSystem.EAX
+                self.emit_mov(left, eax)
+                self.emit_compare_core('cmpl', op, RegSystem.EAX, right, b)
+
+    def emit_compare_core(self, compare, jump, left, right, block):
+        left_addr = left.access_name()
+        right_addr = right.access_name()
+        code = ''
+        code += f'    {compare}\t{left_addr}, {right_addr}\n'
+        code += f'    {jump} {block}\n'
         self.emit_code(code)
+
 
     def emit_indirect_assign(self, ir):
         src = ir.src
@@ -318,7 +351,6 @@ class FunctionEmit(object):
             self.emit_mov(src, eax)
             self.emit_mov(eax, dst)
 
-
     def emit_return(self, ir):
         reg_size = 4
         src = ir.operand
@@ -333,14 +365,14 @@ class FunctionEmit(object):
         else:
             self.assign_core(dst, src)
 
-    def emit_mov(self, source, destination):
+    def emit_mov(self, source, destination, sign_extend=True):
         src = source.access_name()
         dst = destination.access_name()
         src_type = source.type
         dst_type = destination.type
-        self.emit_mov_value(src, dst, src_type, dst_type)
+        self.emit_mov_value(src, dst, src_type, dst_type, sign_extend)
 
-    def emit_mov_value(self, source_address, destination_address, src_type, dst_type):
+    def emit_mov_value(self, source_address, destination_address, src_type, dst_type, sign_extend=True):
         src = source_address
         dst = destination_address
 
@@ -352,7 +384,10 @@ class FunctionEmit(object):
         elif src_type.size == 4 and dst_type.size == 4:
             code = f'    movl\t{src}, {dst}\n'
         elif src_type.match(TypeSystem.SHORT) and dst_type.size == 4:
-            code = f'    movswl\t{src}, {dst}\n'
+            if sign_extend is True:
+                code = f'    movswl\t{src}, {dst}\n'
+            else:
+                code = f'    movzwl\t{src}, {dst}\n'
         elif dst_type.match(TypeSystem.SHORT):
             if src == '%eax':
                 src = '%ax'
