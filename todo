@@ -4,8 +4,12 @@
 
 当前：
 
+intconst 的double 区域
+
 if 模块
-short compare
+double compare
+
+double int  arith
 
 Defind  kind  从NodeKind改为OPKIND
 

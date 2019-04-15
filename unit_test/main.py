@@ -44,7 +44,7 @@ def test_all():
             path = os.path.relpath(cfile, test_dir)
             log(path)
             traceback.print_exc()
-            # raise Exception
+            raise Exception
 
 
 _main_()

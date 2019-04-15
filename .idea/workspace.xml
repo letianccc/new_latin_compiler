@@ -10,28 +10,14 @@
       <change beforePath="$PROJECT_DIR$/front_/input/test.c" beforeDir="false" afterPath="$PROJECT_DIR$/front_/input/test.c" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/front_/input/test.exe" beforeDir="false" afterPath="$PROJECT_DIR$/front_/input/test.exe" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/front_/input/test.s" beforeDir="false" afterPath="$PROJECT_DIR$/front_/input/test.s" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/front_/test.exe" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/unit_test/example/arith/arith.s" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/unit_test/example/arith/arith_short.s" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/unit_test/example/arith/arith_short_to_int.s" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/unit_test/example/arith/double.s" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/unit_test/example/cast/int.s" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/unit_test/example/decl/decl.s" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/unit_test/example/decl/mul_pointer.s" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/unit_test/example/expr/address.s" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/unit_test/example/if/int.s" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/unit_test/example/pointer/pointer.s" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/unit_test/example/pointer/short.s" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/unit_test/example/printf/test.s" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/unit_test/example/return/return.s" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/todo" beforeDir="false" afterPath="$PROJECT_DIR$/todo" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/unit_test/example/if/int.c" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/unit_test/example/if/int.out" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/unit_test/example/test/current.c" beforeDir="false" afterPath="$PROJECT_DIR$/unit_test/example/test/current.c" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/unit_test/example/test/current.out" beforeDir="false" afterPath="$PROJECT_DIR$/unit_test/example/test/current.out" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/unit_test/example/test/current.s" beforeDir="false" afterPath="$PROJECT_DIR$/unit_test/example/test/current.s" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/unit_test/example/test/test1.s" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/unit_test/example/tmp.exe" beforeDir="false" afterPath="$PROJECT_DIR$/unit_test/example/tmp.exe" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/unit_test/example/tmp.s" beforeDir="false" afterPath="$PROJECT_DIR$/unit_test/example/tmp.s" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/unit_test/example/type/short.s" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/unit_test/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/unit_test/main.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/unit_test/util.py" beforeDir="false" afterPath="$PROJECT_DIR$/unit_test/util.py" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -40,10 +26,10 @@
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
   <component name="CoverageDataManager">
-    <SUITE FILE_PATH="coverage/new_latin_compiler$main.coverage" NAME="main Coverage Results" MODIFIED="1555298488559" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/front_" />
+    <SUITE FILE_PATH="coverage/new_latin_compiler$main.coverage" NAME="main Coverage Results" MODIFIED="1555321664947" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/front_" />
     <SUITE FILE_PATH="coverage/new_latin_compiler$main__1_.coverage" NAME="main Coverage Results" MODIFIED="1554908653705" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/front_" />
     <SUITE FILE_PATH="coverage/new_latin_compiler$test.coverage" NAME="test Coverage Results" MODIFIED="1555121547758" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
-    <SUITE FILE_PATH="coverage/new_latin_compiler$main_1_.coverage" NAME="main(1) Coverage Results" MODIFIED="1555299502437" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/unit_test" />
+    <SUITE FILE_PATH="coverage/new_latin_compiler$main_1_.coverage" NAME="main(1) Coverage Results" MODIFIED="1555321607998" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/unit_test" />
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
@@ -92,8 +78,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/front_/emitor.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-18">
-              <caret line="213" column="25" selection-start-line="213" selection-start-column="25" selection-end-line="213" selection-end-column="25" />
+            <state relative-caret-position="92">
+              <caret line="211" selection-start-line="211" selection-end-line="211" />
               <folding>
                 <element signature="e#245#365#0" />
                 <element signature="e#745#993#0" />
@@ -121,7 +107,7 @@
                 <element signature="e#4624#4670#0" />
                 <element signature="e#4729#5628#0" />
                 <element signature="e#5667#5754#0" />
-                <element signature="e#11305#12163#0" />
+                <element signature="e#12913#13771#0" />
                 <element signature="e#9823#9973#0" />
                 <element signature="e#10083#10207#0" />
                 <element signature="e#10253#10386#0" />
@@ -185,8 +171,8 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/unit_test/main.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="63">
-              <caret line="18" lean-forward="true" selection-start-line="18" selection-end-line="18" />
+            <state relative-caret-position="437">
+              <caret line="47" lean-forward="true" selection-start-line="47" selection-end-line="47" />
             </state>
           </provider>
         </entry>
@@ -284,7 +270,7 @@
       </list>
     </option>
   </component>
-  <component name="RunManager" selected="Python.main(1)">
+  <component name="RunManager" selected="Python.main">
     <configuration name="main" type="PythonConfigurationType" factoryName="Python" temporary="true">
       <module name="new_latin_compiler" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -358,8 +344,8 @@
     </list>
     <recent_temporary>
       <list>
-        <item itemvalue="Python.main(1)" />
         <item itemvalue="Python.main" />
+        <item itemvalue="Python.main(1)" />
         <item itemvalue="Python.test" />
       </list>
     </recent_temporary>
@@ -378,7 +364,7 @@
       <workItem from="1554908790386" duration="48718000" />
       <workItem from="1555136561600" duration="17417000" />
       <workItem from="1555227288457" duration="695000" />
-      <workItem from="1555228058242" duration="13304000" />
+      <workItem from="1555228058242" duration="16312000" />
     </task>
     <task id="LOCAL-00001" summary="增加利用exe文件进行测试的逻辑">
       <created>1555136202150</created>
@@ -412,7 +398,7 @@
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="87632000" />
+    <option name="totallyTimeSpent" value="90640000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -432,7 +418,7 @@
       <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" />
-      <window_info active="true" anchor="bottom" id="Run" order="2" visible="true" weight="0.42095914" />
+      <window_info active="true" anchor="bottom" id="Run" order="2" visible="true" weight="0.4866785" />
       <window_info anchor="bottom" id="Debug" order="3" weight="0.6483126" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
@@ -514,7 +500,7 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/front_/emitor.py</url>
-          <line>315</line>
+          <line>344</line>
           <option name="timeStamp" value="40" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
@@ -680,10 +666,19 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/unit_test/new_gen.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state>
+          <folding>
+            <element signature="e#0#24#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/front_/emitor.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-18">
-          <caret line="213" column="25" selection-start-line="213" selection-start-column="25" selection-end-line="213" selection-end-column="25" />
+        <state relative-caret-position="92">
+          <caret line="211" selection-start-line="211" selection-end-line="211" />
           <folding>
             <element signature="e#245#365#0" />
             <element signature="e#745#993#0" />
@@ -711,7 +706,7 @@
             <element signature="e#4624#4670#0" />
             <element signature="e#4729#5628#0" />
             <element signature="e#5667#5754#0" />
-            <element signature="e#11305#12163#0" />
+            <element signature="e#12913#13771#0" />
             <element signature="e#9823#9973#0" />
             <element signature="e#10083#10207#0" />
             <element signature="e#10253#10386#0" />
@@ -727,19 +722,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/unit_test/new_gen.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state>
-          <folding>
-            <element signature="e#0#24#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/unit_test/main.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="63">
-          <caret line="18" lean-forward="true" selection-start-line="18" selection-end-line="18" />
+        <state relative-caret-position="437">
+          <caret line="47" lean-forward="true" selection-start-line="47" selection-end-line="47" />
         </state>
       </provider>
     </entry>

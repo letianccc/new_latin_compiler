@@ -1,5 +1,3 @@
-
-
 void num_cmp() {
     int a = 1;
     if (2 == 2) {

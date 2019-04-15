@@ -208,44 +208,72 @@ class FunctionEmit(object):
         left = ir.left
         right = ir.right
 
-        if SymbolSystem.is_numeric(left) and SymbolSystem.is_numeric(right):
+        if left.type.match(TypeSystem.DOUBLE) or right.type.match(TypeSystem.DOUBLE):
+            self.emit_float_compare(op, left, right, b)
+        elif SymbolSystem.is_numeric(left) and SymbolSystem.is_numeric(right):
             # 数字目前都是int，没有short
             eax = RegSystem.EAX
             self.emit_mov(right, eax)
-            self.emit_compare_core('cmpl', op, left, eax, b)
+            self.emit_integer_compare('cmpl', op, left, eax, b)
         elif SymbolSystem.is_numeric(left) or SymbolSystem.is_numeric(right):
             if SymbolSystem.is_numeric(right):
                 left = ir.right
                 right = ir.left
             if right.type.match(TypeSystem.INT):
-                self.emit_compare_core('cmpl', op, left, right, b)
+                self.emit_integer_compare('cmpl', op, left, right, b)
             elif right.type.match(TypeSystem.SHORT):
-                self.emit_compare_core('cmpw', op, left, right, b)
+                self.emit_integer_compare('cmpw', op, left, right, b)
         else:
             if left.type.match(TypeSystem.INT) and right.type.match(TypeSystem.INT):
                 eax = RegSystem.EAX
                 self.emit_mov(left, eax)
-                self.emit_compare_core('cmpl', op, eax, right, b)
+                self.emit_integer_compare('cmpl', op, eax, right, b)
             elif left.type.match(TypeSystem.SHORT) and right.type.match(TypeSystem.SHORT):
                 eax = RegSystem.EAX
                 self.emit_mov(left, eax, False)
-                self.emit_compare_core('cmpw', op, RegSystem.AX, right, b)
+                self.emit_integer_compare('cmpw', op, RegSystem.AX, right, b)
             else:
                 if left.type.match(TypeSystem.INT) and right.type.match(TypeSystem.SHORT):
                     left = ir.right
                     right = ir.left
                 eax = RegSystem.EAX
                 self.emit_mov(left, eax)
-                self.emit_compare_core('cmpl', op, RegSystem.EAX, right, b)
+                self.emit_integer_compare('cmpl', op, RegSystem.EAX, right, b)
 
-    def emit_compare_core(self, compare, jump, left, right, block):
+    def float_load(self, operand):
+        # TODO: 需要用这个函数用于其他加载浮点数的代码中
+        if operand.type.match(TypeSystem.DOUBLE):
+            op = 'fldl'
+        else:
+            if SymbolSystem.is_numeric(operand):
+                raise Exception
+            if operand.type.match(TypeSystem.INT):
+                op = 'fildl'
+            elif operand.type.match(TypeSystem.SHORT):
+                op = 'filds'
+
+        addr = operand.access_name()
+        code = f'    {op}\t{addr}\n'
+        self.emit_code(code)
+
+    def emit_float_compare(self, jump, left, right, block):
+        self.float_load(left)
+        self.float_load(right)
+        code = ''
+        code += '    fcompp\n'\
+                '    fstsw\n' \
+                '    sahf\n'
+        code += f'    {jump}\t{block}\n'
+        self.emit_code(code)
+
+    def emit_integer_compare(self, compare, jump, left, right, block):
+        # interget 包括short int
         left_addr = left.access_name()
         right_addr = right.access_name()
         code = ''
         code += f'    {compare}\t{left_addr}, {right_addr}\n'
         code += f'    {jump} {block}\n'
         self.emit_code(code)
-
 
     def emit_indirect_assign(self, ir):
         src = ir.src
