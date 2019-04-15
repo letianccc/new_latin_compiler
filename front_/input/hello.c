@@ -1,16 +1,11 @@
 #include<stdio.h>
 
 void main() {
-    // double a = 1.5;
-    // double b = 1.5;
-    // int c = 1;
-    // if (a == c) {
-    //     b = 3;
-    // }
-    double b;
-    int c = 1;
-    b = c;
-    printf("target value: %f\n", b);
-
+    int a = 1;
+    if (a == 1) {
+        int a = 2;
+        printf("target 2: %d\n", a);
+    }
+    printf("target 1: %d\n", a);
     getchar();
 }

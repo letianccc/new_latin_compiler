@@ -4,10 +4,14 @@
 
 当前：
 
+if 模块
+
+
+待做：
+
 intconst 的double 区域
 
-if 模块
-double compare
+
 
 double int  arith
 
@@ -19,11 +23,6 @@ short 有符号  应该计算15位的值  需要检查一下测试用例
 
 
 null 的汇编表示
-
-
-
-
-待做：
 
 
 

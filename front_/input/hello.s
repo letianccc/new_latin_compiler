@@ -3,7 +3,9 @@
 	.def	___main;	.scl	2;	.type	32;	.endef
 	.section .rdata,"dr"
 LC0:
-	.ascii "target value: %f\12\0"
+	.ascii "target 2: %d\12\0"
+LC1:
+	.ascii "target 1: %d\12\0"
 	.text
 	.globl	_main
 	.def	_main;	.scl	2;	.type	32;	.endef
@@ -14,11 +16,17 @@ _main:
 	subl	$32, %esp
 	call	___main
 	movl	$1, 28(%esp)
-	fildl	28(%esp)
-	fstpl	16(%esp)
-	fldl	16(%esp)
-	fstpl	4(%esp)
+	cmpl	$1, 28(%esp)
+	jne	L2
+	movl	$2, 24(%esp)
+	movl	24(%esp), %eax
+	movl	%eax, 4(%esp)
 	movl	$LC0, (%esp)
+	call	_printf
+L2:
+	movl	28(%esp), %eax
+	movl	%eax, 4(%esp)
+	movl	$LC1, (%esp)
 	call	_printf
 	call	_getchar
 	nop

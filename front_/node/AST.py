@@ -178,7 +178,6 @@ class IfNode(Node):
             self.function.add_block(then_block)
         else:
             else_block = Block()
-            self.gen_block(else_block, self.else_stmts)
             self.gen_conditional_jump(cond, else_block, then_block)
             self.gen_block(then_block, self.then_stmts)
             self.gen_jump(next_block)
