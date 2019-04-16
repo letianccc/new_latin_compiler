@@ -408,7 +408,15 @@ class FunctionEmit(object):
 
         if src_type.match(TypeSystem.DOUBLE) or dst_type.match(TypeSystem.DOUBLE):
             code = ''
-            code += f'    fldl\t{src}\n'
+            if dst_type.match(TypeSystem.DOUBLE):
+                if src_type.match(TypeSystem.DOUBLE):
+                    code += f'    fldl\t{src}\n'
+                elif src_type.match(TypeSystem.INT):
+                    code += f'    fildl\t{src}\n'
+                elif src_type.match(TypeSystem.SHORT):
+                    code += f'    filds\t{src}\n'
+            else:
+                raise Exception
             code += f'    fstpl\t{dst}\n'
 
         elif src_type.size == 4 and dst_type.size == 4:
