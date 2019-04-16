@@ -171,7 +171,58 @@ _double_cmp:
     pushl	%edi
     movl	%esp, %ebp
     andl	$-16, %esp
-    subl	$28, %esp
+    subl	$52, %esp
+    fldl	FLOAT0
+    fstpl	44(%esp)
+    fldl	44(%esp)
+    fldl	FLOAT0
+    fcompp
+    fstsw
+    sahf
+    jne	L19
+L18:
+    fldl	FLOAT1
+    fstpl	44(%esp)
+L19:
+    movl	$LC1, %eax
+    movl	%eax, 0(%esp)
+    fldl	44(%esp)
+    fstpl	4(%esp)
+    call	_printf
+    fldl	FLOAT0
+    fstpl	36(%esp)
+    fldl	FLOAT0
+    fldl	36(%esp)
+    fcompp
+    fstsw
+    sahf
+    jne	L21
+L20:
+    fldl	FLOAT1
+    fstpl	36(%esp)
+L21:
+    movl	$LC1, %eax
+    movl	%eax, 0(%esp)
+    fldl	36(%esp)
+    fstpl	4(%esp)
+    call	_printf
+    fldl	FLOAT0
+    fstpl	28(%esp)
+    fldl	28(%esp)
+    fldl	28(%esp)
+    fcompp
+    fstsw
+    sahf
+    jne	L23
+L22:
+    fldl	FLOAT1
+    fstpl	28(%esp)
+L23:
+    movl	$LC1, %eax
+    movl	%eax, 0(%esp)
+    fldl	28(%esp)
+    fstpl	4(%esp)
+    call	_printf
     fldl	FLOAT0
     fstpl	20(%esp)
     fldl	FLOAT0
@@ -181,14 +232,14 @@ _double_cmp:
     fcompp
     fstsw
     sahf
-    jne	L19
-L18:
+    jne	L25
+L24:
     fldl	FLOAT1
-    fstpl	12(%esp)
-L19:
+    fstpl	20(%esp)
+L25:
     movl	$LC1, %eax
     movl	%eax, 0(%esp)
-    fldl	12(%esp)
+    fldl	20(%esp)
     fstpl	4(%esp)
     call	_printf
     movl	%ebp, %esp

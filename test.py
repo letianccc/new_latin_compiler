@@ -1,11 +1,12 @@
-import os
-import subprocess
+import struct
+def decimal_from_double(double_number):
+    # double字符串转换为十进制表示
+    n = float(double_number)
+    bs = struct.pack('d', n)
+    decimal1 = struct.unpack('i', bs[:4])[0]
+    decimal2 = struct.unpack('i', bs[4:])[0]
+    return (decimal1, decimal2)
 
-path = r'C:\code\new_latin_compiler\front_\input'
-os.chdir(path)
-p = subprocess.run('a.exe', input=b'a', capture_output=True)
-out = p.stdout
-out = out.decode()
-print(out)
-
-
+n = 1.5
+n1 = decimal_from_double(n)
+print(n1)

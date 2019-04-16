@@ -2,8 +2,6 @@
 	.text
 	.def	___main;	.scl	2;	.type	32;	.endef
 	.section .rdata,"dr"
-LC0:
-	.ascii "target 2: %d\12\0"
 LC1:
 	.ascii "target 1: %d\12\0"
 	.text
@@ -13,18 +11,19 @@ _main:
 	pushl	%ebp
 	movl	%esp, %ebp
 	andl	$-16, %esp
-	subl	$32, %esp
+	subl	$48, %esp
 	call	___main
-	movl	$1, 28(%esp)
-	cmpl	$1, 28(%esp)
-	jne	L2
-	movl	$2, 24(%esp)
-	movl	24(%esp), %eax
-	movl	%eax, 4(%esp)
-	movl	$LC0, (%esp)
-	call	_printf
-L2:
-	movl	28(%esp), %eax
+	fld1
+	fstpl	40(%esp)
+	fldl	40(%esp)
+	fnstcw	30(%esp)
+	movzwl	30(%esp), %eax
+	orb	$12, %ah
+	movw	%ax, 28(%esp)
+	fldcw	28(%esp)
+	fistpl	36(%esp)
+	fldcw	30(%esp)
+	movl	36(%esp), %eax
 	movl	%eax, 4(%esp)
 	movl	$LC1, (%esp)
 	call	_printf

@@ -1,3 +1,4 @@
+
 void num_cmp() {
     int a = 1;
     if (2 == 2) {
@@ -63,12 +64,30 @@ void var_cmp() {
 }
 
 void double_cmp() {
-    double a = 1.5;
-    double b = 1.5;
-    if (a == b) {
-        b = 3.5;
+    double a1 = 1.5;
+    if (a1 == 1.5) {
+        a1 = 3.5;
     }
-    printf("target 3.5: %f\n", b);
+    printf("target 3.5: %f\n", a1);
+
+    double a2 = 1.5;
+    if (1.5 == a2) {
+        a2 = 3.5;
+    }
+    printf("target 3.5: %f\n", a2);
+
+    double a3 = 1.5;
+    if (a3 == a3) {
+        a3 = 3.5;
+    }
+    printf("target 3.5: %f\n", a3);
+
+    double a4 = 1.5;
+    double a5 = 1.5;
+    if (a4 == a5) {
+        a4 = 3.5;
+    }
+    printf("target 3.5: %f\n", a4);
 }
 
 void main() {

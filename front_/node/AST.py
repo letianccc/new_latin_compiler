@@ -104,10 +104,7 @@ class DeclaratorInitializerNode(Node):
     def gen(self):
         # TODO: initializer 应该递归gen
         if self.initializer:
-            # d = self.declarator.gen()
-            src = self.initializer.gen()
-            ir = AssignIR(self.declarator, src)
-            self.gen_ir(ir)
+            self.gen_assign(self.declarator, self.initializer)
 
 class PointerDeclaratorNode(Node):
     def __init__(self, function, declarator):

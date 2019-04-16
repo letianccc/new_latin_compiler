@@ -1,11 +1,10 @@
 
 
 void main() {
-    int a = 1;
-    if (a == 1) {
-        int a = 2;
-        printf("target 2: %d\n", a);
-    }
-    printf("target 1: %d\n", a);
+    double a;
+    a = 1;
+    printf("target 1: %f\n", a);
+    double c = 1;
+    printf("target 1: %f\n", c);
     getchar();
 }

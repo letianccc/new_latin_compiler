@@ -266,14 +266,14 @@ class Parser:
         expr = self.join()
         while self.match(TokenKind.OR):
             self.expect('||')
-            expr = ExprNode(expr, self.join(), '||')
+            expr = BinaryNode(expr, self.join(), '||')
         return expr
 
     def join(self):
         expr = self.equal()
         while self.match(TokenKind.AND):
             self.expect('&&')
-            expr = ExprNode(expr, self.equal(), '&&')
+            expr = BinaryNode(expr, self.equal(), '&&')
         return expr
 
     def equal(self):
@@ -286,14 +286,14 @@ class Parser:
             t = self.cur_token()
             k = m[t.kind]
             self.next_token()
-            expr = ExprNode(self.function, k, expr, self.rel())
+            expr = BinaryNode(self.function, k, expr, self.rel())
         return expr
 
     def rel(self):
         expr = self.expr_()
         while self.match(TokenKind.LESS) or self.match(TokenKind.LESS_EQ) or self.match(TokenKind.GREAT) or self.match(TokenKind.GREAT_EQ):
             operator = self.next_token().value
-            expr = ExprNode(expr, self.expr_(), operator)
+            expr = BinaryNode(expr, self.expr_(), operator)
         return expr
 
     def expr_(self):
@@ -306,7 +306,7 @@ class Parser:
             t = self.cur_token()
             k = m[t.kind]
             self.next_token()
-            expr = ExprNode(self.function, k, expr, self.term())
+            expr = BinaryNode(self.function, k, expr, self.term())
         return expr
 
     def term(self):
@@ -319,7 +319,7 @@ class Parser:
             t = self.cur_token()
             k = m[t.kind]
             self.next_token()
-            expr = ExprNode(self.function, k, expr, self.term())
+            expr = BinaryNode(self.function, k, expr, self.term())
 
         return expr
 

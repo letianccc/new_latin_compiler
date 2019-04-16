@@ -7,7 +7,9 @@ from front_.ir import *
 from front_.reg_system import *
 
 
-
+class ExpressionNode(Node):
+    def change_type(self):
+        return self
 
 
 class CastNode(Node):
@@ -32,7 +34,6 @@ class CastNode(Node):
         ir = CastIR(dst, src)
         self.function.gen_ir(ir)
         return dst
-
 
 class IndirectionNode(Node):
     def __init__(self, function, operand):
@@ -147,14 +148,11 @@ class AssignNode(Node):
             ir = IndirectionAssignIR(dst, src)
             self.gen_ir(ir)
         else:
-            dst = self.variable.gen()
-            src = self.value.gen()
-            ir = AssignIR(dst, src)
-            self.gen_ir(ir)
+            self.gen_assign(self.variable, self.value)
 
-class ExprNode(Node):
+class BinaryNode(ExpressionNode):
     def __init__(self, function, kind, left, right):
-        super(ExprNode, self).__init__()
+        super(BinaryNode, self).__init__()
         self.left = left
         self.right = right
         self.kind = kind
@@ -169,6 +167,8 @@ class ExprNode(Node):
     def gen(self):
         left = self.left.gen()
         right = self.right.gen()
+        # if src.kind is SymbolKind.INTCONST and dst.type.match(TypeSystem.DOUBLE):
+        #     src = src.upgrade(dst.type)
         type = TypeSystem.max_type(left.type, right.type)
         # TODO: 可能需要add symbol
         dst = self.function.new_tag(type)
@@ -193,36 +193,29 @@ class ExprNode(Node):
             k = NodeKind.EQUAL
         else:
             raise Exception
-        n = ExprNode(self.function, k, self.left, self.right)
+        n = BinaryNode(self.function, k, self.left, self.right)
         return n
 
-class OrNode(Node):
+class OrNode(ExpressionNode):
     def __init__(self, left, right):
         self.left = left
         self.right = right
         self.operator = '||'
 
-class AndNode(Node):
+class AndNode(ExpressionNode):
     def __init__(self, left, right):
         self.left = left
         self.right = right
         self.operator = '&&'
 
-class EqualNode(Node):
+class EqualNode(ExpressionNode):
     def __init__(self, left, right, operator):
         self.left = left
         self.right = right
         self.operator = operator
 
-class RelNode(Node):
+class RelNode(ExpressionNode):
     def __init__(self, left, right, operator):
-        self.left = left
-        self.right = right
-        self.operator = operator
-
-class ArithNode(Node):
-    def __init__(self, left, right, operator):
-        super(ArithNode, self).__init__()
         self.left = left
         self.right = right
         self.operator = operator

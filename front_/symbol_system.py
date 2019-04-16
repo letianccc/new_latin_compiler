@@ -31,6 +31,14 @@ class SymbolSystem(object):
         return s
 
     @classmethod
+    def find_double(cls, value):
+        symbols = cls.constants.symbols
+        for s in symbols:
+            if s.type.match(TypeSystem.DOUBLE) and s.value == value:
+                return s
+        return None
+
+    @classmethod
     def double_constants(cls):
         return cls.constants.double_constants()
 
@@ -179,6 +187,17 @@ class IntSymbol(Symbol):
 
     def access_name(self):
         return self.__access_name
+
+    def upgrade(self, type):
+        if type.match(TypeSystem.DOUBLE):
+            s = SymbolSystem.find_double(self.value)
+            if s is None:
+                s = ConstantSymbol(SymbolKind.DOUBLECONST, TypeSystem.DOUBLE, self.value)
+                SymbolSystem.add(s)
+            return s
+        else:
+            raise Exception
+
 
 class DoubleSymbol(Symbol):
     """docstring for ConstantSymbol."""

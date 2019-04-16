@@ -276,16 +276,17 @@ class FunctionEmit(object):
         self.emit_code(code)
 
     def emit_indirect_assign(self, ir):
+        # *p = 1
         src = ir.src
         dst = ir.dst
         # dst的类型总是POINTER
         assert dst.type.match(TypeSystem.POINTER)
-        eax = RegSystem.reg(RegKind.AX, dst.type.size)
         dx = RegSystem.reg(RegKind.DX, src.type.size)
-        self.emit_mov(dst, eax)
+        self.emit_mov(dst, RegSystem.EAX)
         self.emit_mov(src, dx)
-        dx_addr = dx.access_name()
-        self.emit_mov_value(dx_addr, '(%eax)', dx.type, dst.sub_type())
+        pos = '(%eax)'
+        dst = MemorySystem.new(pos, dst.sub_type())
+        self.emit_mov(dx, dst)
 
     def emit_indirection(self, ir):
         # TODO: src的类型未知  可能是short
@@ -394,6 +395,7 @@ class FunctionEmit(object):
             self.assign_core(dst, src)
 
     def emit_mov(self, source, destination, sign_extend=True):
+
         src = source.access_name()
         dst = destination.access_name()
         src_type = source.type

@@ -9,20 +9,24 @@ _main:
     pushl	%edi
     movl	%esp, %ebp
     andl	$-16, %esp
-    subl	$28, %esp
-    fldl	FLOAT0
-    fstpl	20(%esp)
+    subl	$16, %esp
+    movl	$1, %eax
+    movl	%eax, 12(%esp)
+    cmpl	$1, 12(%esp)
+    jne L1
+L0:
+    movl	$2, %eax
+    movl	%eax, 8(%esp)
     movl	$LC0, %eax
     movl	%eax, 0(%esp)
-    fldl	20(%esp)
-    fstpl	4(%esp)
+    movl	8(%esp), %eax
+    movl	%eax, 4(%esp)
     call	_printf
-    fldl	FLOAT0
-    fstpl	12(%esp)
-    movl	$LC0, %eax
+L1:
+    movl	$LC1, %eax
     movl	%eax, 0(%esp)
-    fldl	12(%esp)
-    fstpl	4(%esp)
+    movl	12(%esp), %eax
+    movl	%eax, 4(%esp)
     call	_printf
     call	_getchar
     movl	%ebp, %esp
@@ -32,7 +36,6 @@ _main:
     popl	%ebp
     ret
 LC0:
-    .string	"target 1: %f\n"
-FLOAT0:
-    .long	0
-    .long	1072693248
+    .string	"target 2: %d\n"
+LC1:
+    .string	"target 1: %d\n"
