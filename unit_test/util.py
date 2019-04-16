@@ -36,16 +36,19 @@ def test_sfile(tmp_path, refer_path):
         return
     with open(refer_path, 'r') as refer:
         with open(tmp_path, 'r') as tmp:
-            refer_lines = refer.read().split('\n')
-            lines = tmp.read().split('\n')
-            for index, refer_line in enumerate(refer_lines):
-                line = lines[index]
-                if refer_line != line:
-                    # path = os.path.relpath(path, test_dir)
-                    # log(path)
-                    log(f'{index}: expect({refer_line})')
-                    log(f'{index}: code  ({line})')
-                    raise Exception
+            assert_lines(tmp.read(), refer.read())
+
+def assert_lines(mybuffer, refer_buffer):
+    refer_lines = refer_buffer.split('\n')
+    lines = mybuffer.split('\n')
+    for index, refer_line in enumerate(refer_lines):
+        line = lines[index]
+        if refer_line != line:
+            # path = os.path.relpath(path, test_dir)
+            # log(path)
+            log(f'{index}: expect({refer_line})')
+            log(f'{index}: code  ({line})')
+            raise Exception
 
 def assert_file(test_dir, cpath, refer_spath, check_exefile, check_sfile):
     # log(cpath)
@@ -60,7 +63,8 @@ def assert_file(test_dir, cpath, refer_spath, check_exefile, check_sfile):
         out = out.replace('\r', '')
         with open(out_refer, 'r') as refer:
             expect = refer.read()
-            assert out == expect
+            assert_lines(out, expect)
+
     exist = os.path.isfile(refer_spath)
     if check_sfile and exist:
         test_sfile(tmp_spath, refer_spath)

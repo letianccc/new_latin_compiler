@@ -3,21 +3,12 @@
 #include<stdio.h>
 
 
-
 void main() {
-    // double c = 1;
-    // short d = c;
-    // printf("target 1: %d\n", d);
-    // double a1 = 1.5;
-    // short a3 = a1;
-    // printf("target 1: %d\n", a3);
-
-
-    double a1 = 1;
-    double a2 = 2;
-    double a4 = 3;
+    double a1 = 3.3;
+    double a2 = 1.1;
     int b = 1;
-    double a3 = a1 + b;
-    printf("target 1: %f\n", a3);
+    double d = a1 - 1;
+
+    printf("target -1.1: %f\n", d);
     getchar();
 }

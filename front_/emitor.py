@@ -313,31 +313,14 @@ class FunctionEmit(object):
         self.emit_code(code)
 
     def emit_arith(self, ir):
-        dst = ir.destination
-        left = ir.left
-        right = ir.right
+        if ir.left.type.match(TypeSystem.DOUBLE) or ir.right.type.match(TypeSystem.DOUBLE):
+            self.emit_double_arith(ir)
+        else:
+            self.emit_integer_arith(ir)
 
-        if left.type.match(TypeSystem.DOUBLE) or right.type.match(TypeSystem.DOUBLE):
-            left_addr = left.access_name()
-            right_addr = right.access_name()
-            dst_addr = dst.access_name()
-            m = {
-                OperatorKind.ADD: 'faddl',
-                OperatorKind.SUB: 'fsubl',
-                OperatorKind.MUL: 'fmull',
-                OperatorKind.DIV: 'divl',
-            }
-            op = m[ir.kind]
-            code = f'    fldl\t{left_addr}\n'\
-                   f'    {op}\t{right_addr}\n'\
-                   f'    fstpl\t{dst_addr}\n'
-            self.emit_code(code)
-            return
-        reg_size = 4
-        eax = RegSystem.reg(RegKind.AX, reg_size)
-        edx = RegSystem.reg(RegKind.DX, reg_size)
-        self.emit_mov(left, eax)
-        self.emit_mov(right, edx)
+    def emit_integer_arith(self, ir):
+        self.emit_mov(ir.left, RegSystem.EAX)
+        self.emit_mov(ir.right, RegSystem.EDX)
         m = {
             OperatorKind.ADD: 'addl',
             OperatorKind.SUB: 'subl',
@@ -347,7 +330,23 @@ class FunctionEmit(object):
         op = m[ir.kind]
         code = f'    {op}\t%edx, %eax\n'
         self.emit_code(code)
-        self.emit_mov(eax, dst)
+        self.emit_mov(RegSystem.EAX, ir.destination)
+
+    def emit_double_arith(self, ir):
+        self.load_float(ir.right)
+        self.load_float(ir.left)
+        m = {
+            OperatorKind.ADD: 'faddp',
+            OperatorKind.SUB: 'fsubp',
+            OperatorKind.MUL: 'fmulp',
+            OperatorKind.DIV: 'divl',
+        }
+        op = m[ir.kind]
+        dst_addr = ir.destination.access_name()
+        code = f'    {op}\t%st, %st(1)\n'\
+               f'    fstpl\t{dst_addr}\n'
+        self.emit_code(code)
+
 
     def emit_call(self, ir):
         self.emit_params(ir)
@@ -375,16 +374,13 @@ class FunctionEmit(object):
         if src.type.match(TypeSystem.DOUBLE) or dst.type.match(TypeSystem.DOUBLE):
             self.emit_mov(src, dst)
         else:
-            reg_size = 4
-            eax = RegSystem.reg(RegKind.AX, reg_size)
+            eax = RegSystem.EAX
             self.emit_mov(src, eax)
             self.emit_mov(eax, dst)
 
     def emit_return(self, ir):
-        reg_size = 4
         src = ir.operand
-        eax = RegSystem.reg(RegKind.AX, reg_size)
-        self.emit_mov(src, eax)
+        self.emit_mov(src, RegSystem.EAX)
 
     def emit_cast(self, ir):
         dst = ir.destination
