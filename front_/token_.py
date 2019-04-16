@@ -27,7 +27,7 @@ class IntConstant(ConstantToken):
     def check(self):
         k = SymbolKind.INTCONST
         type = TypeSystem.type(TokenKind.INT)
-        s = SymbolSystem.find_symbol(self)
+        s = SymbolSystem.find_symbol(k, self.value, TypeSystem.INT)
         if s is None:
             s = IntSymbol(self.value)
             SymbolSystem.add(s)
@@ -44,7 +44,7 @@ class DoubleConstant(ConstantToken):
         # type = TypeSystem.type(self.type)
         k = SymbolKind.DOUBLECONST
         type = TypeSystem.type(TokenKind.DOUBLE)
-        s = SymbolSystem.find_symbol(self)
+        s = SymbolSystem.find_symbol(k, self.value, TypeSystem.DOUBLE)
         if s is None:
             s = DoubleSymbol(self.value)
             SymbolSystem.add(s)
@@ -56,7 +56,7 @@ class IdentifierToken(Token):
         self.kind = kind
 
     def check(self):
-        s = SymbolSystem.find_symbol(self)
+        s = SymbolSystem.find_symbol(SymbolKind.ID, self.value)
         if s is None:
             raise Exception("缺少声明")
         return s
@@ -69,7 +69,7 @@ class FunctionToken(Token):
     def check(self):
         # TODO: 检测最外层作用域标识符是否存在
         # TODO: 检测是否有声明保留函数 printf
-        s = SymbolSystem.find_symbol(self)
+        s = SymbolSystem.find_symbol(SymbolKind.FUNCTION, self.value)
         if s is None:
             v = self.value
             type = TypeSystem.VOID
@@ -83,7 +83,7 @@ class DeclaratorToken(Token):
         self.kind = TokenKind.DECLARATOR
 
     def check(self, type):
-        s = SymbolSystem.find_symbol(self, None, LevelKind.CURRENT)
+        s = SymbolSystem.find_symbol(SymbolKind.ID, self.value, None, LevelKind.CURRENT)
         if s is not None:
             raise Exception("重复定义")
         s = IdentifierSymbol(type, self.value)
@@ -97,7 +97,7 @@ class StringToken(Token):
 
     def check(self):
         # TODO: 检测最外层
-        s = SymbolSystem.find_symbol(self)
+        s = SymbolSystem.find_symbol(SymbolKind.STRING, self.value)
         if s is None:
             type = TypeSystem.type(TokenKind.STRING)
             s = StringSymbol(self.value, type)

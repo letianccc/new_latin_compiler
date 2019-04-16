@@ -4,11 +4,19 @@
 
 当前：
 
+find_symbol 重构
+
+type 比较 统一用kind作为参数
+
+symbol_system 感觉还能继续重构
+
 类型转换  显式隐式  double short int 赋值 条件比较
+
+0 double
 
 if 模块
 
-
+5
 待做：
 
 intconst 的double 区域

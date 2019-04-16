@@ -42,10 +42,7 @@ class Node(object):
     def gen_assign(self, destination, source):
         src = source.gen()
         dst = destination.gen()
-        # TODO: 暂时只考虑int const 转 double
-        if src.kind is SymbolKind.INTCONST and dst.type.match(TypeSystem.DOUBLE):
+        if src.kind is SymbolKind.INTCONST or src.kind is SymbolKind.DOUBLECONST:
             src = src.translate_type(dst.type)
-        elif src.kind is SymbolKind.DOUBLECONST and dst.type.match(TypeSystem.INT):
-            src = src.translate_type(TypeSystem.INT)
         ir = AssignIR(dst, src)
         self.gen_ir(ir)

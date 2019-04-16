@@ -55,7 +55,7 @@ def compile(input_path):
 def check_function(function):
     f = function
     ident = f.identifier
-    s = SymbolSystem.find_symbol(ident)
+    s = SymbolSystem.find_symbol(SymbolKind.FUNCTION, ident.value)
     if s is not None:
         raise Exception("重复定义")
 

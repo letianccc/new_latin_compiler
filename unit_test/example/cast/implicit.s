@@ -86,27 +86,15 @@ _double_to_integer:
     movl	32(%esp), %eax
     movl	%eax, 4(%esp)
     call	_printf
-    fldl	FLOAT0
-    fnstcw	-4(%esp)
-    movzwl	-4(%esp), %eax
-    orb	$12, %ah
-    movw	%ax, -6(%esp)
-    fldcw	-6(%esp)
-    fistps	30(%esp)
-    fldcw	-4(%esp)
+    movl	$1, %eax
+    movw	%ax, 30(%esp)
     movl	$LC1, %eax
     movl	%eax, 0(%esp)
     movswl	30(%esp), %eax
     movl	%eax, 4(%esp)
     call	_printf
-    fldl	FLOAT0
-    fnstcw	-4(%esp)
-    movzwl	-4(%esp), %eax
-    orb	$12, %ah
-    movw	%ax, -6(%esp)
-    fldcw	-6(%esp)
-    fistps	28(%esp)
-    fldcw	-4(%esp)
+    movl	$1, %eax
+    movw	%ax, 28(%esp)
     movl	$LC1, %eax
     movl	%eax, 0(%esp)
     movswl	28(%esp), %eax

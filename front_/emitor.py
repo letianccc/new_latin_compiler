@@ -29,7 +29,8 @@ class Emit(object):
 
     def emit_string(self):
         code = ''
-        for s in SymbolSystem.strings.symbols:
+        strings = SymbolSystem.literals(SymbolKind.STRING)
+        for s in strings:
             # TODO: addr 和 access_name 应该分开
             tag = s.access_name()[1:]
             code += f'{tag}:\n'\
@@ -54,7 +55,7 @@ class Emit(object):
 
     def allocate_float(self):
         # TODO: 待重构
-        doubles = SymbolSystem.double_constants()
+        doubles = SymbolSystem.literals(SymbolKind.DOUBLECONST)
         for index, d in enumerate(doubles):
             addr = f'FLOAT{index}'
             d.set_access_name(addr)
@@ -131,7 +132,7 @@ class Emit(object):
         return space
 
     def emit_double(self):
-        doubles = SymbolSystem.double_constants()
+        doubles = SymbolSystem.literals(SymbolKind.DOUBLECONST)
 
         for f in doubles:
             code = ''
@@ -257,6 +258,7 @@ class FunctionEmit(object):
         self.emit_code(code)
 
     def emit_float_compare(self, jump, left, right, block):
+        # TODO: load 的顺序可能要改  确认一下
         self.load_float(left)
         self.load_float(right)
         code = ''

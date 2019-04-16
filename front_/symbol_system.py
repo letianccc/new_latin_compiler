@@ -6,53 +6,45 @@ from front_.type_system import *
 
 class SymbolSystem(object):
     identifiers = None
-    constants = None
-    strings = None
+    __literals = None
 
     @classmethod
     def add(cls, symbol):
-        if symbol.match(SymbolKind.INTCONST, SymbolKind.DOUBLECONST):
-            symbols = cls.constants
-        elif symbol.match(SymbolKind.STRING):
-            symbols = cls.strings
+        if symbol.match(SymbolKind.INTCONST, SymbolKind.DOUBLECONST, SymbolKind.STRING):
+            symbols = cls.__literals
         elif symbol.match(SymbolKind.ID, SymbolKind.FUNCTION):
             symbols = cls.identifiers
         symbols.add(symbol)
 
     @classmethod
-    def find_symbol(cls, token, type=None, level_kind=None):
-        t = token
-        if t.match(TokenKind.INTCONST, TokenKind.DOUBLECONST):
-            s = cls.constants.find_symbol(t, type, level_kind)
-        elif t.match(TokenKind.STRING):
-            s = cls.strings.find_symbol(t, type, level_kind)
-        elif t.match(TokenKind.ID) or t.match(TokenKind.DECLARATOR) or t.match(TokenKind.FUNCTION):
-            s = cls.identifiers.find_symbol(t, type, level_kind)
+    def find_symbol(cls, kind, value, type=None, level_kind=None):
+        if kind is SymbolKind.INTCONST or kind is SymbolKind.DOUBLECONST or kind is SymbolKind.STRING:
+            field = cls.__literals
+        elif kind is SymbolKind.ID or kind is SymbolKind.FUNCTION:
+            field = cls.identifiers
+        s = cls.find_from_fields(value, type, level_kind, field)
         return s
 
     @classmethod
-    def find_double(cls, value):
-        symbols = cls.constants.symbols
-        for s in symbols:
-            if s.type.match(TypeSystem.DOUBLE) and s.value == value:
+    def find_from_fields(cls, value, type, level_kind, field):
+        s = field.find(value, type)
+        if s is not None or level_kind is LevelKind.CURRENT:
+            return s
+        cur = field.outside
+        while cur is not None:
+            s = cur.find(value, type)
+            if s is not None:
                 return s
+            cur = cur.outside
         return None
 
     @classmethod
-    def find_integer(cls, value):
-        symbols = cls.constants.symbols
-        for s in symbols:
-            if s.type.match(TypeSystem.INT) and s.value == value:
-                return s
-        return None
-
-    @classmethod
-    def double_constants(cls):
-        return cls.constants.double_constants()
-
-    @classmethod
-    def strings(cls):
-        return cls.strings.symbols
+    def literals(cls, kind):
+        if kind is SymbolKind.DOUBLECONST:
+            ls = cls.__literals.double_constants
+        elif kind is SymbolKind.STRING:
+            ls = cls.__literals.strings
+        return ls
 
     @classmethod
     def enter(cls):
@@ -68,8 +60,7 @@ class SymbolSystem(object):
     def init(cls):
         StringSymbol.init()
         cls.identifiers = IdentifierField()
-        cls.constants = GlobalField()
-        cls.strings = GlobalField()
+        cls.__literals = GlobalField()
 
     @classmethod
     def is_numeric(self, symbol):
@@ -85,8 +76,8 @@ class Symbol(object):
         self.kind = None
         self.value = None
 
-    def equal(self, type, token=None):
-        if self.value == token.value:
+    def equal(self, type, value):
+        if self.value == value:
             if type is None or self.type is type:
                 return True
         return False
@@ -197,14 +188,14 @@ class IntSymbol(Symbol):
         return self.__access_name
 
     def translate_type(self, type):
+        s = self
         if type.match(TypeSystem.DOUBLE):
-            s = SymbolSystem.find_double(self.value)
+            s = SymbolSystem.find_symbol(SymbolKind.DOUBLECONST, self.value, TypeSystem.DOUBLE)
             if s is None:
                 s = ConstantSymbol(SymbolKind.DOUBLECONST, TypeSystem.DOUBLE, self.value)
                 SymbolSystem.add(s)
-            return s
-        else:
-            raise Exception
+        return s
+
 
 
 class DoubleSymbol(Symbol):
@@ -228,15 +219,14 @@ class DoubleSymbol(Symbol):
         ...
 
     def translate_type(self, type):
-        if type.match(TypeSystem.INT):
+        s = self
+        if type.match(TypeSystem.INT, TypeSystem.SHORT):
             i = self.integer(self.value)
-            s = SymbolSystem.find_integer(i)
+            s = SymbolSystem.find_symbol(SymbolKind.INTCONST, i, TypeSystem.INT)
             if s is None:
                 s = IntSymbol(i)
                 SymbolSystem.add(s)
-            return s
-        else:
-            raise Exception
+        return s
 
     def integer(self, double_value):
         n = double_value.split('.')

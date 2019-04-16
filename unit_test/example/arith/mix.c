@@ -1,9 +1,5 @@
 
 
-#include<stdio.h>
-
-
-
 
 void add() {
     double a = 1.1;
