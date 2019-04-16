@@ -6,15 +6,18 @@
 
 void main() {
     // double c = 1;
-    // int d = c;
+    // short d = c;
     // printf("target 1: %d\n", d);
+    // double a1 = 1.5;
+    // short a3 = a1;
+    // printf("target 1: %d\n", a3);
 
-    short b = 1;
-    double a1 = b;
-    // double a1 = 1;
-    // double a2 = 2;
-    // double a4 = 3;
-    // double a3 = a1 + a2 + a4;
-    // printf("target 1: %f\n", a3);
+
+    double a1 = 1;
+    double a2 = 2;
+    double a4 = 3;
+    int b = 1;
+    double a3 = a1 + b;
+    printf("target 1: %f\n", a3);
     getchar();
 }

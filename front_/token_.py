@@ -46,7 +46,7 @@ class DoubleConstant(ConstantToken):
         type = TypeSystem.type(TokenKind.DOUBLE)
         s = SymbolSystem.find_symbol(self)
         if s is None:
-            s = ConstantSymbol(k, type, self.value)
+            s = DoubleSymbol(self.value)
             SymbolSystem.add(s)
         return s
 

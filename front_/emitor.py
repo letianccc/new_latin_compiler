@@ -240,7 +240,7 @@ class FunctionEmit(object):
                 self.emit_mov(left, eax)
                 self.emit_integer_compare('cmpl', op, RegSystem.EAX, right, b)
 
-    def float_load(self, operand):
+    def load_float(self, operand):
         # TODO: 需要用这个函数用于其他加载浮点数的代码中
         if operand.type.match(TypeSystem.DOUBLE):
             op = 'fldl'
@@ -257,8 +257,8 @@ class FunctionEmit(object):
         self.emit_code(code)
 
     def emit_float_compare(self, jump, left, right, block):
-        self.float_load(left)
-        self.float_load(right)
+        self.load_float(left)
+        self.load_float(right)
         code = ''
         code += '    fcompp\n'\
                 '    fstsw\n' \
@@ -395,20 +395,50 @@ class FunctionEmit(object):
             self.assign_core(dst, src)
 
     def emit_mov(self, source, destination, sign_extend=True):
+        if source.type.match(TypeSystem.DOUBLE) or destination.type.match(TypeSystem.DOUBLE):
+            self.emit_float_mov(source, destination)
+        else:
+            self.emit_integer_mov(source, destination, sign_extend)
 
+    def emit_float_mov(self, source, destination):
+        dst = destination.access_name()
+        src_type = source.type
+        dst_type = destination.type
+        self.load_float(source)
+        if dst_type.match(TypeSystem.INT):
+            store = 'fistpl'
+        elif dst_type.match(TypeSystem.SHORT):
+            store = 'fistps'
+        elif dst_type.match(TypeSystem.DOUBLE):
+            store = 'fstpl'
+
+        if dst_type.match(TypeSystem.DOUBLE):
+            # x to double
+            code = f'    {store}\t{dst}\n'
+        else:
+            # double to not double
+            old_cw = '-4(%esp)'
+            new_cw = '-6(%esp)'
+            code = f'    fnstcw\t{old_cw}\n'\
+                   f'    movzwl\t{old_cw}, %eax\n'\
+                    '    orb\t$12, %ah\n'\
+                   f'    movw\t%ax, {new_cw}\n'\
+                   f'    fldcw\t{new_cw}\n'\
+                   f'    {store}\t{dst}\n'\
+                   f'    fldcw\t{old_cw}\n'
+        self.emit_code(code)
+
+    def emit_integer_mov(self, source, destination, sign_extend=True):
         src = source.access_name()
         dst = destination.access_name()
         src_type = source.type
         dst_type = destination.type
-        self.emit_mov_value(src, dst, src_type, dst_type, sign_extend)
-
-    def emit_mov_value(self, source_address, destination_address, src_type, dst_type, sign_extend=True):
-        src = source_address
-        dst = destination_address
 
         if src_type.match(TypeSystem.DOUBLE) or dst_type.match(TypeSystem.DOUBLE):
+            raise Exception
             code = ''
             if dst_type.match(TypeSystem.DOUBLE):
+                # self.load_float(src)
                 if src_type.match(TypeSystem.DOUBLE):
                     code += f'    fldl\t{src}\n'
                 elif src_type.match(TypeSystem.INT):

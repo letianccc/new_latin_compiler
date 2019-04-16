@@ -39,6 +39,14 @@ class SymbolSystem(object):
         return None
 
     @classmethod
+    def find_integer(cls, value):
+        symbols = cls.constants.symbols
+        for s in symbols:
+            if s.type.match(TypeSystem.INT) and s.value == value:
+                return s
+        return None
+
+    @classmethod
     def double_constants(cls):
         return cls.constants.double_constants()
 
@@ -188,7 +196,7 @@ class IntSymbol(Symbol):
     def access_name(self):
         return self.__access_name
 
-    def upgrade(self, type):
+    def translate_type(self, type):
         if type.match(TypeSystem.DOUBLE):
             s = SymbolSystem.find_double(self.value)
             if s is None:
@@ -218,6 +226,22 @@ class DoubleSymbol(Symbol):
 
     def emit(self):
         ...
+
+    def translate_type(self, type):
+        if type.match(TypeSystem.INT):
+            i = self.integer(self.value)
+            s = SymbolSystem.find_integer(i)
+            if s is None:
+                s = IntSymbol(i)
+                SymbolSystem.add(s)
+            return s
+        else:
+            raise Exception
+
+    def integer(self, double_value):
+        n = double_value.split('.')
+        i = n[0]
+        return i
 
 class IdentifierSymbol(Symbol):
     """docstring for IdentifierSymbol."""
