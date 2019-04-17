@@ -187,6 +187,55 @@ class BinaryNode(ExpressionNode):
         self.function.gen_ir(ir)
         return dst
 
+class RelationNode(ExpressionNode):
+    def __init__(self, function, kind, left, right):
+        super(RelationNode, self).__init__()
+        self.left = left
+        self.right = right
+        self.kind = kind
+        self.function = function
+
+    def check(self):
+        super().check()
+        self.left = self.left.check()
+        self.right = self.right.check()
+        return self
+
+    def gen(self, true_block, false_block):
+        if self.match(NodeKind.AND):
+            middle_block = Block()
+            left_not = self.left.not_node()
+            left_not.gen(false_block, middle_block)
+            self.function.add_block(middle_block)
+            self.function.change_block(middle_block)
+            self.right.gen(true_block, false_block)
+            return
+        if self.match(NodeKind.OR):
+            middle_block = Block()
+            self.left.gen(true_block, middle_block)
+            self.function.add_block(middle_block)
+            self.function.change_block(middle_block)
+            self.right.gen(true_block, false_block)
+            return
+
+        left = self.left.gen()
+        right = self.right.gen()
+        type = TypeSystem.max_type(left.type, right.type)
+        if type.match(TypeSystem.DOUBLE):
+            left, right = self.translate_type(type, left, right)
+
+        op_map = {
+            NodeKind.EQUAL: OperatorKind.EQUAL,
+            NodeKind.UNEQUAL: OperatorKind.UNEQUAL,
+            NodeKind.GREAT: OperatorKind.GREAT,
+            NodeKind.LESS: OperatorKind.LESS,
+            NodeKind.GREAT_EQ: OperatorKind.GREAT_EQ,
+            NodeKind.LESS_EQ: OperatorKind.LESS_EQ,
+        }
+        k = op_map[self.kind]
+        ir = ConditionalJumpIR(k, left, right, true_block)
+        self.gen_ir(ir)
+
     def not_node(self):
         not_map = {
             NodeKind.EQUAL: NodeKind.UNEQUAL,
@@ -195,9 +244,13 @@ class BinaryNode(ExpressionNode):
             NodeKind.GREAT_EQ: NodeKind.LESS,
             NodeKind.LESS: NodeKind.GREAT_EQ,
             NodeKind.LESS_EQ: NodeKind.GREAT,
+            NodeKind.AND: NodeKind.OR,
+            NodeKind.OR: NodeKind.AND,
         }
+        left = self.left.not_node()
+        right = self.right.not_node()
         k = not_map[self.kind]
-        n = BinaryNode(self.function, k, self.left, self.right)
+        n = RelationNode(self.function, k, left, right)
         return n
 
 class OrNode(ExpressionNode):

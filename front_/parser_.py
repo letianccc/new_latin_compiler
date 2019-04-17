@@ -265,15 +265,17 @@ class Parser:
     def bool_(self):
         expr = self.join()
         while self.match(TokenKind.OR):
-            self.expect('||')
-            expr = BinaryNode(expr, self.join(), '||')
+            self.expect(TokenKind.OR)
+            k = NodeKind.OR
+            expr = RelationNode(self.function, k, expr, self.join())
         return expr
 
     def join(self):
         expr = self.equal()
         while self.match(TokenKind.AND):
-            self.expect('&&')
-            expr = BinaryNode(expr, self.equal(), '&&')
+            self.expect(TokenKind.AND)
+            k = NodeKind.AND
+            expr = RelationNode(self.function, k, expr, self.equal())
         return expr
 
     def equal(self):
@@ -286,7 +288,7 @@ class Parser:
             t = self.cur_token()
             k = m[t.kind]
             self.next_token()
-            expr = BinaryNode(self.function, k, expr, self.rel())
+            expr = RelationNode(self.function, k, expr, self.rel())
         return expr
 
     def rel(self):
@@ -302,7 +304,7 @@ class Parser:
             t = self.cur_token()
             k = m[t.kind]
             self.next_token()
-            expr = BinaryNode(self.function, k, expr, self.expr_())
+            expr = RelationNode(self.function, k, expr, self.expr_())
         return expr
 
     def expr_(self):
@@ -344,7 +346,9 @@ class Parser:
             self.next_token()
             t = self.cur_token()
             if not TypeSystem.is_type_prefix(t.kind):
+                # TODO:   if (a = 1)  赋值  注意验证
                 expr = self.parse_expression()
+                self.expect(TokenKind.RPAREN)
             else:
                 type = self.parse_type()
                 self.expect(TokenKind.RPAREN)

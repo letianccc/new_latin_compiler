@@ -1,5 +1,3 @@
-
-
 void const_logic_compare() {
     int x = 777;
     if (1 < 2 || 2 < 3) {
@@ -248,6 +246,49 @@ void logic_compare() {
     }
     printf("target 0: %d\n", x);
 
+}
 
+void mul_logic() {
+    int i1 = 1;
+    int i2 = 2;
+    int i3 = 3;
+    double d1 = 1.1;
+    double d2 = 2.1;
+    double d3 = 3.1;
+    short s1 = 1;
+    short s2 = 2;
+    short s3 = 3;
+    int x;
 
+    x = 777;
+    if (((1 < 2) || (2 < 3)) && ((3 < 4) && (2 > 3))) {
+        x = 1;
+    } else {
+        x = 0;
+    }
+    printf("target 0: %d\n", x);
+
+    x = 777;
+    if (((1 < 2) || (2 < i3)) && ((3 < 4) && (2 > 3))) {
+        x = 1;
+    } else {
+        x = 0;
+    }
+    printf("target 0: %d\n", x);
+
+    x = 777;
+    if (((i1 < s2) || (s2 < i3)) && ((d3 < 4) && (d3 > 2))) {
+        x = 1;
+    } else {
+        x = 0;
+    }
+    printf("target 1: %d\n", x);
+
+}
+
+void main() {
+    const_logic_compare();
+    logic_compare();
+    mul_logic();
+    getchar();
 }

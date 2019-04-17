@@ -91,6 +91,8 @@ class Symbol(object):
     def gen(self):
         return self
 
+    def not_node(self):
+        return self
 class FunctionSymbol(Symbol):
     """docstring for FunctionSymbol."""
 

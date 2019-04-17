@@ -1,10 +1,12 @@
 
 已做：
 
-emit_conditional_jump
-integer 部分 暂时使用eax,edx简化逻辑
+
 
 当前：
+
+boolean 结果 赋值
+
 
 增加比较类型
 

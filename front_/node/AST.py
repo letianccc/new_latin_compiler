@@ -170,12 +170,12 @@ class IfNode(Node):
         cond = self.cond.not_node()
 
         if len(self.else_stmts) == 0:
-            self.gen_conditional_jump(cond, next_block, then_block)
+            cond.gen(next_block, then_block)
             self.gen_block(then_block, self.then_stmts)
             self.function.add_block(then_block)
         else:
             else_block = Block()
-            self.gen_conditional_jump(cond, else_block, then_block)
+            cond.gen(else_block, then_block)
             self.gen_block(then_block, self.then_stmts)
             self.gen_jump(next_block)
             self.gen_block(else_block, self.else_stmts)
@@ -188,26 +188,6 @@ class IfNode(Node):
         self.function.change_block(block)
         for stmt in statements:
             stmt.gen()
-
-    def gen_conditional_jump(self, condition_node, true_block, false_block):
-        cond = condition_node
-        left = cond.left.gen()
-        right = cond.right.gen()
-        type = TypeSystem.max_type(left.type, right.type)
-        if type.match(TypeSystem.DOUBLE):
-            left, right = self.translate_type(type, left, right)
-
-        op_map = {
-            NodeKind.EQUAL: OperatorKind.EQUAL,
-            NodeKind.UNEQUAL: OperatorKind.UNEQUAL,
-            NodeKind.GREAT: OperatorKind.GREAT,
-            NodeKind.LESS: OperatorKind.LESS,
-            NodeKind.GREAT_EQ: OperatorKind.GREAT_EQ,
-            NodeKind.LESS_EQ: OperatorKind.LESS_EQ,
-        }
-        k = op_map[condition_node.kind]
-        ir = ConditionalJumpIR(k, left, right, true_block)
-        self.gen_ir(ir)
 
     def gen_jump(self, block):
         ir = JumpIR(block)
