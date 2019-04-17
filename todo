@@ -10,8 +10,6 @@ boolean 结果 赋值
 
 增加比较类型
 
-short int mix  short overflow
-比较结果赋值
 
 type 比较 统一用kind作为参数
 

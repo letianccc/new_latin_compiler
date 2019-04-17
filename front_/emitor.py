@@ -202,13 +202,13 @@ class FunctionEmit(object):
         code = ''
         type = TypeSystem.max_type(ir.left.type, ir.right.type)
         jump = self.jump_operator(type, ir.operator)
-        if type.match(TypeSystem.DOUBLE):
+        if type.match(TypeKind.DOUBLE):
             self.emit_float_compare(jump, ir)
         else:
             self.emit_integer_compare(jump, ir)
 
     def jump_operator(self, type, compare_operator):
-        if type.match(TypeSystem.DOUBLE):
+        if type.match(TypeKind.DOUBLE):
             jump_map = {
                 OperatorKind.UNEQUAL: 'jne',
                 OperatorKind.EQUAL: 'je',
@@ -217,7 +217,7 @@ class FunctionEmit(object):
                 OperatorKind.GREAT: 'ja',
                 OperatorKind.LESS: 'jb',
             }
-        elif type.match(TypeSystem.INT, TypeSystem.SHORT):
+        elif type.match(TypeKind.INT, TypeKind.SHORT):
             jump_map = {
                 OperatorKind.UNEQUAL: 'jne',
                 OperatorKind.EQUAL: 'je',
@@ -231,14 +231,14 @@ class FunctionEmit(object):
 
     def load_float(self, operand):
         # TODO: 需要用这个函数用于其他加载浮点数的代码中
-        if operand.type.match(TypeSystem.DOUBLE):
+        if operand.type.match(TypeKind.DOUBLE):
             op = 'fldl'
         else:
             if SymbolSystem.is_numeric(operand):
                 raise Exception
-            if operand.type.match(TypeSystem.INT):
+            if operand.type.match(TypeKind.INT):
                 op = 'fildl'
-            elif operand.type.match(TypeSystem.SHORT):
+            elif operand.type.match(TypeKind.SHORT):
                 op = 'filds'
 
         addr = operand.access_name()
@@ -277,7 +277,7 @@ class FunctionEmit(object):
         src = ir.src
         dst = ir.dst
         # dst的类型总是POINTER
-        assert dst.type.match(TypeSystem.POINTER)
+        assert dst.type.match(TypeKind.POINTER)
         dx = RegSystem.reg(RegKind.DX, src.type.size)
         self.emit_mov(dst, RegSystem.EAX)
         self.emit_mov(src, dx)
@@ -289,7 +289,7 @@ class FunctionEmit(object):
         # TODO: src的类型未知  可能是short
         dst = ir.destination
         src = ir.operand
-        assert src.type.match(TypeSystem.POINTER)
+        assert src.type.match(TypeKind.POINTER)
         dst_addr = dst.access_name()
         eax = RegSystem.reg(RegKind.AX, src.type.size)
         self.emit_mov(src, eax)
@@ -301,7 +301,7 @@ class FunctionEmit(object):
     def emit_address_of(self, ir):
         dst = ir.destination
         src = ir.operand
-        assert dst.type.match(TypeSystem.POINTER)
+        assert dst.type.match(TypeKind.POINTER)
         src_addr = src.access_name()
         dst_addr = dst.access_name()
         code = ''
@@ -310,7 +310,7 @@ class FunctionEmit(object):
         self.emit_code(code)
 
     def emit_arith(self, ir):
-        if ir.left.type.match(TypeSystem.DOUBLE) or ir.right.type.match(TypeSystem.DOUBLE):
+        if ir.left.type.match(TypeKind.DOUBLE) or ir.right.type.match(TypeKind.DOUBLE):
             self.emit_double_arith(ir)
         else:
             self.emit_integer_arith(ir)
@@ -368,7 +368,7 @@ class FunctionEmit(object):
     def assign_core(self, destination, source):
         dst = destination
         src = source
-        if src.type.match(TypeSystem.DOUBLE) or dst.type.match(TypeSystem.DOUBLE):
+        if src.type.match(TypeKind.DOUBLE) or dst.type.match(TypeKind.DOUBLE):
             self.emit_mov(src, dst)
         else:
             eax = RegSystem.EAX
@@ -388,7 +388,7 @@ class FunctionEmit(object):
             self.assign_core(dst, src)
 
     def emit_mov(self, source, destination, sign_extend=True):
-        if source.type.match(TypeSystem.DOUBLE) or destination.type.match(TypeSystem.DOUBLE):
+        if source.type.match(TypeKind.DOUBLE) or destination.type.match(TypeKind.DOUBLE):
             self.emit_float_mov(source, destination)
         else:
             self.emit_integer_mov(source, destination, sign_extend)
@@ -398,14 +398,14 @@ class FunctionEmit(object):
         src_type = source.type
         dst_type = destination.type
         self.load_float(source)
-        if dst_type.match(TypeSystem.INT):
+        if dst_type.match(TypeKind.INT):
             store = 'fistpl'
-        elif dst_type.match(TypeSystem.SHORT):
+        elif dst_type.match(TypeKind.SHORT):
             store = 'fistps'
-        elif dst_type.match(TypeSystem.DOUBLE):
+        elif dst_type.match(TypeKind.DOUBLE):
             store = 'fstpl'
 
-        if dst_type.match(TypeSystem.DOUBLE):
+        if dst_type.match(TypeKind.DOUBLE):
             # x to double
             code = f'    {store}\t{dst}\n'
         else:
@@ -427,16 +427,16 @@ class FunctionEmit(object):
         src_type = source.type
         dst_type = destination.type
 
-        if src_type.match(TypeSystem.DOUBLE) or dst_type.match(TypeSystem.DOUBLE):
+        if src_type.match(TypeKind.DOUBLE) or dst_type.match(TypeKind.DOUBLE):
             raise Exception
             code = ''
-            if dst_type.match(TypeSystem.DOUBLE):
+            if dst_type.match(TypeKind.DOUBLE):
                 # self.load_float(src)
-                if src_type.match(TypeSystem.DOUBLE):
+                if src_type.match(TypeKind.DOUBLE):
                     code += f'    fldl\t{src}\n'
-                elif src_type.match(TypeSystem.INT):
+                elif src_type.match(TypeKind.INT):
                     code += f'    fildl\t{src}\n'
-                elif src_type.match(TypeSystem.SHORT):
+                elif src_type.match(TypeKind.SHORT):
                     code += f'    filds\t{src}\n'
             else:
                 raise Exception
@@ -444,12 +444,12 @@ class FunctionEmit(object):
 
         elif src_type.size == 4 and dst_type.size == 4:
             code = f'    movl\t{src}, {dst}\n'
-        elif src_type.match(TypeSystem.SHORT) and dst_type.size == 4:
+        elif src_type.match(TypeKind.SHORT) and dst_type.size == 4:
             if sign_extend is True:
                 code = f'    movswl\t{src}, {dst}\n'
             else:
                 code = f'    movzwl\t{src}, {dst}\n'
-        elif dst_type.match(TypeSystem.SHORT):
+        elif dst_type.match(TypeKind.SHORT):
             if src == '%eax':
                 src = '%ax'
             if src == '%edx':

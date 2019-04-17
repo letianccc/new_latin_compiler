@@ -26,8 +26,8 @@ class IntConstant(ConstantToken):
 
     def check(self):
         k = SymbolKind.INTCONST
-        type = TypeSystem.type(TokenKind.INT)
-        s = SymbolSystem.find_symbol(k, self.value, TypeSystem.INT)
+        t = TypeKind.INT
+        s = SymbolSystem.find_symbol(k, self.value, t)
         if s is None:
             s = IntSymbol(self.value)
             SymbolSystem.add(s)
@@ -43,8 +43,8 @@ class DoubleConstant(ConstantToken):
         # add_symbol(kind, type, value)
         # type = TypeSystem.type(self.type)
         k = SymbolKind.DOUBLECONST
-        type = TypeSystem.type(TokenKind.DOUBLE)
-        s = SymbolSystem.find_symbol(k, self.value, TypeSystem.DOUBLE)
+        t = TypeKind.DOUBLE
+        s = SymbolSystem.find_symbol(k, self.value, t)
         if s is None:
             s = DoubleSymbol(self.value)
             SymbolSystem.add(s)

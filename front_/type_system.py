@@ -11,9 +11,9 @@ class Type(object):
         self.size = size
         self.sub_type = sub_type
 
-    def match(self, *types):
-        for t in types:
-            if self.kind is t.kind:
+    def match(self, *kinds):
+        for k in kinds:
+            if k is self.kind:
                 return True
         return False
 

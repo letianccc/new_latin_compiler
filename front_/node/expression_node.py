@@ -45,7 +45,7 @@ class IndirectionNode(Node):
     def check(self):
         super().check()
         self.operand = self.operand.check()
-        assert self.operand.type.match(TypeSystem.POINTER)
+        assert self.operand.type.match(TypeKind.POINTER)
         return self
 
     @property
@@ -168,7 +168,7 @@ class BinaryNode(ExpressionNode):
         left = self.left.gen()
         right = self.right.gen()
         type = TypeSystem.max_type(left.type, right.type)
-        if type.match(TypeSystem.DOUBLE):
+        if type.match(TypeKind.DOUBLE):
             left, right = self.translate_type(type, left, right)
 
         # TODO: 可能需要add symbol
@@ -221,7 +221,7 @@ class RelationNode(ExpressionNode):
         left = self.left.gen()
         right = self.right.gen()
         type = TypeSystem.max_type(left.type, right.type)
-        if type.match(TypeSystem.DOUBLE):
+        if type.match(TypeKind.DOUBLE):
             left, right = self.translate_type(type, left, right)
 
         op_map = {

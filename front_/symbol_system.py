@@ -78,7 +78,7 @@ class Symbol(object):
 
     def equal(self, type, value):
         if self.value == value:
-            if type is None or self.type is type:
+            if type is None or self.type.match(type):
                 return True
         return False
 
@@ -93,6 +93,7 @@ class Symbol(object):
 
     def not_node(self):
         return self
+
 class FunctionSymbol(Symbol):
     """docstring for FunctionSymbol."""
 
@@ -157,17 +158,10 @@ class StringSymbol(Symbol):
 class ConstantSymbol(Symbol):
     """docstring for ConstantSymbol."""
 
-    def __init__(self, kind, type, value):
+    def __init__(self, value):
         super(ConstantSymbol, self).__init__()
-        self.kind = kind
         self.value = value
-        self.type = type
-        if self.kind is SymbolKind.INTCONST:
-            self.size = 4
-        elif self.kind is SymbolKind.DOUBLECONST:
-            self.size = 8
         self.__access_name = f'${self.value}'
-        # self.__access_name = f'${self.value}'
 
     def access_name(self):
         return self.__access_name
@@ -175,56 +169,38 @@ class ConstantSymbol(Symbol):
     def set_access_name(self, name):
         self.__access_name = name
 
-class IntSymbol(Symbol):
+class IntSymbol(ConstantSymbol):
     """docstring for ConstantSymbol."""
 
     def __init__(self, value):
-        super(IntSymbol, self).__init__()
+        super(IntSymbol, self).__init__(value)
         self.kind = SymbolKind.INTCONST
         self.type = TypeSystem.INT
         self.size = 4
-        self.value = value
-        self.__access_name = f'${self.value}'
-
-    def access_name(self):
-        return self.__access_name
 
     def translate_type(self, type):
         s = self
-        if type.match(TypeSystem.DOUBLE):
-            s = SymbolSystem.find_symbol(SymbolKind.DOUBLECONST, self.value, TypeSystem.DOUBLE)
+        if type.match(TypeKind.DOUBLE):
+            s = SymbolSystem.find_symbol(SymbolKind.DOUBLECONST, self.value, TypeKind.DOUBLE)
             if s is None:
-                s = ConstantSymbol(SymbolKind.DOUBLECONST, TypeSystem.DOUBLE, self.value)
+                s = DoubleSymbol(self.value)
                 SymbolSystem.add(s)
         return s
 
-
-
-class DoubleSymbol(Symbol):
+class DoubleSymbol(ConstantSymbol):
     """docstring for ConstantSymbol."""
 
     def __init__(self, value):
-        super(DoubleSymbol, self).__init__()
+        super(DoubleSymbol, self).__init__(value)
         self.kind = SymbolKind.DOUBLECONST
         self.type = TypeSystem.DOUBLE
         self.size = 8
-        self.value = value
-        self.__access_name = f'${self.value}'
-
-    def access_name(self):
-        return self.__access_name
-
-    def set_access_name(self, name):
-        self.__access_name = name
-
-    def emit(self):
-        ...
 
     def translate_type(self, type):
         s = self
-        if type.match(TypeSystem.INT, TypeSystem.SHORT):
+        if type.match(TypeKind.INT, TypeKind.SHORT):
             i = self.integer(self.value)
-            s = SymbolSystem.find_symbol(SymbolKind.INTCONST, i, TypeSystem.INT)
+            s = SymbolSystem.find_symbol(SymbolKind.INTCONST, i, TypeKind.INT)
             if s is None:
                 s = IntSymbol(i)
                 SymbolSystem.add(s)
