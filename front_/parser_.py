@@ -291,9 +291,18 @@ class Parser:
 
     def rel(self):
         expr = self.expr_()
-        while self.match(TokenKind.LESS) or self.match(TokenKind.LESS_EQ) or self.match(TokenKind.GREAT) or self.match(TokenKind.GREAT_EQ):
-            operator = self.next_token().value
-            expr = BinaryNode(expr, self.expr_(), operator)
+        while self.match(TokenKind.LESS) or self.match(TokenKind.LESS_EQ) or \
+                self.match(TokenKind.GREAT) or self.match(TokenKind.GREAT_EQ):
+            m = {
+                TokenKind.LESS: NodeKind.LESS,
+                TokenKind.LESS_EQ: NodeKind.LESS_EQ,
+                TokenKind.GREAT: NodeKind.GREAT,
+                TokenKind.GREAT_EQ: NodeKind.GREAT_EQ,
+            }
+            t = self.cur_token()
+            k = m[t.kind]
+            self.next_token()
+            expr = BinaryNode(self.function, k, expr, self.expr_())
         return expr
 
     def expr_(self):

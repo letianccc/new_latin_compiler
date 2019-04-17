@@ -200,46 +200,34 @@ class FunctionEmit(object):
 
     def emit_conditional_jump(self, ir):
         code = ''
-        b = ir.block
-        b = b.access_name()
-        if ir.operator is OperatorKind.UNEQUAL:
-            op = 'jne'
+        type = TypeSystem.max_type(ir.left.type, ir.right.type)
+        jump = self.jump_operator(type, ir.operator)
+        if type.match(TypeSystem.DOUBLE):
+            self.emit_float_compare(jump, ir)
         else:
-            op = 'je'
-        left = ir.left
-        right = ir.right
+            self.emit_integer_compare(jump, ir)
 
-        if left.type.match(TypeSystem.DOUBLE) or right.type.match(TypeSystem.DOUBLE):
-            self.emit_float_compare(op, left, right, b)
-        elif SymbolSystem.is_numeric(left) and SymbolSystem.is_numeric(right):
-            # 数字目前都是int，没有short
-            eax = RegSystem.EAX
-            self.emit_mov(right, eax)
-            self.emit_integer_compare('cmpl', op, left, eax, b)
-        elif SymbolSystem.is_numeric(left) or SymbolSystem.is_numeric(right):
-            if SymbolSystem.is_numeric(right):
-                left = ir.right
-                right = ir.left
-            if right.type.match(TypeSystem.INT):
-                self.emit_integer_compare('cmpl', op, left, right, b)
-            elif right.type.match(TypeSystem.SHORT):
-                self.emit_integer_compare('cmpw', op, left, right, b)
-        else:
-            if left.type.match(TypeSystem.INT) and right.type.match(TypeSystem.INT):
-                eax = RegSystem.EAX
-                self.emit_mov(left, eax)
-                self.emit_integer_compare('cmpl', op, eax, right, b)
-            elif left.type.match(TypeSystem.SHORT) and right.type.match(TypeSystem.SHORT):
-                eax = RegSystem.EAX
-                self.emit_mov(left, eax, False)
-                self.emit_integer_compare('cmpw', op, RegSystem.AX, right, b)
-            else:
-                if left.type.match(TypeSystem.INT) and right.type.match(TypeSystem.SHORT):
-                    left = ir.right
-                    right = ir.left
-                eax = RegSystem.EAX
-                self.emit_mov(left, eax)
-                self.emit_integer_compare('cmpl', op, RegSystem.EAX, right, b)
+    def jump_operator(self, type, compare_operator):
+        if type.match(TypeSystem.DOUBLE):
+            jump_map = {
+                OperatorKind.UNEQUAL: 'jne',
+                OperatorKind.EQUAL: 'je',
+                OperatorKind.GREAT_EQ: 'jae',
+                OperatorKind.LESS_EQ: 'jbe',
+                OperatorKind.GREAT: 'ja',
+                OperatorKind.LESS: 'jb',
+            }
+        elif type.match(TypeSystem.INT, TypeSystem.SHORT):
+            jump_map = {
+                OperatorKind.UNEQUAL: 'jne',
+                OperatorKind.EQUAL: 'je',
+                OperatorKind.GREAT_EQ: 'jge',
+                OperatorKind.LESS_EQ: 'jle',
+                OperatorKind.GREAT: 'jg',
+                OperatorKind.LESS: 'jl',
+            }
+        jump = jump_map[compare_operator]
+        return jump
 
     def load_float(self, operand):
         # TODO: 需要用这个函数用于其他加载浮点数的代码中
@@ -257,24 +245,31 @@ class FunctionEmit(object):
         code = f'    {op}\t{addr}\n'
         self.emit_code(code)
 
-    def emit_float_compare(self, jump, left, right, block):
-        # TODO: load 的顺序可能要改  确认一下
-        self.load_float(left)
-        self.load_float(right)
+    def emit_float_compare(self, jump_operator, ir):
+        self.load_float(ir.right)
+        self.load_float(ir.left)
+        b = ir.block.access_name()
         code = ''
         code += '    fcompp\n'\
                 '    fstsw\n' \
                 '    sahf\n'
-        code += f'    {jump}\t{block}\n'
+        code += f'    {jump_operator}\t{b}\n'
         self.emit_code(code)
 
-    def emit_integer_compare(self, compare, jump, left, right, block):
+    def emit_integer_compare(self, jump_operator, ir):
         # interget 包括short int
+        # cmp 第二个操作数（右边） 不能是常量
+        left = RegSystem.EAX
+        right = RegSystem.EDX
+        self.emit_mov(ir.left, left)
+        self.emit_mov(ir.right, right)
         left_addr = left.access_name()
         right_addr = right.access_name()
+        b = ir.block.access_name()
+        # result = left_addr - right_addr = operand2 - operand1
         code = ''
-        code += f'    {compare}\t{left_addr}, {right_addr}\n'
-        code += f'    {jump} {block}\n'
+        code += f'    cmpl\t{right_addr}, {left_addr}\n'
+        code += f'    {jump_operator} {b}\n'
         self.emit_code(code)
 
     def emit_indirect_assign(self, ir):

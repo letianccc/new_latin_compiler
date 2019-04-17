@@ -1,10 +1,15 @@
 
 已做：
 
+emit_conditional_jump
+integer 部分 暂时使用eax,edx简化逻辑
 
 当前：
 
-find_symbol 重构
+增加比较类型
+
+short int mix  short overflow
+比较结果赋值
 
 type 比较 统一用kind作为参数
 

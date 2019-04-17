@@ -190,21 +190,24 @@ class IfNode(Node):
             stmt.gen()
 
     def gen_conditional_jump(self, condition_node, true_block, false_block):
-        if condition_node.match(NodeKind.EQUAL, NodeKind.UNEQUAL):
-            cond = condition_node
-            left = cond.left.gen()
-            right = cond.right.gen()
-            type = TypeSystem.max_type(left.type, right.type)
-            if type.match(TypeSystem.DOUBLE):
-                left, right = self.translate_type(type, left, right)
-            if condition_node.match(NodeKind.EQUAL):
-                k = OperatorKind.EQUAL
-            else:
-                k = OperatorKind.UNEQUAL
-            ir = ConditionalJumpIR(k, left, right, true_block)
-            self.gen_ir(ir)
-        else:
-            raise Exception
+        cond = condition_node
+        left = cond.left.gen()
+        right = cond.right.gen()
+        type = TypeSystem.max_type(left.type, right.type)
+        if type.match(TypeSystem.DOUBLE):
+            left, right = self.translate_type(type, left, right)
+
+        op_map = {
+            NodeKind.EQUAL: OperatorKind.EQUAL,
+            NodeKind.UNEQUAL: OperatorKind.UNEQUAL,
+            NodeKind.GREAT: OperatorKind.GREAT,
+            NodeKind.LESS: OperatorKind.LESS,
+            NodeKind.GREAT_EQ: OperatorKind.GREAT_EQ,
+            NodeKind.LESS_EQ: OperatorKind.LESS_EQ,
+        }
+        k = op_map[condition_node.kind]
+        ir = ConditionalJumpIR(k, left, right, true_block)
+        self.gen_ir(ir)
 
     def gen_jump(self, block):
         ir = JumpIR(block)

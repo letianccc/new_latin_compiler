@@ -108,6 +108,8 @@ class TypeKind(IntEnum):
     DOUBLE = auto()
 
 class NodeKind(IntEnum):
+    IF = auto()
+
     CALL = auto()
     FUNCTION = auto()
     ACTUAL_PARAMETER = auto()
@@ -127,9 +129,17 @@ class NodeKind(IntEnum):
     RETURN = auto()
     TYPE = auto()
     CAST = auto()
+    OR = auto()
+    AND = auto()
+    BITOR = auto()
+    BITXOR = auto()
+    BITAND = auto()
     EQUAL = auto()
     UNEQUAL = auto()
-    IF = auto()
+    GREAT = auto()
+    LESS = auto()
+    GREAT_EQ = auto()
+    LESS_EQ = auto()
 
 
 class OperatorKind(IntEnum):
@@ -146,8 +156,17 @@ class OperatorKind(IntEnum):
     CAST = auto()
     CONDITIONAL_JUMP = auto()
     JUMP = auto()
+    OR = auto()
+    AND = auto()
+    BITOR = auto()
+    BITXOR = auto()
+    BITAND = auto()
     EQUAL = auto()
     UNEQUAL = auto()
+    GREAT = auto()
+    LESS = auto()
+    GREAT_EQ = auto()
+    LESS_EQ = auto()
 
 class BlockKind(IntEnum):
     FUNCTION = auto()

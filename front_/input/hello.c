@@ -4,10 +4,17 @@
 
 
 void main() {
-    int a = 7;
-    double b = 7;
-    int a1 = 7;
-    int a2 = 7;
-    double c = a == a1 && a == a2 && a1 == a2;
+    double d1 = 1;
+    double d2 = 2;
+    int t;
+
+    t = 777;
+    if (d1 < d2) {
+        t = 1;
+    } else {
+        t = 0;
+    }
+    printf("target 1: %d\n", t);
+
 	getchar();
 }

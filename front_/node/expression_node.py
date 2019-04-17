@@ -188,12 +188,15 @@ class BinaryNode(ExpressionNode):
         return dst
 
     def not_node(self):
-        if self.match(NodeKind.EQUAL):
-            k = NodeKind.UNEQUAL
-        elif self.match(NodeKind.UNEQUAL):
-            k = NodeKind.EQUAL
-        else:
-            raise Exception
+        not_map = {
+            NodeKind.EQUAL: NodeKind.UNEQUAL,
+            NodeKind.UNEQUAL: NodeKind.EQUAL,
+            NodeKind.GREAT: NodeKind.LESS_EQ,
+            NodeKind.GREAT_EQ: NodeKind.LESS,
+            NodeKind.LESS: NodeKind.GREAT_EQ,
+            NodeKind.LESS_EQ: NodeKind.GREAT,
+        }
+        k = not_map[self.kind]
         n = BinaryNode(self.function, k, self.left, self.right)
         return n
 

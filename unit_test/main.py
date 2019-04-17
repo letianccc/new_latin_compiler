@@ -37,6 +37,7 @@ def test_all():
     paths = filepaths(test_dir)
     check_exefile = True
     check_sfile = True
+    # check_sfile = False
     for cfile, sfile in paths:
         try:
             assert_file(test_dir, cfile, sfile, check_exefile, check_sfile)

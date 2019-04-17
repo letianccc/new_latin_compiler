@@ -1,6 +1,10 @@
 	.file	"hello.c"
 	.text
 	.def	___main;	.scl	2;	.type	32;	.endef
+	.section .rdata,"dr"
+LC2:
+	.ascii "target 1: %d\12\0"
+	.text
 	.globl	_main
 	.def	_main;	.scl	2;	.type	32;	.endef
 _main:
@@ -9,35 +13,35 @@ _main:
 	andl	$-16, %esp
 	subl	$48, %esp
 	call	___main
-	movl	$7, 44(%esp)
-	fldl	LC0
+	fld1
 	fstpl	32(%esp)
-	movl	$7, 28(%esp)
-	movl	$7, 24(%esp)
+	fldl	LC1
+	fstpl	24(%esp)
+	movl	$777, 44(%esp)
+	fldl	32(%esp)
+	fldl	24(%esp)
+	fcompp 
+	fnstsw	%ax
+	sahf
+	jbe	L6
+	movl	$1, 44(%esp)
+	jmp	L4
+L6:
+	movl	$0, 44(%esp)
+L4:
 	movl	44(%esp), %eax
-	cmpl	28(%esp), %eax
-	jne	L2
-	movl	44(%esp), %eax
-	cmpl	24(%esp), %eax
-	jne	L2
-	movl	28(%esp), %eax
-	cmpl	24(%esp), %eax
-	jne	L2
-	movl	$1, 12(%esp)
-	jmp	L3
-L2:
-	movl	$0, 12(%esp)
-L3:
-	fildl	12(%esp)
-	fstpl	16(%esp)
+	movl	%eax, 4(%esp)
+	movl	$LC2, (%esp)
+	call	_printf
 	call	_getchar
 	nop
 	leave
 	ret
 	.section .rdata,"dr"
 	.align 8
-LC0:
+LC1:
 	.long	0
-	.long	1075576832
+	.long	1073741824
 	.ident	"GCC: (MinGW.org GCC-8.2.0-3) 8.2.0"
+	.def	_printf;	.scl	2;	.type	32;	.endef
 	.def	_getchar;	.scl	2;	.type	32;	.endef
