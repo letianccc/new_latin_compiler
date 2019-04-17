@@ -24,6 +24,9 @@ class Reg(object):
     def access_name(self):
         return self.__access_name
 
+    def gen(self):
+        return self
+
 class RegSystem(object):
     EAX = Reg(RegKind.AX, '%eax', 4)
     AX = Reg(RegKind.AX, '%ax', 2)

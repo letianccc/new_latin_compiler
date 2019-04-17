@@ -5,6 +5,7 @@ from front_.node.node import Node
 from front_.defind import *
 from front_.ir import *
 from front_.reg_system import *
+from front_.symbol_system import *
 
 
 class ExpressionNode(Node):
@@ -141,14 +142,11 @@ class AssignNode(Node):
         self.variable.defind = d
 
     def gen(self):
-        if self.variable.match(NodeKind.INDIRECTION):
-            dst = self.variable.gen()
-            src = self.value.gen()
-            dst = dst.defind.src1
-            ir = IndirectionAssignIR(dst, src)
-            self.gen_ir(ir)
-        else:
-            self.gen_assign(self.variable, self.value)
+        self.gen_assign_core(self.variable, self.value)
+
+    def gen_jump(self, block):
+        ir = JumpIR(block)
+        self.gen_ir(ir)
 
 class BinaryNode(ExpressionNode):
     def __init__(self, function, kind, left, right):

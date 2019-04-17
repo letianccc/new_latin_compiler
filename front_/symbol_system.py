@@ -62,6 +62,11 @@ class SymbolSystem(object):
         cls.identifiers = IdentifierField()
         cls.__literals = GlobalField()
 
+        s = IntSymbol('1')
+        SymbolSystem.add(s)
+        s = IntSymbol('0')
+        SymbolSystem.add(s)
+
     @classmethod
     def is_numeric(self, symbol):
         k = symbol.kind

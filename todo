@@ -7,6 +7,9 @@
 
 boolean 结果 赋值
 
+布尔赋值 需要更多的测试用例
+
+branch_template gen_for_kinds gen_assign_core 可以进一步重构
 
 增加比较类型
 

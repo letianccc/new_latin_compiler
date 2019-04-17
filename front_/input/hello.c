@@ -9,7 +9,7 @@ void main() {
     int i1 = 1;
     int i2 = 2;
     int i3 = 3;
-    x = (i1 < i2) && (i1 < i3) && (i2 < i3);
+    x = (i1 < i2);
     printf("target 1: %d\n", x);
     getchar();
 }

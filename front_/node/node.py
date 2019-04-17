@@ -4,6 +4,7 @@ from front_.myenum import *
 from front_.util import *
 from front_.type_system import *
 from front_.ir import *
+from front_.symbol_system import *
 
 
 
@@ -54,3 +55,62 @@ class Node(object):
         if s2.kind is SymbolKind.INTCONST or s2.kind is SymbolKind.DOUBLECONST:
             s2 = s2.translate_type(type)
         return s1, s2
+
+    def branch_template(self, condition_closure, then_closure, else_closure):
+        then_block = Block()
+        next_block = Block()
+        if else_closure is None:
+            condition_closure(then_block, next_block)
+
+            self.function.change_block(then_block)
+            then_closure(then_block)
+            self.function.add_block(then_block)
+        else:
+            else_block = Block()
+            condition_closure(then_block, else_block)
+            self.function.change_block(then_block)
+            then_closure(then_block)
+            self.gen_jump(next_block)
+            self.function.change_block(else_block)
+            else_closure(else_block)
+            self.function.add_block(then_block)
+            self.function.add_block(else_block)
+        self.function.add_block(next_block)
+        self.function.change_block(next_block)
+
+    def gen_jump(self, block):
+        ir = JumpIR(block)
+        self.gen_ir(ir)
+
+    def gen_for_kinds(self, destination, source):
+        dst = destination.gen()
+        src = source.gen()
+        if destination.match(NodeKind.INDIRECTION):
+            dst = dst.defind.src1
+            ir = IndirectionAssignIR(dst, src)
+            self.gen_ir(ir)
+        else:
+            self.gen_assign(dst, src)
+
+    def gen_assign_core(self, destination, source):
+        dst = destination
+        src = source
+        # TODO: 判断要重构
+        if src.__class__.__name__ != 'RelationNode':
+            self.gen_for_kinds(dst, src)
+        elif src.__class__.__name__ == 'RelationNode':
+            def cond_closure(true_block, false_block):
+                cond = src.not_node()
+                cond.gen(false_block, true_block)
+
+            def then_closure(then_block):
+                s1 = SymbolSystem.find_symbol(SymbolKind.INTCONST, '1')
+                self.gen_for_kinds(dst, s1)
+
+            def else_closure(else_block):
+                s0 = SymbolSystem.find_symbol(SymbolKind.INTCONST, '0')
+                self.gen_for_kinds(dst, s0)
+
+            self.branch_template(cond_closure, then_closure, else_closure)
+        else:
+            raise Exception

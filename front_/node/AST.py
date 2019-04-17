@@ -104,7 +104,7 @@ class DeclaratorInitializerNode(Node):
     def gen(self):
         # TODO: initializer 应该递归gen
         if self.initializer:
-            self.gen_assign(self.declarator, self.initializer)
+            self.gen_assign_core(self.declarator, self.initializer)
 
 class PointerDeclaratorNode(Node):
     def __init__(self, function, declarator):
@@ -165,33 +165,25 @@ class IfNode(Node):
         SymbolSystem.quit()
 
     def gen(self):
-        then_block = Block()
-        next_block = Block()
-        cond = self.cond.not_node()
+        def cond_closure(true_block, false_block):
+            cond = self.cond.not_node()
+            cond.gen(false_block, true_block)
 
-        if len(self.else_stmts) == 0:
-            cond.gen(next_block, then_block)
+        def then_closure(then_block):
             self.gen_block(then_block, self.then_stmts)
-            self.function.add_block(then_block)
-        else:
-            else_block = Block()
-            cond.gen(else_block, then_block)
-            self.gen_block(then_block, self.then_stmts)
-            self.gen_jump(next_block)
-            self.gen_block(else_block, self.else_stmts)
-            self.function.add_block(then_block)
-            self.function.add_block(else_block)
-        self.function.add_block(next_block)
-        self.function.change_block(next_block)
+
+        else_closure = None
+        if len(self.else_stmts) != 0:
+            def else_closure(else_block):
+                self.gen_block(else_block, self.else_stmts)
+
+        self.branch_template(cond_closure, then_closure, else_closure)
 
     def gen_block(self, block, statements):
         self.function.change_block(block)
         for stmt in statements:
             stmt.gen()
 
-    def gen_jump(self, block):
-        ir = JumpIR(block)
-        self.gen_ir(ir)
 
 
 

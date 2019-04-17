@@ -19,18 +19,8 @@ _main:
 	movl	$3, 16(%esp)
 	movl	24(%esp), %eax
 	cmpl	20(%esp), %eax
-	jge	L2
-	movl	24(%esp), %eax
-	cmpl	16(%esp), %eax
-	jge	L2
-	movl	20(%esp), %eax
-	cmpl	16(%esp), %eax
-	jge	L2
-	movl	$1, %eax
-	jmp	L3
-L2:
-	movl	$0, %eax
-L3:
+	setl	%al
+	movzbl	%al, %eax
 	movl	%eax, 28(%esp)
 	movl	28(%esp), %eax
 	movl	%eax, 4(%esp)
