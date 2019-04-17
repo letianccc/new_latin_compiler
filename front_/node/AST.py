@@ -194,6 +194,9 @@ class IfNode(Node):
             cond = condition_node
             left = cond.left.gen()
             right = cond.right.gen()
+            type = TypeSystem.max_type(left.type, right.type)
+            if type.match(TypeSystem.DOUBLE):
+                left, right = self.translate_type(type, left, right)
             if condition_node.match(NodeKind.EQUAL):
                 k = OperatorKind.EQUAL
             else:

@@ -168,12 +168,8 @@ class BinaryNode(ExpressionNode):
         left = self.left.gen()
         right = self.right.gen()
         type = TypeSystem.max_type(left.type, right.type)
-
         if type.match(TypeSystem.DOUBLE):
-            if left.kind is SymbolKind.INTCONST:
-                left = left.translate_type(type)
-            if right.kind is SymbolKind.INTCONST:
-                right = right.translate_type(type)
+            left, right = self.translate_type(type, left, right)
 
         # TODO: 可能需要add symbol
         dst = self.function.new_tag(type)

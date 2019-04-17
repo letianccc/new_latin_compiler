@@ -12,7 +12,6 @@ symbol_system 感觉还能继续重构
 
 类型转换  显式隐式  double short int 赋值 条件比较
 
-0 double
 
 if 模块
 

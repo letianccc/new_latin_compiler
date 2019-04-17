@@ -42,7 +42,15 @@ class Node(object):
     def gen_assign(self, destination, source):
         src = source.gen()
         dst = destination.gen()
-        if src.kind is SymbolKind.INTCONST or src.kind is SymbolKind.DOUBLECONST:
-            src = src.translate_type(dst.type)
+        src, dst = self.translate_type(dst.type, src, dst)
         ir = AssignIR(dst, src)
         self.gen_ir(ir)
+
+    def translate_type(self, type, symbol1, symbol2=None):
+        s1 = symbol1
+        s2 = symbol2
+        if s1.kind is SymbolKind.INTCONST or s1.kind is SymbolKind.DOUBLECONST:
+            s1 = s1.translate_type(type)
+        if s2.kind is SymbolKind.INTCONST or s2.kind is SymbolKind.DOUBLECONST:
+            s2 = s2.translate_type(type)
+        return s1, s2
