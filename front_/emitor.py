@@ -375,12 +375,9 @@ class FunctionEmit(object):
             self.emit_mov(eax, dst)
 
     def emit_return(self, ir):
-        t = ir.type
         src = ir.operand
-        if t.match(TypeKind.INT, TypeKind.SHORT):
-            self.emit_mov(src, RegSystem.EAX)
-        else:
-            self.load_float(src)
+        dst = RegSystem.reg(RegKind.AX, ir.type.size)
+        self.emit_mov(src, dst)
 
     def emit_cast(self, ir):
         dst = ir.destination

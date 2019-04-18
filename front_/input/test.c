@@ -1,37 +1,26 @@
 
 
 
-
-double func() {
-    return 1.1;
+int func1() {
+    return 7;
 }
 
-double func1() {
-    return 1;
-}
-
-double func2() {
-    int a = 1;
+short func2() {
+    short a = 70000;
     return a;
 }
 
-double func3() {
-    double a = 1.1;
+short func3() {
+    int a = 70000;
     return a;
 }
 
 void main() {
-    double d1 = func();
-    printf("target 1.1: %f\n", d1);
-
-    double d2 = func1();
-    printf("target 1: %f\n", d2);
-
-    double d3 = func2();
-    printf("target 1: %f\n", d3);
-
-    double d4 = func3();
-    printf("target 1.1: %f\n", d4);
-
+    int a = func1();
+    short b = func2();
+    int c = func3();
+    printf("target 7: %d\n", a);
+    printf("target 4464: %d\n", b);
+    printf("target 4464: %d\n", c);
     getchar();
 }

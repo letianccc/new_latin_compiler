@@ -123,12 +123,9 @@ class CallNode(Node):
             params.append(src)
         ir = CallIR(self.call_function, params)
         self.gen_ir(ir)
-        
-        t = self.call_function.type
-        if t.match(TypeKind.DOUBLE):
-            dst = RegSystem.ST
-        else:
-            dst = RegSystem.EAX
+
+        size = self.call_function.type.size
+        dst = RegSystem.reg(RegKind.AX, size)
         return dst
 
 class AssignNode(Node):

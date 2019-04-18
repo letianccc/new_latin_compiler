@@ -2,14 +2,13 @@
 
 #include<stdio.h>
 
-double func() {
-    double d = 7;
-    return d;
+short func3() {
+    int a = 70000;
+    return a;
 }
 
 void main() {
-    double d;
-    d = func();
-    printf("target 1: %f\n", d);
+    int c = func3();
+    printf("target 4464: %d\n", c);
     getchar();
 }

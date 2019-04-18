@@ -37,6 +37,8 @@ class RegSystem(object):
     @classmethod
     def reg(cls, kind, size):
         # 目前size为2返回AX  为0或4返回EAX
+        if size == 8:
+            return cls.ST
         if kind is RegKind.AX:
             r = cls.AX if size == 2 else cls.EAX
         elif kind is RegKind.DX:
