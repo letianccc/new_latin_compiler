@@ -10,6 +10,8 @@ while
 
 if 模块
 
+while if  gen模块需要重构  增加复用
+
 增加比较类型
 
 
@@ -52,7 +54,20 @@ access_name需要重构，找个地方把相关逻辑放一起
 需要把部分逻辑从emit过程转移到gen过程，即增加中间代码
 
 BUG:
-double声明
+1.  double声明
+2.
+    double d = 0;
+    while (d < 3) {
+        printf("hello %f\n", d);
+        d = d + 1;
+    }
+
+    short s = 0;
+    while (s < 5) {
+        printf("hello %f\n", s);
+        s = s + 1;
+    }
+    一直输出2
 
 
 待关注：

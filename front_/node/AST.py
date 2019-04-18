@@ -183,6 +183,35 @@ class IfNode(Node):
 
 
 class WhileNode(Node):
-    def __init__(self, cond, suite):
+    def __init__(self, function, cond, suite):
         self.cond = cond
         self.suite = suite
+        self.function = function
+        self.kind = NodeKind.WHILE
+
+    def check(self):
+        super().check()
+        self.cond.check()
+        SymbolSystem.enter()
+        for stmt in self.suite:
+            stmt.check()
+        SymbolSystem.quit()
+
+    def gen(self):
+        cond_block = Block()
+        suite_block = Block()
+        next_block = Block()
+
+        self.function.change_block(cond_block)
+        cond = self.cond.not_node()
+        cond.gen(next_block, suite_block)
+
+        self.function.change_block(suite_block)
+        for stmt in self.suite:
+            stmt.gen()
+        self.gen_jump(cond_block)
+
+        self.function.add_block(cond_block)
+        self.function.add_block(suite_block)
+        self.function.add_block(next_block)
+        self.function.change_block(next_block)

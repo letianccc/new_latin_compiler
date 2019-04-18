@@ -2,13 +2,15 @@
 
 #include<stdio.h>
 
-short func3() {
-    int a = 70000;
-    return a;
-}
-
 void main() {
-    int c = func3();
-    printf("target 4464: %d\n", c);
-    getchar();
+
+	// short s = 0;
+	// while (s < 5) {
+	// 	printf("hello %f\n", s);
+	// 	s = s + 1;
+	// }
+	double b = 4;
+	printf("%f", b);
+
+	getchar();
 }
