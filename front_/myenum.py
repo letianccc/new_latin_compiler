@@ -184,3 +184,4 @@ class LevelKind(IntEnum):
 class RegKind(IntEnum):
     AX = auto()
     DX = auto()
+    ST = auto()

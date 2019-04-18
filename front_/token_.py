@@ -58,7 +58,7 @@ class IdentifierToken(Token):
     def check(self):
         s = SymbolSystem.find_symbol(SymbolKind.ID, self.value)
         if s is None:
-            raise Exception("缺少声明")
+            raise Exception("缺少声明", self.value)
         return s
 
 class FunctionToken(Token):

@@ -123,8 +123,12 @@ class CallNode(Node):
             params.append(src)
         ir = CallIR(self.call_function, params)
         self.gen_ir(ir)
-        size = TypeSystem.INT.size
-        dst = RegSystem.reg(RegKind.AX, size)
+        
+        t = self.call_function.type
+        if t.match(TypeKind.DOUBLE):
+            dst = RegSystem.ST
+        else:
+            dst = RegSystem.EAX
         return dst
 
 class AssignNode(Node):
@@ -283,8 +287,9 @@ class ReturnNode(Node):
 
     def gen(self):
         src = self.operand.gen()
-        type = TypeSystem.INT
-        ir = ReturnIR(type, src)
+        t = self.function.type
+        src = self.translate_type(t, src)
+        ir = ReturnIR(t, src)
         self.gen_ir(ir)
 
 class ArrayNode(Node):

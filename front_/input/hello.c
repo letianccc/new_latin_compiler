@@ -2,14 +2,14 @@
 
 #include<stdio.h>
 
-
+double func() {
+    double d = 7;
+    return d;
+}
 
 void main() {
-    int x = 777;
-    int i1 = 1;
-    int i2 = 2;
-    int i3 = 3;
-    x = (i1 < i2);
-    printf("target 1: %d\n", x);
+    double d;
+    d = func();
+    printf("target 1: %f\n", d);
     getchar();
 }

@@ -344,7 +344,6 @@ class FunctionEmit(object):
                f'    fstpl\t{dst_addr}\n'
         self.emit_code(code)
 
-
     def emit_call(self, ir):
         self.emit_params(ir)
         function_tag = f'_{ir.function.value}'
@@ -376,8 +375,12 @@ class FunctionEmit(object):
             self.emit_mov(eax, dst)
 
     def emit_return(self, ir):
+        t = ir.type
         src = ir.operand
-        self.emit_mov(src, RegSystem.EAX)
+        if t.match(TypeKind.INT, TypeKind.SHORT):
+            self.emit_mov(src, RegSystem.EAX)
+        else:
+            self.load_float(src)
 
     def emit_cast(self, ir):
         dst = ir.destination
@@ -394,10 +397,14 @@ class FunctionEmit(object):
             self.emit_integer_mov(source, destination, sign_extend)
 
     def emit_float_mov(self, source, destination):
+        if source is not RegSystem.ST:
+            self.load_float(source)
+        if destination is RegSystem.ST:
+            return
+
         dst = destination.access_name()
         src_type = source.type
         dst_type = destination.type
-        self.load_float(source)
         if dst_type.match(TypeKind.INT):
             store = 'fistpl'
         elif dst_type.match(TypeKind.SHORT):

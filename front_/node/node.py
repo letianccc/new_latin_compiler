@@ -52,6 +52,8 @@ class Node(object):
         s2 = symbol2
         if s1.kind is SymbolKind.INTCONST or s1.kind is SymbolKind.DOUBLECONST:
             s1 = s1.translate_type(type)
+        if s2 is None:
+            return s1
         if s2.kind is SymbolKind.INTCONST or s2.kind is SymbolKind.DOUBLECONST:
             s2 = s2.translate_type(type)
         return s1, s2
@@ -82,7 +84,7 @@ class Node(object):
         ir = JumpIR(block)
         self.gen_ir(ir)
 
-    def gen_for_kinds(self, destination, source):
+    def gen_not_bool_assign(self, destination, source):
         dst = destination.gen()
         src = source.gen()
         if destination.match(NodeKind.INDIRECTION):
@@ -97,7 +99,7 @@ class Node(object):
         src = source
         # TODO: 判断要重构
         if not src.match(NodeKind.BOOLEAN):
-            self.gen_for_kinds(dst, src)
+            self.gen_not_bool_assign(dst, src)
         else:
             def cond_closure(true_block, false_block):
                 cond = src.not_node()
@@ -105,10 +107,10 @@ class Node(object):
 
             def then_closure():
                 s1 = SymbolSystem.find_symbol(SymbolKind.INTCONST, '1')
-                self.gen_for_kinds(dst, s1)
+                self.gen_not_bool_assign(dst, s1)
 
             def else_closure():
                 s0 = SymbolSystem.find_symbol(SymbolKind.INTCONST, '0')
-                self.gen_for_kinds(dst, s0)
+                self.gen_not_bool_assign(dst, s0)
 
             self.branch_template(cond_closure, then_closure, else_closure)
