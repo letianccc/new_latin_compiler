@@ -5,23 +5,25 @@
 
 当前：
 
-boolean 结果 赋值
+给Node 增加 operator 属性
 
 布尔赋值 需要更多的测试用例
+
+if 模块
+
+增加比较类型
+
 
 branch_template gen_for_kinds gen_assign_core 可以进一步重构
 
 增加比较类型
 
 
-type 比较 统一用kind作为参数
-
 symbol_system 感觉还能继续重构
 
 类型转换  显式隐式  double short int 赋值 条件比较
 
 
-if 模块
 
 5
 待做：

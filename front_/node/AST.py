@@ -96,7 +96,7 @@ class DeclaratorInitializerNode(Node):
         if self.initializer:
             # TODO: type暂时为None
             self.initializer = self.initializer.check()
-            d = Defind(NodeKind.ASSIGN, self.declarator, self.initializer)
+            d = Defind(OperatorKind.ASSIGN, self.declarator, self.initializer)
             self.declarator.defind = d
 
         return self
@@ -169,22 +169,17 @@ class IfNode(Node):
             cond = self.cond.not_node()
             cond.gen(false_block, true_block)
 
-        def then_closure(then_block):
-            self.gen_block(then_block, self.then_stmts)
+        def then_closure():
+            for stmt in self.then_stmts:
+                stmt.gen()
 
         else_closure = None
         if len(self.else_stmts) != 0:
-            def else_closure(else_block):
-                self.gen_block(else_block, self.else_stmts)
+            def else_closure():
+                for stmt in self.else_stmts:
+                    stmt.gen()
 
         self.branch_template(cond_closure, then_closure, else_closure)
-
-    def gen_block(self, block, statements):
-        self.function.change_block(block)
-        for stmt in statements:
-            stmt.gen()
-
-
 
 
 class WhileNode(Node):

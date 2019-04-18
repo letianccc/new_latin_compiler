@@ -75,3 +75,14 @@ word_map = {
     '#': TokenKind.POUND,
 
 }
+
+not_map = {
+    OperatorKind.EQUAL: OperatorKind.UNEQUAL,
+    OperatorKind.UNEQUAL: OperatorKind.EQUAL,
+    OperatorKind.GREAT: OperatorKind.LESS_EQ,
+    OperatorKind.GREAT_EQ: OperatorKind.LESS,
+    OperatorKind.LESS: OperatorKind.GREAT_EQ,
+    OperatorKind.LESS_EQ: OperatorKind.GREAT,
+    OperatorKind.AND: OperatorKind.OR,
+    OperatorKind.OR: OperatorKind.AND,
+}

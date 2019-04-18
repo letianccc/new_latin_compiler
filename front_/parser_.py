@@ -42,7 +42,7 @@ class Parser:
         self.match(TokenKind.ID)
         func_ident = self.next_token()
         # 参数
-        params = self.parse_parameters(NodeKind.FORMAL_PARAMETER)
+        params = self.parse_parameters(True)
 
         # s.init(type, func_ident.value, params)
         # SymbolSystem.add(s)
@@ -53,23 +53,23 @@ class Parser:
         node.params = params
         return node
 
-    def parse_parameters(self, parameter_kind):
+    def parse_parameters(self, parse_formal):
         self.expect(TokenKind.LPAREN)
         params = []
         if self.match(TokenKind.RPAREN):
             self.next_token()
             return params
-        self.parse_param(params, parameter_kind)
+        self.parse_param(params, parse_formal)
         while self.match(TokenKind.COMMA):
             self.next_token()
-            self.parse_param(params, parameter_kind)
+            self.parse_param(params, parse_formal)
         self.expect(TokenKind.RPAREN)
         for index, p in enumerate(reversed(params)):
             p.index = index
         return params
 
-    def parse_param(self, parameters, parameter_kind):
-        if parameter_kind is NodeKind.ACTUAL_PARAMETER:
+    def parse_param(self, parameters, parse_formal):
+        if parse_formal is False:
             p = self.parse_expression()
         else:
             t = self.next_token()
@@ -79,7 +79,7 @@ class Parser:
         parameters.append(p)
 
     def parse_call(self, variable):
-        params = self.parse_parameters(NodeKind.ACTUAL_PARAMETER)
+        params = self.parse_parameters(False)
         # self.expect(TokenKind.SEMICOLON)
         f = FunctionToken(variable.value)
         n = CallNode(self.function, f, params)
@@ -266,29 +266,29 @@ class Parser:
         expr = self.join()
         while self.match(TokenKind.OR):
             self.expect(TokenKind.OR)
-            k = NodeKind.OR
-            expr = RelationNode(self.function, k, expr, self.join())
+            k = OperatorKind.OR
+            expr = LogicNode(self.function, k, expr, self.join())
         return expr
 
     def join(self):
         expr = self.equal()
         while self.match(TokenKind.AND):
             self.expect(TokenKind.AND)
-            k = NodeKind.AND
-            expr = RelationNode(self.function, k, expr, self.equal())
+            k = OperatorKind.AND
+            expr = LogicNode(self.function, k, expr, self.equal())
         return expr
 
     def equal(self):
         expr = self.rel()
         while self.match(TokenKind.EQUAL) or self.match(TokenKind.UNEQUAL):
             m = {
-                TokenKind.EQUAL: NodeKind.EQUAL,
-                TokenKind.UNEQUAL: NodeKind.UNEQUAL,
+                TokenKind.EQUAL: OperatorKind.EQUAL,
+                TokenKind.UNEQUAL: OperatorKind.UNEQUAL,
             }
             t = self.cur_token()
             k = m[t.kind]
             self.next_token()
-            expr = RelationNode(self.function, k, expr, self.rel())
+            expr = CompareNode(self.function, k, expr, self.rel())
         return expr
 
     def rel(self):
@@ -296,41 +296,41 @@ class Parser:
         while self.match(TokenKind.LESS) or self.match(TokenKind.LESS_EQ) or \
                 self.match(TokenKind.GREAT) or self.match(TokenKind.GREAT_EQ):
             m = {
-                TokenKind.LESS: NodeKind.LESS,
-                TokenKind.LESS_EQ: NodeKind.LESS_EQ,
-                TokenKind.GREAT: NodeKind.GREAT,
-                TokenKind.GREAT_EQ: NodeKind.GREAT_EQ,
+                TokenKind.LESS: OperatorKind.LESS,
+                TokenKind.LESS_EQ: OperatorKind.LESS_EQ,
+                TokenKind.GREAT: OperatorKind.GREAT,
+                TokenKind.GREAT_EQ: OperatorKind.GREAT_EQ,
             }
             t = self.cur_token()
             k = m[t.kind]
             self.next_token()
-            expr = RelationNode(self.function, k, expr, self.expr_())
+            expr = CompareNode(self.function, k, expr, self.expr_())
         return expr
 
     def expr_(self):
         expr = self.term()
         while self.match(TokenKind.ADD) or self.match(TokenKind.SUB):
             m = {
-                TokenKind.ADD: NodeKind.ADD,
-                TokenKind.SUB: NodeKind.SUB,
+                TokenKind.ADD: OperatorKind.ADD,
+                TokenKind.SUB: OperatorKind.SUB,
             }
             t = self.cur_token()
             k = m[t.kind]
             self.next_token()
-            expr = BinaryNode(self.function, k, expr, self.term())
+            expr = ArithNode(self.function, k, expr, self.term())
         return expr
 
     def term(self):
         expr = self.unary()
         while self.match(TokenKind.MUL) or self.match(TokenKind.DIV):
             m = {
-                TokenKind.MUL: NodeKind.MUL,
-                TokenKind.DIV: NodeKind.DIV,
+                TokenKind.MUL: OperatorKind.MUL,
+                TokenKind.DIV: OperatorKind.DIV,
             }
             t = self.cur_token()
             k = m[t.kind]
             self.next_token()
-            expr = BinaryNode(self.function, k, expr, self.term())
+            expr = ArithNode(self.function, k, expr, self.term())
 
         return expr
 

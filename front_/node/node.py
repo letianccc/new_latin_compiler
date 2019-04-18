@@ -63,16 +63,16 @@ class Node(object):
             condition_closure(then_block, next_block)
 
             self.function.change_block(then_block)
-            then_closure(then_block)
+            then_closure()
             self.function.add_block(then_block)
         else:
             else_block = Block()
             condition_closure(then_block, else_block)
             self.function.change_block(then_block)
-            then_closure(then_block)
+            then_closure()
             self.gen_jump(next_block)
             self.function.change_block(else_block)
-            else_closure(else_block)
+            else_closure()
             self.function.add_block(then_block)
             self.function.add_block(else_block)
         self.function.add_block(next_block)
@@ -96,21 +96,19 @@ class Node(object):
         dst = destination
         src = source
         # TODO: 判断要重构
-        if src.__class__.__name__ != 'RelationNode':
+        if not src.match(NodeKind.BOOLEAN):
             self.gen_for_kinds(dst, src)
-        elif src.__class__.__name__ == 'RelationNode':
+        else:
             def cond_closure(true_block, false_block):
                 cond = src.not_node()
                 cond.gen(false_block, true_block)
 
-            def then_closure(then_block):
+            def then_closure():
                 s1 = SymbolSystem.find_symbol(SymbolKind.INTCONST, '1')
                 self.gen_for_kinds(dst, s1)
 
-            def else_closure(else_block):
+            def else_closure():
                 s0 = SymbolSystem.find_symbol(SymbolKind.INTCONST, '0')
                 self.gen_for_kinds(dst, s0)
 
             self.branch_template(cond_closure, then_closure, else_closure)
-        else:
-            raise Exception

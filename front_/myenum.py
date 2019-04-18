@@ -110,6 +110,9 @@ class TypeKind(IntEnum):
 class NodeKind(IntEnum):
     IF = auto()
 
+    ARITH = auto()
+    BOOLEAN = auto()
+
     CALL = auto()
     FUNCTION = auto()
     ACTUAL_PARAMETER = auto()
@@ -118,10 +121,7 @@ class NodeKind(IntEnum):
     DECLARATOR = auto()
     DECLARATION = auto()
     DECLARATOR_INITIALIZER = auto()
-    ADD = auto()
-    SUB = auto()
-    MUL = auto()
-    DIV = auto()
+
     ADDRESS_OF = auto()
     INDIRECTION = auto()
     POINTER_DECLARATOR = auto()
@@ -129,17 +129,10 @@ class NodeKind(IntEnum):
     RETURN = auto()
     TYPE = auto()
     CAST = auto()
-    OR = auto()
-    AND = auto()
+
     BITOR = auto()
     BITXOR = auto()
     BITAND = auto()
-    EQUAL = auto()
-    UNEQUAL = auto()
-    GREAT = auto()
-    LESS = auto()
-    GREAT_EQ = auto()
-    LESS_EQ = auto()
 
 
 class OperatorKind(IntEnum):
