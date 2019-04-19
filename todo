@@ -4,7 +4,13 @@
 
 当前：
 
+emit_mov  所有相关函数  dst src 位置 重构
+
 寄存器管理
+
+for
+
+数组参数传递
 
 id symbol is_formal_param属性可以考虑去掉
 

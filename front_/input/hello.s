@@ -19,6 +19,7 @@ _main:
 	movl	$10, %ecx
 	movl	%edx, %edi
 	rep stosl
+	movl	$1, 28(%esp)
 	movl	28(%esp), %eax
 	movl	%eax, 4(%esp)
 	movl	$LC0, (%esp)

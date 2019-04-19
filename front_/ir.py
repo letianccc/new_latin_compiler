@@ -41,11 +41,12 @@ class IR:
         return False
 
 class ArrayInitialIR(IR):
-    def __init__(self, array):
+    def __init__(self, array, values):
         super(ArrayInitialIR, self).__init__()
         self.kind = OperatorKind.ARRAY_INIT
         self.operator = OperatorKind.ARRAY_INIT
         self.array = array
+        self.values = values
 
 
 class ConditionalJumpIR(IR):

@@ -129,14 +129,14 @@ class ArrayInitializerNode(Node):
         return self
 
     def gen(self):
-        ir = ArrayInitialIR(self.declarator)
+        values = []
+        if self.initializer is not None:
+            for value in self.initializer:
+                v = value.gen()
+                values.append(v)
+        ir = ArrayInitialIR(self.declarator, values)
         self.gen_ir(ir)
 
-        # # TODO: initializer 应该递归gen
-        # if self.initializer is :
-        #     dst = self.declarator
-        #     src = self.initializer
-        #     self.gen_assign_core_node(dst, src)
 
 class PointerDeclaratorNode(Node):
     def __init__(self, function, declarator):

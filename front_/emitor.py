@@ -211,6 +211,10 @@ class FunctionEmit(object):
 
     def emit_array_init(self, ir):
         array = ir.array
+        self.array_zero_init(array)
+        self.custom_init(array, ir.values)
+
+    def array_zero_init(self, array):
         addr = array.access_name()
         init_value = 0
         size = array.size
@@ -222,6 +226,14 @@ class FunctionEmit(object):
                 '    rep\tstosl\n'
         self.emit_code(code)
 
+    def custom_init(self, array, values):
+        sp = array.offset
+        size = array.type.size
+        for v in values:
+            addr = f'{sp}(%esp)'
+            sp += size
+            m = MemorySystem.new(addr, array.type)
+            self.assign_core(m, v)
 
     def emit_jump(self, ir):
         b = ir.block.access_name()
