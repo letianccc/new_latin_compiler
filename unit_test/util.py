@@ -56,7 +56,13 @@ def assert_file(test_dir, cpath, refer_spath, check_exefile, check_sfile):
     exe_path = tmp_spath[:-2]
     out_refer = cpath[:-1] + 'out'
     tmpout_path = fr'{test_dir}\tmp.out'
-    write_code(cpath, tmp_spath)
+
+    code = compile(cpath)
+    if code == '':
+        return
+    with open(tmp_spath, 'w') as f:
+        f.write(code)
+
     exist = os.path.isfile(out_refer)
     if check_exefile and exist:
         out = execute_sfile(tmp_spath, exe_path)

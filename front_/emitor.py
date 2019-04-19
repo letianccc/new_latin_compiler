@@ -67,7 +67,8 @@ class Emit(object):
             space = 0
 
             for local in func.locals:
-                space += local.type.size
+                if local.is_array is False:
+                    space += local.type.size
             for tag in func.tags:
                 space += tag.type.size
             # 计算call最大使用空间
@@ -78,25 +79,29 @@ class Emit(object):
                     max_space = s
 
             space += max_space
-            # 数组
+            # 数组总空间
             for a in func.arrays:
-                size = a.size
-                space += size
+                capacity = a.size * a.type.size
+                space += capacity
 
             func.reverse_space = space
             sp = space
             # 数组成员分配偏移
             for a in func.arrays:
-                sp -= a.size
+                capacity = a.size * a.type.size
+                sp -= capacity
                 a.offset = sp
+                name = f'{a.offset}(%esp)'
+                a.set_access_name(name)
 
             # 为局部变量分配偏移
             for index, local in enumerate(func.locals):
                 # local.index = index
-                size = local.type.size
-                sp -= size
-                name = f'{sp}(%esp)'
-                local.set_access_name(name)
+                if local.is_array is False:
+                    size = local.type.size
+                    sp -= size
+                    name = f'{sp}(%esp)'
+                    local.set_access_name(name)
             # 为中间变量分配偏移
             for tag in func.tags:
                 sp -= tag.type.size
@@ -198,9 +203,25 @@ class FunctionEmit(object):
             self.emit_conditional_jump(ir)
         elif ir.match(OperatorKind.JUMP):
             self.emit_jump(ir)
+        elif ir.match(OperatorKind.ARRAY_INIT):
+            self.emit_array_init(ir)
 
         else:
             raise Exception
+
+    def emit_array_init(self, ir):
+        array = ir.array
+        addr = array.access_name()
+        init_value = 0
+        size = array.size
+        # TODO: size, init_value 的汇编表示需要重构
+        code = f'    leal\t{addr}, %edx\n'\
+               f'    movl\t${init_value}, %eax\n'\
+               f'    movl\t${size}, %ecx\n'\
+                '    movl\t%edx, %edi\n'\
+                '    rep\tstosl\n'
+        self.emit_code(code)
+
 
     def emit_jump(self, ir):
         b = ir.block.access_name()

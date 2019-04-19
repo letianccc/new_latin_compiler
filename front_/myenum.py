@@ -97,6 +97,8 @@ class TokenKind(IntEnum):
     FUNCTION = auto()
 
 
+    ARRAY_DECLARATOR = auto()
+
 
 class TypeKind(IntEnum):
     VOID = auto()
@@ -163,6 +165,8 @@ class OperatorKind(IntEnum):
     LESS = auto()
     GREAT_EQ = auto()
     LESS_EQ = auto()
+
+    ARRAY_INIT = auto()
 
 class BlockKind(IntEnum):
     FUNCTION = auto()

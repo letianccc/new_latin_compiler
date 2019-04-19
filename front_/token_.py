@@ -93,7 +93,7 @@ class DeclaratorToken(Token):
 class ArrayDeclaratorToken(Token):
     def __init__(self, value, size_expression):
         self.value = value
-        self.kind = TokenKind.DECLARATOR
+        self.kind = TokenKind.ARRAY_DECLARATOR
         self.size_expression = size_expression
 
     def check(self, type):

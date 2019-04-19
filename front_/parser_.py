@@ -100,6 +100,8 @@ class Parser:
         return stmt
 
     def parse_expression(self):
+        if self.match(TokenKind.LBRACE):
+            return self.parse_array_init_block()
         variable = self.parse_bool()
         # TODO: assign 应该像其他表达式一样用一个循环实现
         if self.match(TokenKind.ASSIGN):
@@ -109,6 +111,18 @@ class Parser:
             # self.expect(TokenKind.SEMICOLON)
             return AssignNode(self.function, variable, value)
         return variable
+
+    def parse_array_init_block(self):
+        self.expect(TokenKind.LBRACE)
+        exprs = []
+        ex = self.parse_expression()
+        exprs.append(ex)
+        while self.match(TokenKind.COMMA):
+            self.next_token()
+            ex = self.parse_expression()
+            exprs.append(ex)
+        self.expect(TokenKind.RBRACE)
+        return exprs
 
     def parse_declaration(self):
         type = self.next_token()
@@ -129,11 +143,16 @@ class Parser:
 
     def parse_declarator_initialer(self):
         declarator = self.parse_declarator()
+
         init = None
         if self.match(TokenKind.ASSIGN):
             self.next_token()
             init = self.parse_expression()
-        d = DeclaratorInitializerNode(self.function, declarator, init)
+        if declarator.match(TokenKind.ARRAY_DECLARATOR):
+            init_node = ArrayInitializerNode
+        else:
+            init_node = DeclaratorInitializerNode
+        d = init_node(self.function, declarator, init)
         return d
 
     def parse_declarator(self, parse_type=False):

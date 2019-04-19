@@ -123,6 +123,7 @@ class FunctionSymbol(Symbol):
         self.reverse_space = 0
         self.tags = []
         self.strings = []
+        # TODO: local 和 array 最好分开
         self.locals = []
         b = Block(BlockKind.FUNCTION)
         self.cur_block = b
@@ -283,6 +284,7 @@ class ArraySymbol(IdentifierSymbol):
         count = int(count)
         s = count * self.type.size
         return s
+
 
 class TagSymbol(Symbol):
     """docstring for IdentifierSymbol."""

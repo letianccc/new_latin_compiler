@@ -5,9 +5,8 @@
 
 void main() {
 
-	int i = 1;
-	int b[10] = { i, i+ 1 };
-
+	int a[10] = {0};
+	printf("target 0: %d\n", a[1]);
 
 	getchar();
 }

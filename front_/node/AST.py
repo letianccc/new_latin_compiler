@@ -108,6 +108,36 @@ class DeclaratorInitializerNode(Node):
             src = self.initializer
             self.gen_assign_core_node(dst, src)
 
+class ArrayInitializerNode(Node):
+    def __init__(self, function, declarator, initializer):
+        super(ArrayInitializerNode, self).__init__()
+        self.kind = NodeKind.DECLARATOR_INITIALIZER
+        self.function = function
+        self.declarator = declarator
+        self.initializer = initializer
+
+    def check(self, identifier_type):
+        super().check()
+        self.declarator = self.declarator.check(identifier_type)
+        initer = self.initializer
+        if initer is not None:
+            for index, e in enumerate(initer):
+                e = e.check()
+                initer[index] = e
+                d = Defind(OperatorKind.ASSIGN, self.declarator, e)
+                self.declarator.defind = d
+        return self
+
+    def gen(self):
+        ir = ArrayInitialIR(self.declarator)
+        self.gen_ir(ir)
+
+        # # TODO: initializer 应该递归gen
+        # if self.initializer is :
+        #     dst = self.declarator
+        #     src = self.initializer
+        #     self.gen_assign_core_node(dst, src)
+
 class PointerDeclaratorNode(Node):
     def __init__(self, function, declarator):
         super(PointerDeclaratorNode, self).__init__()
