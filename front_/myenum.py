@@ -135,6 +135,8 @@ class NodeKind(IntEnum):
     BITXOR = auto()
     BITAND = auto()
 
+    ARRAY = auto()
+
 
 class OperatorKind(IntEnum):
     CALL = auto()
@@ -186,3 +188,4 @@ class RegKind(IntEnum):
     AX = auto()
     DX = auto()
     ST = auto()
+    CX = auto()

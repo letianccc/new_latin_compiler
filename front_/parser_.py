@@ -145,8 +145,14 @@ class Parser:
             if parse_type is True:
                 raise Exception
             d = self.parse_identifier()
-            # TODO: kind可能需要改变
-            d = DeclaratorToken(d.value)
+            if self.match(TokenKind.LBRACKET):
+                self.next_token()
+                expr = self.parse_expression()
+                self.expect(TokenKind.RBRACKET)
+                d = ArrayDeclaratorToken(d.value, expr)
+            else:
+                # TODO: kind可能需要改变
+                d = DeclaratorToken(d.value)
         elif parse_type is True:
             return None
         return d
@@ -365,10 +371,10 @@ class Parser:
             return expr
         elif self.match(TokenKind.LBRACE):
             return self.block_()
-        elif self.is_array():
-            name = self.next_token()
-            index = self.parse_array_element()
-            return Array(name, index)
+        # elif self.is_array():
+        #     name = self.next_token()
+        #     index = self.parse_array_element()
+        #     return Array(name, index)
         elif self.match(TokenKind.STRING):
             t = self.next_token()
             return t
@@ -380,6 +386,11 @@ class Parser:
             expr = self.parse_identifier()
             if self.match(TokenKind.LPAREN):
                 expr = self.parse_call(expr)
+            elif self.match(TokenKind.LBRACKET):
+                self.next_token()
+                size = self.parse_expression()
+                self.expect(TokenKind.RBRACKET)
+                expr = ArrayNode(self.function, expr, size)
             return expr
             # return self.parse_identifier()
         else:

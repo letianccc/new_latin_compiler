@@ -99,6 +99,13 @@ class Symbol(object):
     def not_node(self):
         return self
 
+    def access_name(self):
+        return self.__access_name
+
+    def set_access_name(self, access_name):
+        self.__access_name = access_name
+
+# TODO: function 应该继承 id
 class FunctionSymbol(Symbol):
     """docstring for FunctionSymbol."""
 
@@ -120,9 +127,15 @@ class FunctionSymbol(Symbol):
         b = Block(BlockKind.FUNCTION)
         self.cur_block = b
         self.blocks = [b]
+        self.is_array = False
+
+    @property
+    def arrays(self):
+        a = [local for local in self.locals if local.is_array is True]
+        return a
 
     def add_param(self, parameter):
-        parameter.index = len(self.params)
+        # parameter.index = len(self.params)
         self.params.append(parameter)
 
     def gen_ir(self, ir):
@@ -224,10 +237,10 @@ class IdentifierSymbol(Symbol):
         self.kind = SymbolKind.ID
         self.type = type
         self.value = value
-        self.index = 0
-        self.offset = None
+        self.__index = 0
         self.is_formal_param = False
         self.__access_name = None
+        self.is_array = False
 
     def sub_type(self):
         # TODO: sub_type  考虑放到PointerSymbol里面
@@ -242,6 +255,35 @@ class IdentifierSymbol(Symbol):
     def set_access_name(self, access_name):
         self.__access_name = access_name
 
+class ArraySymbol(IdentifierSymbol):
+    """docstring for IdentifierSymbol."""
+
+    def __init__(self, type, value, size_expression):
+        super(ArraySymbol, self).__init__(type, value)
+        self.size_expression = size_expression
+        self.is_formal_param = False
+        self.__access_name = None
+        self.is_array = True
+        self.__offset = None
+
+    @property
+    def size(self):
+        return int(self.size_expression.value)
+
+    @property
+    def offset(self):
+        return self.__offset
+
+    @offset.setter
+    def offset(self, offset):
+        self.__offset = offset
+
+    def get_size(self):
+        count = self.size_expression.value
+        count = int(count)
+        s = count * self.type.size
+        return s
+
 class TagSymbol(Symbol):
     """docstring for IdentifierSymbol."""
 
@@ -249,7 +291,6 @@ class TagSymbol(Symbol):
         super(TagSymbol, self).__init__()
         self.kind = SymbolKind.TAG
         self.type = type
-        self.offset = None
         self.defind = None
 
     def sub_type(self):
@@ -257,6 +298,3 @@ class TagSymbol(Symbol):
         if self.type.sub_type is None:
             return self.type
         return self.type.sub_type
-
-    def access_name(self):
-        return f'{self.offset}(%esp)'

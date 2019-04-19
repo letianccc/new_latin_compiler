@@ -1,12 +1,17 @@
 class T:
-    targets = [1, 2]
-    @property
-    @classmethod
-    def value(cls):
-        return cls.targets
+    def __init__(self):
+        self._value = 1
 
-    @classmethod
-    def add(cls, value):
-        cls.targets.append(value)
-T.add(333)
-print(T.value)
+    @property
+    def value(self):
+        print('getter')
+        return self._value
+
+    @value.setter
+    def value(self, value):
+        print('setter')
+        pass
+
+t = T()
+v = t.value
+print(v)

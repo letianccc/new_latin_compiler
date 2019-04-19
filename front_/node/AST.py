@@ -181,7 +181,6 @@ class IfNode(Node):
 
         self.branch_template(cond_closure, then_closure, else_closure)
 
-
 class WhileNode(Node):
     def __init__(self, function, cond, suite):
         self.cond = cond

@@ -47,7 +47,7 @@ class Emit(object):
         for f in self.functions:
             for b in f.blocks:
                 if b.kind is BlockKind.GENERAL:
-                    b.index = index
+                    # b.index = index
                     name = f'L{index}'
                     b.set_access_name(name)
                     index += 1
@@ -78,25 +78,34 @@ class Emit(object):
                     max_space = s
 
             space += max_space
+            # 数组
+            for a in func.arrays:
+                size = a.size
+                space += size
+
             func.reverse_space = space
-            # 为局部变量分配偏移
             sp = space
+            # 数组成员分配偏移
+            for a in func.arrays:
+                sp -= a.size
+                a.offset = sp
+
+            # 为局部变量分配偏移
             for index, local in enumerate(func.locals):
-                local.index = index
+                # local.index = index
                 size = local.type.size
                 sp -= size
                 name = f'{sp}(%esp)'
                 local.set_access_name(name)
-                # local.offset = sp
             # 为中间变量分配偏移
             for tag in func.tags:
                 sp -= tag.type.size
-                tag.offset = sp
+                name = f'{sp}(%esp)'
+                tag.set_access_name(name)
             # 为函数参数分配偏移
             # +5  要跳过 返回地址，ebp,ebx,esi,edi 寻址到第一个传递过来的值
             offset = 5 * 4
             for p in func.params:
-                # p.offset = offset
                 name = f'{offset}(%ebp)'
                 p.set_access_name(name)
                 offset += p.type.size

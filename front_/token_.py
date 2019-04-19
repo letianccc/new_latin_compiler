@@ -90,6 +90,21 @@ class DeclaratorToken(Token):
         SymbolSystem.add(s)
         return s
 
+class ArrayDeclaratorToken(Token):
+    def __init__(self, value, size_expression):
+        self.value = value
+        self.kind = TokenKind.DECLARATOR
+        self.size_expression = size_expression
+
+    def check(self, type):
+        s = SymbolSystem.find_symbol(SymbolKind.ID, self.value, None, LevelKind.CURRENT)
+        if s is not None:
+            raise Exception("重复定义")
+        expr = self.size_expression.check()
+        s = ArraySymbol(type, self.value, expr)
+        SymbolSystem.add(s)
+        return s
+
 class StringToken(Token):
     def __init__(self, kind, value=None):
         self.value = value

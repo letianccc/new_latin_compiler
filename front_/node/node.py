@@ -36,6 +36,9 @@ class Node(object):
         # log(self.function.identifier.value)
         self.function = self.function.symbol
 
+    def gen(self):
+        return self
+
     def gen_ir(self, ir):
         ir.from_node = self.kind
         self.function.gen_ir(ir)

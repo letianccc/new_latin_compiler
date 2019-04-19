@@ -13,7 +13,7 @@ class Block:
         self.irs = []
         self.kind = kind
         self.symbol = None
-        self.index = None
+        # self.index = None
         self.__access_name = None
 
     def add_ir(self, ir):

@@ -15,9 +15,9 @@ class Reg(object):
         self.type = type
         self.__access_name = access_name
 
-    def match(self, *types):
-        for t in types:
-            if self.kind is t.kind:
+    def match(self, *kinds):
+        for k in kinds:
+            if self.kind is k:
                 return True
         return False
 
@@ -32,6 +32,8 @@ class RegSystem(object):
     AX = Reg(RegKind.AX, '%ax', TypeSystem.SHORT, 2)
     EDX = Reg(RegKind.DX, '%edx', TypeSystem.INT, 4)
     DX = Reg(RegKind.DX, '%dx', TypeSystem.SHORT, 2)
+    ECX = Reg(RegKind.CX, '%ecx', TypeSystem.INT, 4)
+    CX = Reg(RegKind.CX, '%cx', TypeSystem.SHORT, 2)
     ST = Reg(RegKind.ST, None, TypeSystem.DOUBLE, 8)
 
     @classmethod

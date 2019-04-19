@@ -13,6 +13,35 @@ class ExpressionNode(Node):
     def change_type(self):
         return self
 
+
+class ArrayNode(Node):
+    def __init__(self, function, array, index_expression):
+        self.array = array
+        self.index_expression = index_expression
+        self.function = function
+        self.kind = NodeKind.ARRAY
+        self.type = None
+
+    def check(self):
+        super().check()
+        self.array = self.array.check()
+        self.type = self.array.type
+        self.index_expression = self.index_expression.check()
+        return self
+
+    def gen(self):
+        index = self.index_expression.gen()
+        self.gen_assign_core(RegSystem.ECX, index)
+        return self
+
+    def access_name(self):
+        offset = self.array.offset
+        size = self.type.size
+        pos = f'{offset}(%esp, %ecx, {size})'
+        return pos
+
+
+
 class CastNode(Node):
     def __init__(self, function, type, expression):
         super(CastNode, self).__init__()
@@ -289,11 +318,11 @@ class ReturnNode(Node):
         ir = ReturnIR(t, src)
         self.gen_ir(ir)
 
-class ArrayNode(Node):
-    def __init__(self, variable, index):
-        self.variable = variable
-        self.index = index
-
-class Array_Node(Node):
-    def __init__(self, array):
-        self.array = array
+# class ArrayNode(Node):
+#     def __init__(self, variable, index):
+#         self.variable = variable
+#         self.index = index
+#
+# class Array_Node(Node):
+#     def __init__(self, array):
+#         self.array = array
