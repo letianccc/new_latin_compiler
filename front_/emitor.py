@@ -268,8 +268,9 @@ class FunctionEmit(object):
     def emit_integer_compare(self, jump_operator, ir):
         # interget 包括short int
         # cmp 第二个操作数（右边） 不能是常量
-        left = RegSystem.EAX
-        right = RegSystem.EDX
+        size = 4
+        left = RegSystem.free_reg(size)
+        right = RegSystem.free_reg(size)
         self.emit_mov(ir.left, left)
         self.emit_mov(ir.right, right)
         left_addr = left.access_name()
@@ -280,6 +281,8 @@ class FunctionEmit(object):
         code += f'    cmpl\t{right_addr}, {left_addr}\n'
         code += f'    {jump_operator} {b}\n'
         self.emit_code(code)
+        left.free()
+        right.free()
 
     def emit_indirect_assign(self, ir):
         # *p = 1
@@ -325,8 +328,11 @@ class FunctionEmit(object):
             self.emit_integer_arith(ir)
 
     def emit_integer_arith(self, ir):
-        self.emit_mov(ir.left, RegSystem.EAX)
-        self.emit_mov(ir.right, RegSystem.EDX)
+        size = 4
+        reg1 = RegSystem.free_reg(size)
+        reg2 = RegSystem.free_reg(size)
+        self.emit_mov(ir.left, reg1)
+        self.emit_mov(ir.right, reg2)
         m = {
             OperatorKind.ADD: 'addl',
             OperatorKind.SUB: 'subl',
@@ -334,9 +340,13 @@ class FunctionEmit(object):
             OperatorKind.DIV: 'divl',
         }
         op = m[ir.kind]
-        code = f'    {op}\t%edx, %eax\n'
+        addr1 = reg1.access_name()
+        addr2 = reg2.access_name()
+        code = f'    {op}\t{addr2}, {addr1}\n'
         self.emit_code(code)
-        self.emit_mov(RegSystem.EAX, ir.destination)
+        reg2.free()
+        self.emit_mov(reg1, ir.destination)
+        reg1.free()
 
     def emit_double_arith(self, ir):
         self.load_float(ir.right)
@@ -440,22 +450,7 @@ class FunctionEmit(object):
         src_type = source.type
         dst_type = destination.type
 
-        if src_type.match(TypeKind.DOUBLE) or dst_type.match(TypeKind.DOUBLE):
-            raise Exception
-            code = ''
-            if dst_type.match(TypeKind.DOUBLE):
-                # self.load_float(src)
-                if src_type.match(TypeKind.DOUBLE):
-                    code += f'    fldl\t{src}\n'
-                elif src_type.match(TypeKind.INT):
-                    code += f'    fildl\t{src}\n'
-                elif src_type.match(TypeKind.SHORT):
-                    code += f'    filds\t{src}\n'
-            else:
-                raise Exception
-            code += f'    fstpl\t{dst}\n'
-
-        elif src_type.size == 4 and dst_type.size == 4:
+        if src_type.size == 4 and dst_type.size == 4:
             code = f'    movl\t{src}, {dst}\n'
         elif src_type.match(TypeKind.SHORT) and dst_type.size == 4:
             if sign_extend is True:

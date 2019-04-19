@@ -1,11 +1,10 @@
 
 已做：
 
-去掉除string_symbol外所有symbol的 index, offset 属性
 
 当前：
 
-ArraySymbol  access_name
+寄存器管理
 
 id symbol is_formal_param属性可以考虑去掉
 
@@ -13,7 +12,7 @@ id symbol is_formal_param属性可以考虑去掉
 
 
 while if  gen模块需要重构  增加复用
-branch_template gen_for_kinds gen_assign_core 可以进一步重构
+branch_template gen_for_kinds gen_assign_node 可以进一步重构
 
 
 类型转换  显式隐式  double short int 赋值 条件比较

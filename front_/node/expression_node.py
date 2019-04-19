@@ -7,6 +7,7 @@ from front_.ir import *
 from front_.reg_system import *
 from front_.symbol_system import *
 from front_.data import *
+from front_.memory import *
 
 
 class ExpressionNode(Node):
@@ -32,7 +33,11 @@ class ArrayNode(Node):
     def gen(self):
         index = self.index_expression.gen()
         self.gen_assign_core(RegSystem.ECX, index)
-        return self
+        src = self
+        dst = self.function.new_tag(self.type)
+        d = Defind(None, dst, self)
+        self.gen_assign_core(dst, src)
+        return dst
 
     def access_name(self):
         offset = self.array.offset
@@ -174,7 +179,9 @@ class AssignNode(Node):
         self.variable.defind = d
 
     def gen(self):
-        self.gen_assign_core(self.variable, self.value)
+        dst = self.variable
+        src = self.value
+        self.gen_assign_core_node(dst, src)
 
 class ArithNode(ExpressionNode):
     def __init__(self, function, operator, left, right):

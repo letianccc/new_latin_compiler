@@ -4,6 +4,8 @@
 from front_.myenum import *
 from front_.type_system import *
 
+
+
 class Reg(object):
     """docstring for Type."""
 
@@ -14,6 +16,7 @@ class Reg(object):
         # TODO: type 暂时为short或int
         self.type = type
         self.__access_name = access_name
+        self.leisure = True
 
     def match(self, *kinds):
         for k in kinds:
@@ -27,6 +30,13 @@ class Reg(object):
     def gen(self):
         return self
 
+    def use(self):
+        self.leisure = False
+
+    def free(self):
+        self.leisure = True
+
+
 class RegSystem(object):
     EAX = Reg(RegKind.AX, '%eax', TypeSystem.INT, 4)
     AX = Reg(RegKind.AX, '%ax', TypeSystem.SHORT, 2)
@@ -34,7 +44,10 @@ class RegSystem(object):
     DX = Reg(RegKind.DX, '%dx', TypeSystem.SHORT, 2)
     ECX = Reg(RegKind.CX, '%ecx', TypeSystem.INT, 4)
     CX = Reg(RegKind.CX, '%cx', TypeSystem.SHORT, 2)
+    EBX = Reg(RegKind.BX, '%ebx', TypeSystem.INT, 4)
+    BX = Reg(RegKind.BX, '%bx', TypeSystem.SHORT, 2)
     ST = Reg(RegKind.ST, None, TypeSystem.DOUBLE, 8)
+    regs = [EAX, AX, EDX, DX, ECX, CX, EBX, BX, ST]
 
     @classmethod
     def reg(cls, kind, size):
@@ -46,3 +59,14 @@ class RegSystem(object):
         elif kind is RegKind.DX:
             r = cls.DX if size == 2 else cls.EDX
         return r
+
+    @classmethod
+    def free_reg(cls, size):
+        # 目前size为2返回AX  为0或4返回EAX
+        if size == 8:
+            return cls.ST
+        for reg in cls.regs:
+            if size == reg.size and reg.leisure is True:
+                reg.use()
+                return reg
+        raise Exception

@@ -5,6 +5,7 @@ from front_.util import *
 from front_.type_system import *
 from front_.ir import *
 from front_.symbol_system import *
+from front_.reg_system import *
 
 
 
@@ -43,9 +44,9 @@ class Node(object):
         ir.from_node = self.kind
         self.function.gen_ir(ir)
 
-    def gen_assign(self, destination, source):
-        src = source.gen()
-        dst = destination.gen()
+    def gen_assign_core(self, destination, source):
+        src = source
+        dst = destination
         src, dst = self.translate_type(dst.type, src, dst)
         ir = AssignIR(dst, src)
         self.gen_ir(ir)
@@ -87,33 +88,44 @@ class Node(object):
         ir = JumpIR(block)
         self.gen_ir(ir)
 
-    def gen_not_bool_assign(self, destination, source):
-        dst = destination.gen()
-        src = source.gen()
+    def gen_assign(self, destination, source):
+        if destination.match(NodeKind.ARRAY):
+            src = source.gen()
+            dst = destination
+            index = dst.index_expression.gen()
+            self.gen_assign_core(RegSystem.ECX, index)
+        else:
+            dst = destination.gen()
+            src = source.gen()
         if destination.match(NodeKind.INDIRECTION):
             dst = dst.defind.src1
             ir = IndirectionAssignIR(dst, src)
             self.gen_ir(ir)
         else:
-            self.gen_assign(dst, src)
+            self.gen_assign_core(dst, src)
 
-    def gen_assign_core(self, destination, source):
-        dst = destination
+    def gen_assign_core_node(self, destination, source):
         src = source
+        dst = destination
         # TODO: 判断要重构
         if not src.match(NodeKind.BOOLEAN):
-            self.gen_not_bool_assign(dst, src)
+            self.gen_assign(dst, src)
         else:
-            def cond_closure(true_block, false_block):
-                cond = src.not_node()
-                cond.gen(false_block, true_block)
+            self.gen_bool_assign(dst, src)
 
-            def then_closure():
-                s1 = SymbolSystem.find_symbol(SymbolKind.INTCONST, '1')
-                self.gen_not_bool_assign(dst, s1)
+    def gen_bool_assign(self, destination, source):
+        dst = destination
+        src = source
+        def cond_closure(true_block, false_block):
+            cond = src.not_node()
+            cond.gen(false_block, true_block)
 
-            def else_closure():
-                s0 = SymbolSystem.find_symbol(SymbolKind.INTCONST, '0')
-                self.gen_not_bool_assign(dst, s0)
+        def then_closure():
+            s1 = SymbolSystem.find_symbol(SymbolKind.INTCONST, '1')
+            self.gen_assign(dst, s1)
 
-            self.branch_template(cond_closure, then_closure, else_closure)
+        def else_closure():
+            s0 = SymbolSystem.find_symbol(SymbolKind.INTCONST, '0')
+            self.gen_assign(dst, s0)
+
+        self.branch_template(cond_closure, then_closure, else_closure)

@@ -178,6 +178,8 @@ class SymbolKind(IntEnum):
     INTCONST = auto()
     DOUBLECONST = auto()
     TAG = auto()
+    MEMORY = auto()
+    REG = auto()
 
 class LevelKind(IntEnum):
     CURRENT = auto()
@@ -187,5 +189,6 @@ class LevelKind(IntEnum):
 class RegKind(IntEnum):
     AX = auto()
     DX = auto()
-    ST = auto()
     CX = auto()
+    BX = auto()
+    ST = auto()

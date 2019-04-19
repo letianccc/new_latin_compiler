@@ -1,17 +1,20 @@
-class T:
-    def __init__(self):
-        self._value = 1
+from enum import IntEnum, auto
+class TypeKind(IntEnum):
+    VOID = auto()
+    SHORT = auto()
+    STRING = auto()
+    POINTER = auto()
+    INT = auto()
+    FLOAT = auto()
+    DOUBLE = auto()
 
-    @property
-    def value(self):
-        print('getter')
-        return self._value
+class RegKind(IntEnum):
+    AX = auto()
+    DX = auto()
+    CX = auto()
+    BX = auto()
+    ST = auto()
 
-    @value.setter
-    def value(self, value):
-        print('setter')
-        pass
-
-t = T()
-v = t.value
-print(v)
+t = RegKind.AX
+r = isinstance(t, TypeKind)
+print(r)
