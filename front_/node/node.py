@@ -129,3 +129,6 @@ class Node(object):
             self.gen_assign(dst, s0)
 
         self.branch_template(cond_closure, then_closure, else_closure)
+
+    def not_node(self):
+        return self

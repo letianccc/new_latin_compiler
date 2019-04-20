@@ -46,14 +46,14 @@ class Parser:
 
         # s.init(type, func_ident.value, params)
         # SymbolSystem.add(s)
-        stmts = self.block_()
+        stmts = self.parse_block()
         node.statements = stmts
         node.type = type
         node.identifier = func_ident
         node.params = params
         return node
 
-    def block_(self):
+    def parse_block(self):
         if self.match(TokenKind.LBRACE):
             self.expect(TokenKind.LBRACE)
             if self.match(TokenKind.RBRACE):
@@ -67,7 +67,8 @@ class Parser:
             block = self.parse_statements()
             self.expect(TokenKind.RBRACE)
         else:
-            block = self.single_stmt()
+            st = self.parse_statement()
+            block = [st]
         return block
 
     def parse_statements(self):
@@ -77,27 +78,67 @@ class Parser:
             stmts.append(stmt)
         return stmts
 
-    def single_stmt(self):
-        return self.parse_statement()
-
     def parse_statement(self):
         # TODO: 有的直接返回 有的匹配分号  最好重构一下
         if self.match(TokenKind.IF):
             stmt = self.parse_if()
             return stmt
-        elif self.match(TokenKind.INT, TokenKind.DOUBLE, TokenKind.SHORT):
+        if self.match(TokenKind.FOR):
+            stmt = self.parse_for()
+            return stmt
+        elif self.match_type():
             stmt = self.parse_declaration()
         elif self.match(TokenKind.WHILE):
             stmt = self.parse_while()
             return stmt
         elif self.match(TokenKind.LBRACE):
-            stmt = self.block_()
+            stmt = self.parse_block()
         elif self.match(TokenKind.RETURN):
             stmt = self.parse_return()
         else:
             stmt = self.parse_expression()
         self.expect(TokenKind.SEMICOLON)
         return stmt
+
+    def parse_for(self):
+        self.expect(TokenKind.FOR)
+        self.expect(TokenKind.LPAREN)
+        init = self.parse_initial()
+        self.expect(TokenKind.SEMICOLON)
+        cond = self.parse_for_cond()
+        self.expect(TokenKind.SEMICOLON)
+        iterator = self.parse_expression_sequence()
+        self.expect(TokenKind.RPAREN)
+        suite = self.parse_block()
+        n = ForNode(self.function, init, cond, iterator, suite)
+        return n
+
+    def parse_initial(self):
+        if self.match_type():
+            init = self.parse_declaration()
+        else:
+            # TODO: 必须是assign expr
+            init = self.parse_expression()
+        return init
+
+    def parse_for_cond(self):
+        expr = self.parse_expression()
+        while self.match(TokenKind.COMMA):
+            self.next_token()
+            e = self.parse_expression()
+            k = OperatorKind.AND
+            expr = LogicNode(self.function, k, expr, e)
+        return expr
+
+    def parse_expression_sequence(self):
+        exprs = []
+        ex = self.parse_expression()
+        exprs.append(ex)
+        while self.match(TokenKind.COMMA):
+            self.next_token()
+            ex = self.parse_expression()
+            exprs.append(ex)
+        return exprs
 
     def parse_expression(self):
         if self.match(TokenKind.LBRACE):
@@ -108,7 +149,6 @@ class Parser:
             self.next_token()
             value = self.parse_expression()
             variable.left_value = True
-            # self.expect(TokenKind.SEMICOLON)
             return AssignNode(self.function, variable, value)
         return variable
 
@@ -176,22 +216,6 @@ class Parser:
             return None
         return d
 
-    # def parse_point_declarator(self):
-    #     self.expect(TokenKind.MUL)
-    #     ident = self.parse_declarator()
-
-    def decl_single_variable(self, type):
-        ident = self.next_token()
-
-        if self.match(TokenKind.LPAREN):
-            raise Exception
-
-
-        # amount = 1
-        # self.add_symbol(var, amount)
-        self.expect(TokenKind.SEMICOLON)
-        return DeclNode(self.function, type, ident)
-
     def add_symbol(self, symbol, amount):
         self.symbols.append(symbol)
         self.ident_count += amount
@@ -202,7 +226,7 @@ class Parser:
         self.expect(TokenKind.LPAREN)
         cond = self.parse_bool()
         self.expect(TokenKind.RPAREN)
-        suite = self.block_()
+        suite = self.parse_block()
         return WhileNode(self.function, cond, suite)
 
     def parse_if(self):
@@ -210,10 +234,10 @@ class Parser:
         self.expect(TokenKind.LPAREN)
         cond = self.parse_bool()
         self.expect(TokenKind.RPAREN)
-        then_stmts = self.block_()
+        then_stmts = self.parse_block()
         if self.match(TokenKind.ELSE):
             self.expect(TokenKind.ELSE)
-            else_stmts = self.block_()
+            else_stmts = self.parse_block()
         else:
             else_stmts = []
         return IfNode(self.function, cond, then_stmts, else_stmts)
@@ -245,7 +269,6 @@ class Parser:
 
     def parse_call(self, variable):
         params = self.parse_parameters(False)
-        # self.expect(TokenKind.SEMICOLON)
         f = FunctionToken(variable.value)
         n = CallNode(self.function, f, params)
         self.function.call_nodes.append(n)
@@ -389,7 +412,7 @@ class Parser:
             self.expect(TokenKind.RPAREN)
             return expr
         elif self.match(TokenKind.LBRACE):
-            return self.block_()
+            return self.parse_block()
         # elif self.is_array():
         #     name = self.next_token()
         #     index = self.parse_array_element()
@@ -465,6 +488,9 @@ class Parser:
             return True
         else:
             return False
+
+    def match_type(self):
+        return self.match(TokenKind.INT, TokenKind.DOUBLE, TokenKind.SHORT)
 
     def cur_token(self):
         return self.tokens[self.index]

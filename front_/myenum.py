@@ -112,6 +112,7 @@ class TypeKind(IntEnum):
 class NodeKind(IntEnum):
     IF = auto()
     WHILE = auto()
+    FOR = auto()
 
     ARITH = auto()
     BOOLEAN = auto()

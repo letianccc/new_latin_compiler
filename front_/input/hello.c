@@ -5,8 +5,11 @@
 
 void main() {
 
-	int a[10] = {0, 1};
-	printf("target 0: %d\n", a[1]);
+	for (int i = 0, j = 0; i<8, j<5; i++, j++) {
+		printf("hello\n");
+
+
+	}
 
 	getchar();
 }

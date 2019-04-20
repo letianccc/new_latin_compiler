@@ -150,6 +150,7 @@ class CallNode(Node):
                 raise Exception('函数参数数量不匹配')
             # TODO: 检测参数兼容性
 
+
     def gen(self):
         params = []
         for p in self.params:
@@ -177,6 +178,7 @@ class AssignNode(Node):
         self.value = self.value.check()
         d = Defind(self.operator, self.variable, self.value)
         self.variable.defind = d
+        return self
 
     def gen(self):
         dst = self.variable
@@ -317,6 +319,7 @@ class ReturnNode(Node):
     def check(self):
         super().check()
         self.operand = self.operand.check()
+        return self
 
     def gen(self):
         src = self.operand.gen()

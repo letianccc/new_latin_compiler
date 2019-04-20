@@ -7,6 +7,7 @@ from front_.type_system import *
 class SymbolSystem(object):
     identifiers = None
     __literals = None
+    debug_id = []
 
     @classmethod
     def add(cls, symbol):
@@ -14,6 +15,7 @@ class SymbolSystem(object):
             symbols = cls.__literals
         elif symbol.match(SymbolKind.ID, SymbolKind.FUNCTION):
             symbols = cls.identifiers
+            cls.debug_id.append(symbol)
         symbols.add(symbol)
 
     @classmethod

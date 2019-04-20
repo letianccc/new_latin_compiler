@@ -26,9 +26,11 @@ class FunctionNode(Node):
         SymbolSystem.enter()
         for p in self.params:
             p.check()
-        for stmt in self.statements:
-            stmt.check()
+        stmts = self.statements
+        for index, stmt in enumerate(self.statements):
+            stmts[index] = stmt.check()
         SymbolSystem.quit()
+        return self
 
     def gen(self):
         # if self.statements is None:
@@ -51,9 +53,9 @@ class ParameterNode(Node):
 
     def check(self):
         super().check()
-        s = self.parameter.check(self.specifier)
-        self.parameter = s
-        self.function.add_param(s)
+        self.parameter = self.parameter.check(self.specifier)
+        self.function.add_param(self.parameter)
+        return self
 
     def gen(self):
         p = self.parameter.gen()
@@ -77,6 +79,7 @@ class DeclarationNode(Node):
         for d in self.declarators:
             d.check(type)
             self.function.locals.append(d.declarator)
+        return self
 
     def gen(self):
         for d in self.declarators:
@@ -148,9 +151,8 @@ class PointerDeclaratorNode(Node):
     def check(self, type):
         type = TypeSystem.pointer(type)
         if self.declarator is not None:
-            d = self.declarator.check(type)
-            self.declarator = d
-            return d
+            self.declarator = self.declarator.check(type)
+            return self.declarator
         else:
             # TODO: 这部分逻辑最好用另一个类实现
             return type
@@ -186,15 +188,20 @@ class IfNode(Node):
 
     def check(self):
         super().check()
-        self.cond.check()
         SymbolSystem.enter()
-        for stmt in self.then_stmts:
-            stmt.check()
+        self.cond = self.cond.check()
+
+        stmts = self.then_stmts
+        for index, stmt in enumerate(self.then_stmts):
+            stmts[index] = stmt.check()
+
         SymbolSystem.quit()
         SymbolSystem.enter()
-        for stmt in self.else_stmts:
-            stmt.check()
+        stmts = self.else_stmts
+        for index, stmt in enumerate(self.else_stmts):
+            stmts[index] = stmt.check()
         SymbolSystem.quit()
+        return self
 
     def gen(self):
         def cond_closure(true_block, false_block):
@@ -222,11 +229,12 @@ class WhileNode(Node):
 
     def check(self):
         super().check()
-        self.cond.check()
         SymbolSystem.enter()
-        for stmt in self.suite:
-            stmt.check()
+        self.cond = self.cond.check()
+        for index, stmt in enumerate(self.suite):
+            self.suite[index] = stmt.check()
         SymbolSystem.quit()
+        return self
 
     def gen(self):
         cond_block = Block()
@@ -244,5 +252,50 @@ class WhileNode(Node):
 
         self.function.add_block(cond_block)
         self.function.add_block(suite_block)
+        self.function.add_block(next_block)
+        self.function.change_block(next_block)
+
+class ForNode(Node):
+    def __init__(self, function, initialer, condition, iterator, suite):
+        self.function = function
+        self.kind = NodeKind.FOR
+        self.initialer = initialer
+        self.condition = condition
+        self.iterator = iterator
+        self.suite = suite
+
+    def check(self):
+        super().check()
+        SymbolSystem.enter()
+        self.initialer = self.initialer.check()
+        self.condition = self.condition.check()
+        for index, stmt in enumerate(self.iterator):
+            self.iterator[index] = stmt.check()
+        for index, stmt in enumerate(self.suite):
+            self.suite[index] = stmt.check()
+        SymbolSystem.quit()
+        return self
+
+    def gen(self):
+        self.initialer.gen()
+
+        cond_block = Block()
+        suite_block = Block()
+        next_block = Block()
+        # 先add 不然在stmt gen过程中  会先插入其他块
+        self.function.add_block(cond_block)
+        self.function.add_block(suite_block)
+
+        self.function.change_block(cond_block)
+        cond = self.condition.not_node()
+        cond.gen(next_block, suite_block)
+
+        self.function.change_block(suite_block)
+        for stmt in self.suite:
+            stmt.gen()
+        for stmt in self.iterator:
+            stmt.gen()
+        self.gen_jump(cond_block)
+
         self.function.add_block(next_block)
         self.function.change_block(next_block)

@@ -4,7 +4,6 @@
 
 当前：
 
-emit_mov  所有相关函数  dst src 位置 重构
 
 寄存器管理
 
@@ -16,6 +15,7 @@ id symbol is_formal_param属性可以考虑去掉
 
 数组
 
+emit_mov  所有相关函数  dst src 位置 重构
 
 while if  gen模块需要重构  增加复用
 branch_template gen_for_kinds gen_assign_node 可以进一步重构
