@@ -74,7 +74,7 @@ class Lexer:
             if next == '=':
                 word += next
                 self.next_char()
-        elif c == '&' or c == '|' or c == '=':
+        elif c == '&' or c == '|' or c == '=' or c == '+' or c == '-':
             next = self.next_char()
             if c == next:
                 word += next

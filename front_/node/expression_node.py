@@ -15,6 +15,27 @@ class ExpressionNode(Node):
         return self
 
 
+
+class IncNode(Node):
+    def __init__(self, function, operand):
+        super(IncNode, self).__init__()
+        self.kind = NodeKind.INC
+        self.function = function
+        self.operand = operand
+        self.operator = OperatorKind.INC
+
+    def check(self):
+        super().check()
+        self.operand = self.operand.check()
+        return self
+
+    def gen(self):
+        s1 = SymbolSystem.find_symbol(SymbolKind.INTCONST, '1')
+        k = OperatorKind.ADD
+        ir = ExprIR(k, self.operand, self.operand, s1)
+        self.function.gen_ir(ir)
+        return self.operand
+
 class ArrayNode(Node):
     def __init__(self, function, array, index_expression):
         self.array = array
@@ -44,8 +65,6 @@ class ArrayNode(Node):
         size = self.type.size
         pos = f'{offset}(%esp, %ecx, {size})'
         return pos
-
-
 
 class CastNode(Node):
     def __init__(self, function, type, expression):

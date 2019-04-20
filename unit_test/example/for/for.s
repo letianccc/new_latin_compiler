@@ -9,145 +9,141 @@ _bubble:
     pushl	%edi
     movl	%esp, %ebp
     andl	$-16, %esp
-    subl	$120, %esp
-    leal	80(%esp), %edx
+    subl	$112, %esp
+    leal	72(%esp), %edx
     movl	$0, %eax
     movl	$10, %ecx
     movl	%edx, %edi
     rep	stosl
     movl	$3, %eax
-    movl	%eax, 80(%esp)
+    movl	%eax, 72(%esp)
     movl	$5, %eax
-    movl	%eax, 84(%esp)
+    movl	%eax, 76(%esp)
     movl	$1, %eax
-    movl	%eax, 88(%esp)
+    movl	%eax, 80(%esp)
     movl	$7, %eax
-    movl	%eax, 92(%esp)
+    movl	%eax, 84(%esp)
     movl	$4, %eax
-    movl	%eax, 96(%esp)
+    movl	%eax, 88(%esp)
     movl	$9, %eax
-    movl	%eax, 100(%esp)
+    movl	%eax, 92(%esp)
     movl	$6, %eax
-    movl	%eax, 104(%esp)
+    movl	%eax, 96(%esp)
     movl	$8, %eax
+    movl	%eax, 100(%esp)
+    movl	$10, %eax
+    movl	%eax, 104(%esp)
+    movl	$4, %eax
     movl	%eax, 108(%esp)
     movl	$10, %eax
-    movl	%eax, 112(%esp)
-    movl	$4, %eax
-    movl	%eax, 116(%esp)
-    movl	$10, %eax
-    movl	%eax, 64(%esp)
+    movl	%eax, 56(%esp)
     movl	$0, %eax
-    movl	%eax, 72(%esp)
+    movl	%eax, 64(%esp)
 L0:
-    movl	64(%esp), %eax
+    movl	56(%esp), %eax
     movl	$1, %edx
     subl	%edx, %eax
-    movl	%eax, 60(%esp)
-    movl	72(%esp), %eax
-    movl	60(%esp), %edx
+    movl	%eax, 52(%esp)
+    movl	64(%esp), %eax
+    movl	52(%esp), %edx
     cmpl	%edx, %eax
     jge L7
 L1:
     movl	$0, %eax
-    movl	%eax, 68(%esp)
+    movl	%eax, 60(%esp)
 L2:
-    movl	64(%esp), %eax
+    movl	56(%esp), %eax
     movl	$1, %edx
     subl	%edx, %eax
-    movl	%eax, 56(%esp)
-    movl	56(%esp), %eax
-    movl	72(%esp), %edx
+    movl	%eax, 48(%esp)
+    movl	48(%esp), %eax
+    movl	64(%esp), %edx
     subl	%edx, %eax
-    movl	%eax, 52(%esp)
-    movl	68(%esp), %eax
-    movl	52(%esp), %edx
+    movl	%eax, 44(%esp)
+    movl	60(%esp), %eax
+    movl	44(%esp), %edx
     cmpl	%edx, %eax
     jge L6
 L3:
-    movl	68(%esp), %eax
+    movl	60(%esp), %eax
     movl	%eax, %ecx
-    movl	80(%esp, %ecx, 4), %eax
-    movl	%eax, 48(%esp)
-    movl	68(%esp), %eax
+    movl	72(%esp, %ecx, 4), %eax
+    movl	%eax, 40(%esp)
+    movl	60(%esp), %eax
     movl	$1, %edx
     addl	%edx, %eax
-    movl	%eax, 44(%esp)
-    movl	44(%esp), %eax
+    movl	%eax, 36(%esp)
+    movl	36(%esp), %eax
     movl	%eax, %ecx
-    movl	80(%esp, %ecx, 4), %eax
-    movl	%eax, 40(%esp)
-    movl	48(%esp), %eax
-    movl	40(%esp), %edx
+    movl	72(%esp, %ecx, 4), %eax
+    movl	%eax, 32(%esp)
+    movl	40(%esp), %eax
+    movl	32(%esp), %edx
     cmpl	%edx, %eax
     jle L5
 L4:
-    movl	68(%esp), %eax
+    movl	60(%esp), %eax
     movl	%eax, %ecx
-    movl	80(%esp, %ecx, 4), %eax
-    movl	%eax, 36(%esp)
-    movl	36(%esp), %eax
-    movl	%eax, 76(%esp)
-    movl	68(%esp), %eax
-    movl	$1, %edx
-    addl	%edx, %eax
-    movl	%eax, 32(%esp)
-    movl	32(%esp), %eax
-    movl	%eax, %ecx
-    movl	80(%esp, %ecx, 4), %eax
+    movl	72(%esp, %ecx, 4), %eax
     movl	%eax, 28(%esp)
-    movl	68(%esp), %eax
-    movl	%eax, %ecx
     movl	28(%esp), %eax
-    movl	%eax, 80(%esp, %ecx, 4)
-    movl	68(%esp), %eax
+    movl	%eax, 68(%esp)
+    movl	60(%esp), %eax
     movl	$1, %edx
     addl	%edx, %eax
     movl	%eax, 24(%esp)
     movl	24(%esp), %eax
     movl	%eax, %ecx
-    movl	76(%esp), %eax
-    movl	%eax, 80(%esp, %ecx, 4)
-L5:
-    movl	68(%esp), %eax
-    movl	$1, %edx
-    addl	%edx, %eax
+    movl	72(%esp, %ecx, 4), %eax
     movl	%eax, 20(%esp)
+    movl	60(%esp), %eax
+    movl	%eax, %ecx
     movl	20(%esp), %eax
-    movl	%eax, 68(%esp)
-    jmp L2
-L6:
-    movl	72(%esp), %eax
+    movl	%eax, 72(%esp, %ecx, 4)
+    movl	60(%esp), %eax
     movl	$1, %edx
     addl	%edx, %eax
     movl	%eax, 16(%esp)
     movl	16(%esp), %eax
-    movl	%eax, 72(%esp)
+    movl	%eax, %ecx
+    movl	68(%esp), %eax
+    movl	%eax, 72(%esp, %ecx, 4)
+L5:
+    movl	60(%esp), %eax
+    movl	$1, %edx
+    addl	%edx, %eax
+    movl	%eax, 60(%esp)
+    jmp L2
+L6:
+    movl	64(%esp), %eax
+    movl	$1, %edx
+    addl	%edx, %eax
+    movl	%eax, 64(%esp)
     jmp L0
 L7:
     movl	$0, %eax
-    movl	%eax, 72(%esp)
+    movl	%eax, 64(%esp)
 L8:
-    movl	72(%esp), %eax
-    movl	64(%esp), %edx
+    movl	64(%esp), %eax
+    movl	56(%esp), %edx
     cmpl	%edx, %eax
     jge L10
 L9:
-    movl	72(%esp), %eax
+    movl	64(%esp), %eax
     movl	%eax, %ecx
-    movl	80(%esp, %ecx, 4), %eax
+    movl	72(%esp, %ecx, 4), %eax
     movl	%eax, 12(%esp)
     movl	$LC0, %eax
     movl	%eax, 0(%esp)
     movl	12(%esp), %eax
     movl	%eax, 4(%esp)
     call	_printf
-    movl	72(%esp), %eax
+    movl	64(%esp), %eax
     movl	$1, %edx
     addl	%edx, %eax
     movl	%eax, 8(%esp)
     movl	8(%esp), %eax
-    movl	%eax, 72(%esp)
+    movl	%eax, 64(%esp)
     jmp L8
 L10:
     movl	%ebp, %esp

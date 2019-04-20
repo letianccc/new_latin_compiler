@@ -383,6 +383,9 @@ class Parser:
 
     def unary(self):
         # TODO: + -a  - +a  + +a - -a
+        if self.match(TokenKind.ADD):
+            self.next_token()
+            return self.unary()
         if self.match(TokenKind.NOT) or self.match(TokenKind.SUB) \
             or self.match(TokenKind.BITAND) or self.match(TokenKind.MUL):
             t = self.cur_token()
@@ -401,6 +404,10 @@ class Parser:
                 self.expect(TokenKind.RPAREN)
                 expr = self.unary()
                 expr = CastNode(self.function, type, expr)
+        elif self.match(TokenKind.INC):
+            self.next_token()
+            expr = self.factor()
+            expr = IncNode(self.function, expr)
         else:
             expr = self.factor()
         return expr

@@ -97,6 +97,7 @@ class TokenKind(IntEnum):
     FUNCTION = auto()
 
 
+
     ARRAY_DECLARATOR = auto()
 
 
@@ -139,6 +140,8 @@ class NodeKind(IntEnum):
     BITAND = auto()
 
     ARRAY = auto()
+    INC = auto()
+    DEC = auto()
 
 
 class OperatorKind(IntEnum):
@@ -168,6 +171,8 @@ class OperatorKind(IntEnum):
     LESS_EQ = auto()
 
     ARRAY_INIT = auto()
+    INC = auto()
+    DEC = auto()
 
 class BlockKind(IntEnum):
     FUNCTION = auto()

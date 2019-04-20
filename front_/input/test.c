@@ -4,8 +4,8 @@ void bubble() {
 	int temp;
     int i, j;
 	int len = 10;
-    for (i=0; i<len-1; i=i+1) {
-		for (j=0; j<len-1-i; j=j+1) {
+    for (i=0; i<len-1; ++i) {
+		for (j=0; j<len-1-i; ++j) {
             if (arr[j] > arr[j+1]) {
                 temp = arr[j];
                 arr[j] = arr[j+1];
@@ -17,7 +17,6 @@ void bubble() {
 		printf ("sort %d\n", arr[i]);
 	}
 }
-
 void nest_for() {
 	for (int i = 0; i < 5; i=i+1) {
 		for (int j = 0; j < 5; j=j+	1) {
@@ -39,7 +38,6 @@ void access() {
 	for (int i = 0; i < 10; i=i+1) {
 		printf("array[i]: %d\n", a[i]);
 	}
-
 }
 
 void main() {
