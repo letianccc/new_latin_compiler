@@ -108,7 +108,6 @@ class IndirectionAssignIR(IR):
         self.dst = destination
         self.src = source
 
-
 class ExprIR(IR):
     def __init__(self, kind, destination, left, right):
         super(ExprIR, self).__init__()
@@ -131,8 +130,9 @@ class UnaryIR(IR):
 class CallIR(IR):
     """docstring for CallIR."""
 
-    def __init__(self, function, parameters):
+    def __init__(self, destination, function, parameters):
         super(CallIR, self).__init__()
+        self.destination = destination
         self.function = function
         self.params = parameters
         self.kind = OperatorKind.CALL

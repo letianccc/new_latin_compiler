@@ -169,17 +169,25 @@ class CallNode(Node):
                 raise Exception('函数参数数量不匹配')
             # TODO: 检测参数兼容性
 
-
     def gen(self):
         params = []
         for p in self.params:
             src = p.gen()
             params.append(src)
-        ir = CallIR(self.call_function, params)
-        self.gen_ir(ir)
 
-        size = self.call_function.type.size
-        dst = RegSystem.reg(RegKind.AX, size)
+        # d = Defind(self.operator, dst, operand)
+        # dst.defind = d
+
+        t = self.call_function.type
+        if t.match(TypeKind.VOID):
+            dst = None
+        else:
+            dst = self.function.new_tag(t)
+        ir = CallIR(dst, self.call_function, params)
+        self.gen_ir(ir)
+        #
+        # size = self.call_function.type.size
+        # dst = RegSystem.reg(RegKind.AX, size)
         return dst
 
 class AssignNode(Node):
@@ -228,7 +236,7 @@ class ArithNode(ExpressionNode):
 
         # TODO: 可能需要add symbol
         dst = self.function.new_tag(type)
-        d = Defind(self.kind, dst, left, right)
+        d = Defind(self.operator, dst, left, right)
         dst.defind = d
 
         k = self.operator

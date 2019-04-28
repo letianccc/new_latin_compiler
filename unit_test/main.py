@@ -36,8 +36,8 @@ def test_all():
     test_dir = r'C:\code\new_latin_compiler\unit_test\example'
     paths = filepaths(test_dir)
     check_exefile = True
-    check_sfile = True
-    # check_sfile = False
+    # check_sfile = True
+    check_sfile = False
     for cfile, sfile in paths:
         
         try:

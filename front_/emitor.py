@@ -401,6 +401,13 @@ class FunctionEmit(object):
         function_tag = f'_{ir.function.value}'
         code = f'    call\t{function_tag}\n'
         self.emit_code(code)
+        dst = ir.destination
+        if dst is not None:
+            if dst.type.match(TypeKind.DOUBLE):
+                src = RegSystem.ST
+            else:
+                src = RegSystem.reg(RegKind.AX, dst.type.size)
+            self.emit_mov(src, dst)
 
     def emit_params(self, ir):
         offset = 0
