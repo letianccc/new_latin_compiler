@@ -179,6 +179,12 @@ class ExprIR(IR):
         self.destination = destination
         self.type = TypeSystem.max_type(self.left.type, self.right.type)
 
+    def match_constant(self, operand, value):
+        if operand.match(SymbolKind.INTCONST, SymbolKind.DOUBLECONST):
+            if operand.value == value:
+                return True
+        return False
+
     def format(self):
         left = self.left.name()
         right = self.right.name()
@@ -192,43 +198,48 @@ class AddIR(ExprIR):
         right = self.right
         ir = self
         use = None
-        if self.is_zero(left):
+        if self.match_constant(left, '0'):
             use = right
-        if self.is_zero(right):
+        if self.match_constant(right, '0'):
             use = left
         if use is not None:
             ir = AssignIR(self.destination, use)
         return ir
 
-    def is_zero(self, operand):
-        if operand.match(SymbolKind.INTCONST, SymbolKind.DOUBLECONST):
-            if operand.value == '0':
-                return True
-        return False
-
 class SubIR(ExprIR):
     def optimize(self):
-        return self
         left = self.left
         right = self.right
         ir = self
-        use = None
-        if self.is_zero(left):
-            use = right
-        if self.is_zero(right):
-            use = left
-        if use is not None:
-            ir = AssignIR(self.destination, use)
+        if self.match_constant(right, '0'):
+            ir = AssignIR(self.destination, left)
+        elif self.match_constant(left, '0'):
+            ir = MinusIR(self.destination, right)
         return ir
 
 class MulIR(ExprIR):
     def optimize(self):
-        op = self.left
-        if op.match(SymbolKind.INTCONST, SymbolKind.DOUBLECONST):
-            if op.value == '0':
-                ir = AssignIR(self.destination, self.right)
-                return ir
-        return self
+        left = self.left
+        right = self.right
+        ir = self
+        # dst = src * 0 or 0 * src
+        use = None
+        if self.match_constant(left, '0'):
+            use = left
+        elif self.match_constant(right, '0'):
+            use = right
+        if use is not None:
+            ir = AssignIR(self.destination, use)
+            return ir
+        # dst = src * 1 or 1 * src
+        if self.match_constant(left, '1'):
+            use = right
+        if self.match_constant(right, '1'):
+            use = left
+        if use is not None:
+            ir = AssignIR(self.destination, use)
+            return ir
+        return ir
 
 class UnaryIR(IR):
     def __init__(self, kind, destination, operand):

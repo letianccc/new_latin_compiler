@@ -1,30 +1,27 @@
-_simple_minus:
-	ai	= 1
-	t0	= -ai
-	bi	= t0
-	as	= 1
-	t1	= -as
-	bs	= t1
-	ad	= 1
-	t2	= -ad
-	bd	= t2
-	call	printf ("target -1: %d\n",bi)
-	call	printf ("target -1: %d\n",bs)
-	call	printf ("target -1.0: %f\n",bd)
-_mix_minus:
-	ai	= 1
-	as	= 1
-	ad	= 1
-	t3	= -as
-	bi	= t3
-	t4	= -ad
-	bs	= t4
-	t5	= -ai
-	bd	= t5
-	call	printf ("target -1: %d\n",bi)
-	call	printf ("target -1: %d\n",bs)
-	call	printf ("target -1.0: %f\n",bd)
 _main:
-	call	simple_minus ()
-	call	mix_minus ()
+	a	= 1
+	t0	= 0
+	b1	= t0
+	t1	= a
+	b2	= t1
+	t2	= -a
+	b3	= t2
+	t3	= a
+	b4	= t3
+	t4	= a
+	b5	= t4
+	t5	= a
+	b6	= t5
+	t6	= 0
+	b7	= t6
+	t7	= a
+	b8	= t7
+	call	printf ("target 0 : %d\n",b1)
+	call	printf ("target 1 : %d\n",b2)
+	call	printf ("target -1: %d\n",b3)
+	call	printf ("target 1 : %d\n",b4)
+	call	printf ("target 1 : %d\n",b5)
+	call	printf ("target 1 : %d\n",b6)
+	call	printf ("target 0 : %d\n",b7)
+	call	printf ("target 1 : %d\n",b8)
 	call	getchar ()
