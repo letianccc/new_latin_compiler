@@ -155,6 +155,7 @@ class OperatorKind(IntEnum):
     RETURN = auto()
     ASSIGN = auto()
     INDIRECTION_ASSIGN = auto()
+    ARRAY_ASSIGN = auto()
     CAST = auto()
     CONDITIONAL_JUMP = auto()
     JUMP = auto()

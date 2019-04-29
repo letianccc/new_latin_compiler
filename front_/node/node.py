@@ -93,11 +93,15 @@ class Node(object):
         self.gen_ir(ir)
 
     def gen_assign(self, destination, source):
+        # TODO: NodeKind.INDIRECTION 中可能包含 NodeKind.ARRAY
         if destination.match(NodeKind.ARRAY):
             src = source.gen()
             dst = destination
             index = dst.index_expression.gen()
-            self.gen_assign_core(RegSystem.ECX, index)
+            # self.gen_assign_core(RegSystem.ECX, index)
+            ir = AssignAssignIR(dst, index, src)
+            self.gen_ir(ir)
+            return
         else:
             dst = destination.gen()
             src = source.gen()

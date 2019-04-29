@@ -207,6 +207,8 @@ class FunctionEmit(object):
             self.emit_array_init(ir)
         elif ir.match(OperatorKind.ARRAY):
             self.emit_array(ir)
+        elif ir.match(OperatorKind.ARRAY_ASSIGN):
+            self.emit_array_assign(ir)
 
         else:
             raise Exception
@@ -323,6 +325,23 @@ class FunctionEmit(object):
         self.emit_code(code)
         left.free()
         right.free()
+
+    def emit_array_assign(self, ir):
+        src = ir.source
+        self.emit_mov(ir.index, RegSystem.ECX)
+        self.assign_core(ir.array, src)
+        return
+        # *p = 1
+        src = ir.src
+        dst = ir.dst
+        # dst的类型总是POINTER
+        assert dst.type.match(TypeKind.POINTER)
+        dx = RegSystem.reg(RegKind.DX, src.type.size)
+        self.emit_mov(dst, RegSystem.EAX)
+        self.emit_mov(src, dx)
+        pos = '(%eax)'
+        dst = MemorySystem.new(pos, dst.sub_type())
+        self.emit_mov(dx, dst)
 
     def emit_indirect_assign(self, ir):
         # *p = 1

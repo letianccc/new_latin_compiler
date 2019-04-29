@@ -53,14 +53,10 @@ class ArrayNode(Node):
 
     def gen(self):
         index = self.index_expression.gen()
-        # self.gen_assign_core(RegSystem.ECX, index)
-        # src = self
         dst = self.new_tag(self.type)
         d = Defind(None, dst, self)
-        # self.gen_assign_core(dst, src)
         ir = ArrayIR(dst, self, index)
         self.gen_ir(ir)
-
         return dst
 
     def access_name(self):
@@ -188,9 +184,6 @@ class CallNode(Node):
             dst = self.function.new_tag(t)
         ir = CallIR(dst, self.call_function, params)
         self.gen_ir(ir)
-        #
-        # size = self.call_function.type.size
-        # dst = RegSystem.reg(RegKind.AX, size)
         return dst
 
 class AssignNode(Node):

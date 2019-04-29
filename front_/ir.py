@@ -117,6 +117,14 @@ class IndirectionAssignIR(IR):
         self.dst = destination
         self.src = source
 
+class AssignAssignIR(IR):
+    def __init__(self, array, index, source):
+        super(AssignAssignIR, self).__init__()
+        self.kind = OperatorKind.ARRAY_ASSIGN
+        self.array = array
+        self.index = index
+        self.source = source
+
 class ExprIR(IR):
     def __init__(self, kind, destination, left, right):
         super(ExprIR, self).__init__()
