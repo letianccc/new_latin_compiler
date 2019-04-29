@@ -205,9 +205,16 @@ class FunctionEmit(object):
             self.emit_jump(ir)
         elif ir.match(OperatorKind.ARRAY_INIT):
             self.emit_array_init(ir)
+        elif ir.match(OperatorKind.ARRAY):
+            self.emit_array(ir)
 
         else:
             raise Exception
+
+    def emit_array(self, ir):
+        dst = ir.destination
+        self.emit_mov(ir.index, RegSystem.ECX)
+        self.assign_core(dst, ir.array)
 
     def emit_array_init(self, ir):
         array = ir.array

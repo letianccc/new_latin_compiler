@@ -287,7 +287,6 @@ class ArraySymbol(IdentifierSymbol):
         s = count * self.type.size
         return s
 
-
 class TagSymbol(Symbol):
     """docstring for IdentifierSymbol."""
 

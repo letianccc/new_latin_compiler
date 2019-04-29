@@ -53,11 +53,14 @@ class ArrayNode(Node):
 
     def gen(self):
         index = self.index_expression.gen()
-        self.gen_assign_core(RegSystem.ECX, index)
-        src = self
-        dst = self.function.new_tag(self.type)
+        # self.gen_assign_core(RegSystem.ECX, index)
+        # src = self
+        dst = self.new_tag(self.type)
         d = Defind(None, dst, self)
-        self.gen_assign_core(dst, src)
+        # self.gen_assign_core(dst, src)
+        ir = ArrayIR(dst, self, index)
+        self.gen_ir(ir)
+
         return dst
 
     def access_name(self):

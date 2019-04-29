@@ -44,6 +44,10 @@ class Node(object):
         ir.from_node = self.kind
         self.function.gen_ir(ir)
 
+    def new_tag(self, type):
+        tag = self.function.new_tag(self.type)
+        return tag
+
     def gen_assign_core(self, destination, source):
         src = source
         dst = destination

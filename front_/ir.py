@@ -48,6 +48,15 @@ class ArrayInitialIR(IR):
         self.array = array
         self.values = values
 
+class ArrayIR(IR):
+    def __init__(self, destination, array, index):
+        super(ArrayIR, self).__init__()
+        self.kind = OperatorKind.ARRAY
+        self.operator = OperatorKind.ARRAY
+        self.array = array
+        self.index = index
+        self.destination = destination
+
 
 class ConditionalJumpIR(IR):
     def __init__(self, operator, left, right, block):

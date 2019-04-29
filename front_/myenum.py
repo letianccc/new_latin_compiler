@@ -171,6 +171,7 @@ class OperatorKind(IntEnum):
     LESS_EQ = auto()
 
     ARRAY_INIT = auto()
+    ARRAY = auto()
     INC = auto()
     DEC = auto()
 
