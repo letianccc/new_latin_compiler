@@ -5,7 +5,7 @@ from front_.util import *
 class Type(object):
     """docstring for Type."""
 
-    def __init__(self, kind, size, value=None, sub_type=None):
+    def __init__(self, kind, size, value, sub_type=None):
         super(Type, self).__init__()
         self.kind = kind
         self.size = size
@@ -68,7 +68,7 @@ class TypeSystem(object):
 
     @classmethod
     def new(cls, kind, size, sub_type):
-        t = Type(kind, size, sub_type)
+        t = Type(kind, size, None, sub_type)
         return t
 
     @classmethod
@@ -80,3 +80,9 @@ class TypeSystem(object):
     def pointer(self, type):
         t = TypeSystem.new(TypeKind.POINTER, TypeSystem.POINTER.size, type)
         return t
+
+    @classmethod
+    def is_integer(cls, type):
+        if type.match(TypeKind.INT, TypeKind.SHORT):
+            return True
+        return False

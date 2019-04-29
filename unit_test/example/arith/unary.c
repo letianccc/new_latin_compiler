@@ -1,4 +1,5 @@
 
+
 void simple_minus() {
     int ai = 1;
     int bi = - ai;

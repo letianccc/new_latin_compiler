@@ -7,6 +7,7 @@ from front_.data import *
 
 class Block:
     id = 0
+    # id_pool = 0
     def __init__(self, kind=BlockKind.GENERAL):
         # self.statements = stmts
         # self.id = Block.id_pool
@@ -49,6 +50,7 @@ class IR:
         return self
 
     def format(self):
+        raise Exception
         return None
 
 class ArrayInitialIR(IR):
@@ -65,7 +67,7 @@ class ArrayInitialIR(IR):
             values.append(v.name())
         values = ",".join(values)
         init = '{' + values + '}'
-        return f'\t{self.array.name()}[] = {init}\n'
+        return f'\t{self.array.name()}[]\t= {init}\n'
 
 class ArrayIR(IR):
     def __init__(self, destination, array, index):
@@ -80,7 +82,7 @@ class ArrayIR(IR):
         dst = self.destination.name()
         array = self.array.name()
         index = self.index.name()
-        return f'\t{dst} = {array}[{index}]\n'
+        return f'\t{dst}\t= {array}[{index}]\n'
 
 class ConditionalJumpIR(IR):
     def __init__(self, operator, left, right, block):
@@ -133,19 +135,16 @@ class ReturnIR(IR):
         return f'\treturn {self.operand.name()}\n'
 
 class AssignIR(IR):
-    def __init__(self, destination, source1, source2=None):
+    def __init__(self, destination, source):
         super(AssignIR, self).__init__()
         self.kind = OperatorKind.ASSIGN
-        # self.destination = destination
-        # self.source = source
-        self.operands[0] = destination
-        self.operands[1] = source1
-        self.operands[2] = source2
+        self.destination = destination
+        self.source = source
 
-    # def format(self):
-    #     dst = self.operands[0].name()
-    #     src1 = self.operands[1].name()
-    #     return f'\treturn {self.operand.name()}\n'
+    def format(self):
+        dst = self.destination.name()
+        src = self.source.name()
+        return f'\t{dst}\t= {src}\n'
 
 class IndirectionAssignIR(IR):
     def __init__(self, destination, source):
@@ -155,7 +154,7 @@ class IndirectionAssignIR(IR):
         self.src = source
 
     def format(self):
-        return f'\t*{self.dst.name()} = {self.src.name()}\n'
+        return f'\t*{self.dst.name()}\t= {self.src.name()}\n'
 
 class ArrayAssignIR(IR):
     def __init__(self, array, index, source):
@@ -189,6 +188,41 @@ class ExprIR(IR):
 
 class AddIR(ExprIR):
     def optimize(self):
+        left = self.left
+        right = self.right
+        ir = self
+        use = None
+        if self.is_zero(left):
+            use = right
+        if self.is_zero(right):
+            use = left
+        if use is not None:
+            ir = AssignIR(self.destination, use)
+        return ir
+
+    def is_zero(self, operand):
+        if operand.match(SymbolKind.INTCONST, SymbolKind.DOUBLECONST):
+            if operand.value == '0':
+                return True
+        return False
+
+class SubIR(ExprIR):
+    def optimize(self):
+        return self
+        left = self.left
+        right = self.right
+        ir = self
+        use = None
+        if self.is_zero(left):
+            use = right
+        if self.is_zero(right):
+            use = left
+        if use is not None:
+            ir = AssignIR(self.destination, use)
+        return ir
+
+class MulIR(ExprIR):
+    def optimize(self):
         op = self.left
         if op.match(SymbolKind.INTCONST, SymbolKind.DOUBLECONST):
             if op.value == '0':
@@ -204,11 +238,25 @@ class UnaryIR(IR):
         self.destination = destination
 
     def format(self):
+        dst = self.destination.name()
+        src = self.operand.name()
         if self.kind is OperatorKind.ADDRESS_OF:
-            return f'\t{self.destination.name()} = &{self.operand.name()}\n'
+            op = '&'
         elif self.kind is OperatorKind.INDIRECTION:
-            return f'\t{self.destination.name()} = *{self.operand.name()}\n'
+            op = '*'
+        return f'\t{dst}\t= {op} {src}\n'
 
+class MinusIR(IR):
+    def __init__(self, destination, operand):
+        super(MinusIR, self).__init__()
+        self.kind = OperatorKind.MINUS
+        self.operand = operand
+        self.destination = destination
+
+    def format(self):
+        dst = self.destination.name()
+        src = self.operand.name()
+        return f'\t{dst}\t= -{src}\n'
 
 class CallIR(IR):
     """docstring for CallIR."""

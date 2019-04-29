@@ -45,6 +45,7 @@ def compile(input_path, debug=False):
 
 
     symbols = [f.symbol for f in functions]
+    
 
     if debug is True:
         path = r'C:\code\new_latin_compiler\front_\input\test.ir'

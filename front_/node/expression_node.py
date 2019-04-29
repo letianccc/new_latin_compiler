@@ -14,8 +14,6 @@ class ExpressionNode(Node):
     def change_type(self):
         return self
 
-
-
 class IncNode(Node):
     def __init__(self, function, operand):
         super(IncNode, self).__init__()
@@ -66,7 +64,8 @@ class ArrayNode(Node):
         return pos
 
     def name(self):
-        return self.array.name()
+        array = self.array.name()
+        return f'{array}'
 
 class CastNode(Node):
     def __init__(self, function, type, expression):
@@ -143,6 +142,28 @@ class AddressOfNode(Node):
         d = Defind(self.operator, dst, operand)
         dst.defind = d
         ir = UnaryIR(self.operator, dst, operand)
+        self.function.gen_ir(ir)
+        return dst
+
+class MinusNode(Node):
+    def __init__(self, function, operand):
+        super(MinusNode, self).__init__()
+        self.kind = NodeKind.MINUS
+        self.operator = OperatorKind.MINUS
+        self.operand = operand
+        self.function = function
+
+    def check(self):
+        super().check()
+        self.operand = self.operand.check()
+        return self
+
+    def gen(self):
+        operand = self.operand.gen()
+        dst = self.function.new_tag(self.operand.type)
+        d = Defind(self.operator, dst, operand)
+        dst.defind = d
+        ir = MinusIR(dst, operand)
         self.function.gen_ir(ir)
         return dst
 
@@ -238,11 +259,14 @@ class ArithNode(ExpressionNode):
         d = Defind(self.operator, dst, left, right)
         dst.defind = d
 
-        k = self.operator
-        if k is OperatorKind.ADD:
-            ir = AddIR(k, dst, left, right)
-        else:
-            ir = ExprIR(k, dst, left, right)
+        op = self.operator
+        map = {
+            OperatorKind.ADD: AddIR,
+            OperatorKind.SUB: SubIR,
+            OperatorKind.MUL: MulIR,
+        }
+        IR = map[op]
+        ir = IR(op, dst, left, right)
         self.function.gen_ir(ir)
         return dst
 

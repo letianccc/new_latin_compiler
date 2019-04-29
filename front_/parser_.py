@@ -20,6 +20,7 @@ class Parser:
         self.constructors = {
             TokenKind.BITAND: AddressOfNode,
             TokenKind.MUL: IndirectionNode,
+            TokenKind.SUB: MinusNode,
         }
 
     def parse_functions(self):
@@ -456,7 +457,6 @@ class Parser:
         self.expect(TokenKind.ID)
         return t
 
-
     def parse_array_element(self):
         array_index = self.parse_array_postfix()
         if not self.is_num(array_index):
@@ -475,7 +475,6 @@ class Parser:
                 # }
                 break
         return Array_(array)
-
 
     def match(self, token_kind):
         t = self.cur_token()

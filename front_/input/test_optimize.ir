@@ -1,57 +1,30 @@
-_swap1:
-_swap2:
-	t0 = *a
-	t1 = *a
-	t2 = *b
-	*a = t2
-	t3 = *b
-	*b = c
-_swap:
-	call	swap1 (a,b)
-	call	printf ("target 4464\t: %d\n",a)
-	call	printf ("target 14464\t: %d\n",b)
-	t4 = &a
-	t5 = &b
-	call	swap2 (t4,t5)
-	call	printf ("target 14464\t: %d\n",a)
-	call	printf ("target 4464\t: %d\n",b)
-_func1:
-	t6 = *a
-	call	printf ("target 4464\t: %d\n",t6)
-_pass_pointer:
-	t7 = &a
-	call	func1 (b)
-_mul_indirect_assign:
-	t8 = &a
-	t9 = &b
-	call	printf ("target 4464\t: %d\n",a)
-	t10 = *b
-	call	printf ("target 4464\t: %d\n",t10)
-	t11 = *c
-	t12 = *t11
-	call	printf ("target 4464\t: %d\n",t12)
-	t13 = *c
-	t14 = *t13
-	*t13 = 80000
-	call	printf ("target 14464\t: %d\n",a)
-	t15 = *b
-	call	printf ("target 14464\t: %d\n",t15)
-	t16 = *c
-	t17 = *t16
-	call	printf ("target 14464\t: %d\n",t17)
-_func:
-	t18 = &a
-	call	printf ("target 4464\t: %d\n",a)
-	t19 = *b
-	call	printf ("target 4464\t: %d\n",t19)
-	t20 = *b
-	*b = c
-	call	printf ("target 14464\t: %d\n",a)
-	t21 = *b
-	call	printf ("target 14464\t: %d\n",t21)
+_simple_minus:
+	ai	= 1
+	t0	= -ai
+	bi	= t0
+	as	= 1
+	t1	= -as
+	bs	= t1
+	ad	= 1
+	t2	= -ad
+	bd	= t2
+	call	printf ("target -1: %d\n",bi)
+	call	printf ("target -1: %d\n",bs)
+	call	printf ("target -1.0: %f\n",bd)
+_mix_minus:
+	ai	= 1
+	as	= 1
+	ad	= 1
+	t3	= -as
+	bi	= t3
+	t4	= -ad
+	bs	= t4
+	t5	= -ai
+	bd	= t5
+	call	printf ("target -1: %d\n",bi)
+	call	printf ("target -1: %d\n",bs)
+	call	printf ("target -1.0: %f\n",bd)
 _main:
-	call	func ()
-	call	pass_pointer ()
-	call	swap ()
-	call	mul_indirect_assign ()
+	call	simple_minus ()
+	call	mix_minus ()
 	call	getchar ()

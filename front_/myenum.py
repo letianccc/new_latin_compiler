@@ -142,6 +142,7 @@ class NodeKind(IntEnum):
     ARRAY = auto()
     INC = auto()
     DEC = auto()
+    MINUS = auto()
 
 
 class OperatorKind(IntEnum):
@@ -175,7 +176,8 @@ class OperatorKind(IntEnum):
     ARRAY = auto()
     INC = auto()
     DEC = auto()
-
+    MINUS = auto()
+    
 class BlockKind(IntEnum):
     FUNCTION = auto()
     STRING = auto()

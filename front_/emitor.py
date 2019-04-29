@@ -51,7 +51,7 @@ class Emit(object):
                     name = f'L{index}'
                     b.set_access_name(name)
                     index += 1
-                
+
 
 
     def allocate_float(self):
@@ -210,9 +210,23 @@ class FunctionEmit(object):
             self.emit_array(ir)
         elif ir.match(OperatorKind.ARRAY_ASSIGN):
             self.emit_array_assign(ir)
-
+        elif ir.match(OperatorKind.MINUS):
+            self.emit_minus(ir)
         else:
             raise Exception
+
+    def emit_minus(self, ir):
+        type = ir.operand.type
+        if TypeSystem.is_integer(type):
+            self.emit_mov(RegSystem.EAX, ir.operand)
+            code = '\tnegl\t %eax\n'
+            self.emit_code(code)
+            self.emit_mov(ir.destination, RegSystem.EAX)
+        else:
+            self.emit_mov(RegSystem.ST, ir.operand)
+            code = '\tfchs\n'
+            self.emit_code(code)
+            self.emit_mov(ir.destination, RegSystem.ST)
 
     def emit_array(self, ir):
         dst = ir.destination
@@ -435,9 +449,7 @@ class FunctionEmit(object):
             self.assign_core(dst, p)
 
     def emit_assign(self, ir):
-        src = ir.operands[1]
-        dst = ir.operands[0]
-        self.assign_core(dst, src)
+        self.assign_core(ir.destination, ir.source)
 
     def assign_core(self, destination, source):
         dst = destination

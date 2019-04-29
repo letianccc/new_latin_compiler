@@ -1,13 +1,13 @@
-
-
 #include<stdio.h>
 
-void f() {
-	return 0;
-}
+
 void main() {
 
-	int b;
-	b = f();
-	getchar();
+
+	double ad = 1;
+	double bd = -ad;
+	printf("%f\n", bd);
+
+    getchar();
+
 }
