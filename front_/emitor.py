@@ -215,7 +215,7 @@ class FunctionEmit(object):
 
     def emit_array(self, ir):
         dst = ir.destination
-        self.emit_mov(ir.index, RegSystem.ECX)
+        self.emit_mov(RegSystem.ECX, ir.index)
         self.assign_core(dst, ir.array)
 
     def emit_array_init(self, ir):
@@ -313,8 +313,8 @@ class FunctionEmit(object):
         size = 4
         left = RegSystem.free_reg(size)
         right = RegSystem.free_reg(size)
-        self.emit_mov(ir.left, left)
-        self.emit_mov(ir.right, right)
+        self.emit_mov(left, ir.left)
+        self.emit_mov(right, ir.right)
         left_addr = left.access_name()
         right_addr = right.access_name()
         b = ir.block.access_name()
@@ -328,20 +328,9 @@ class FunctionEmit(object):
 
     def emit_array_assign(self, ir):
         src = ir.source
-        self.emit_mov(ir.index, RegSystem.ECX)
+        self.emit_mov(RegSystem.ECX, ir.index)
         self.assign_core(ir.array, src)
         return
-        # *p = 1
-        src = ir.src
-        dst = ir.dst
-        # dst的类型总是POINTER
-        assert dst.type.match(TypeKind.POINTER)
-        dx = RegSystem.reg(RegKind.DX, src.type.size)
-        self.emit_mov(dst, RegSystem.EAX)
-        self.emit_mov(src, dx)
-        pos = '(%eax)'
-        dst = MemorySystem.new(pos, dst.sub_type())
-        self.emit_mov(dx, dst)
 
     def emit_indirect_assign(self, ir):
         # *p = 1
@@ -350,11 +339,11 @@ class FunctionEmit(object):
         # dst的类型总是POINTER
         assert dst.type.match(TypeKind.POINTER)
         dx = RegSystem.reg(RegKind.DX, src.type.size)
-        self.emit_mov(dst, RegSystem.EAX)
-        self.emit_mov(src, dx)
+        self.emit_mov(RegSystem.EAX, dst)
+        self.emit_mov(dx, src)
         pos = '(%eax)'
         dst = MemorySystem.new(pos, dst.sub_type())
-        self.emit_mov(dx, dst)
+        self.emit_mov(dst, dx)
 
     def emit_indirection(self, ir):
         # TODO: src的类型未知  可能是short
@@ -363,11 +352,11 @@ class FunctionEmit(object):
         assert src.type.match(TypeKind.POINTER)
         dst_addr = dst.access_name()
         eax = RegSystem.reg(RegKind.AX, src.type.size)
-        self.emit_mov(src, eax)
+        self.emit_mov(eax, src)
         pos = '(%eax)'
         target = MemorySystem.new(pos, dst.type)
-        self.emit_mov(target, eax)
-        self.emit_mov(eax, dst)
+        self.emit_mov(eax, target)
+        self.emit_mov(dst, eax)
 
     def emit_address_of(self, ir):
         dst = ir.destination
@@ -390,8 +379,8 @@ class FunctionEmit(object):
         size = 4
         reg1 = RegSystem.free_reg(size)
         reg2 = RegSystem.free_reg(size)
-        self.emit_mov(ir.left, reg1)
-        self.emit_mov(ir.right, reg2)
+        self.emit_mov(reg1, ir.left)
+        self.emit_mov(reg2, ir.right)
         m = {
             OperatorKind.ADD: 'addl',
             OperatorKind.SUB: 'subl',
@@ -404,7 +393,7 @@ class FunctionEmit(object):
         code = f'    {op}\t{addr2}, {addr1}\n'
         self.emit_code(code)
         reg2.free()
-        self.emit_mov(reg1, ir.destination)
+        self.emit_mov(ir.destination, reg1)
         reg1.free()
 
     def emit_double_arith(self, ir):
@@ -433,7 +422,7 @@ class FunctionEmit(object):
                 src = RegSystem.ST
             else:
                 src = RegSystem.reg(RegKind.AX, dst.type.size)
-            self.emit_mov(src, dst)
+            self.emit_mov(dst, src)
 
     def emit_params(self, ir):
         offset = 0
@@ -453,32 +442,32 @@ class FunctionEmit(object):
         dst = destination
         src = source
         if src.type.match(TypeKind.DOUBLE) or dst.type.match(TypeKind.DOUBLE):
-            self.emit_mov(src, dst)
+            self.emit_mov(dst, src)
         else:
             eax = RegSystem.EAX
-            self.emit_mov(src, eax)
-            self.emit_mov(eax, dst)
+            self.emit_mov(eax, src)
+            self.emit_mov(dst, eax)
 
     def emit_return(self, ir):
         src = ir.operand
         dst = RegSystem.reg(RegKind.AX, ir.type.size)
-        self.emit_mov(src, dst)
+        self.emit_mov(dst, src)
 
     def emit_cast(self, ir):
         dst = ir.destination
         src = ir.source
         if SymbolSystem.is_numeric(src):
-            self.emit_mov(src, dst)
+            self.emit_mov(dst, src)
         else:
             self.assign_core(dst, src)
 
-    def emit_mov(self, source, destination, sign_extend=True):
+    def emit_mov(self, destination, source, sign_extend=True):
         if source.type.match(TypeKind.DOUBLE) or destination.type.match(TypeKind.DOUBLE):
-            self.emit_float_mov(source, destination)
+            self.emit_float_mov(destination, source)
         else:
-            self.emit_integer_mov(source, destination, sign_extend)
+            self.emit_integer_mov(destination, source, sign_extend)
 
-    def emit_float_mov(self, source, destination):
+    def emit_float_mov(self, destination, source):
         if source is not RegSystem.ST:
             self.load_float(source)
         if destination is RegSystem.ST:
@@ -510,7 +499,7 @@ class FunctionEmit(object):
                    f'    fldcw\t{old_cw}\n'
         self.emit_code(code)
 
-    def emit_integer_mov(self, source, destination, sign_extend=True):
+    def emit_integer_mov(self, destination, source, sign_extend=True):
         src = source.access_name()
         dst = destination.access_name()
         src_type = source.type
