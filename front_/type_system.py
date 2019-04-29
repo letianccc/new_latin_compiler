@@ -5,10 +5,11 @@ from front_.util import *
 class Type(object):
     """docstring for Type."""
 
-    def __init__(self, kind, size, sub_type=None):
+    def __init__(self, kind, size, value=None, sub_type=None):
         super(Type, self).__init__()
         self.kind = kind
         self.size = size
+        self.value = value
         self.sub_type = sub_type
 
     def match(self, *kinds):
@@ -17,14 +18,17 @@ class Type(object):
                 return True
         return False
 
+    def name(self):
+        return f'{self.value}'
+
 class TypeSystem(object):
-    VOID = Type(TypeKind.VOID, 0)
-    SHORT = Type(TypeKind.SHORT, 2)
-    STRING = Type(TypeKind.STRING, 4)
-    INT = Type(TypeKind.INT, 4)
-    FLOAT = Type(TypeKind.FLOAT, 4)
-    DOUBLE = Type(TypeKind.DOUBLE, 8)
-    POINTER = Type(TypeKind.POINTER, 4)
+    VOID = Type(TypeKind.VOID, 0, 'void')
+    SHORT = Type(TypeKind.SHORT, 2, 'short')
+    STRING = Type(TypeKind.STRING, 4, None)
+    INT = Type(TypeKind.INT, 4, 'int')
+    FLOAT = Type(TypeKind.FLOAT, 4, 'float')
+    DOUBLE = Type(TypeKind.DOUBLE, 8, 'double')
+    POINTER = Type(TypeKind.POINTER, 4, None)
 
     types = None
 

@@ -107,6 +107,9 @@ class Symbol(object):
     def set_access_name(self, access_name):
         self.__access_name = access_name
 
+    def name(self):
+        return self.value
+
 # TODO: function 应该继承 id
 class FunctionSymbol(Symbol):
     """docstring for FunctionSymbol."""
@@ -128,6 +131,8 @@ class FunctionSymbol(Symbol):
         # TODO: local 和 array 最好分开
         self.locals = []
         b = Block(BlockKind.FUNCTION)
+        name = f'_{self.value}'
+        b.set_access_name(name)
         self.cur_block = b
         self.blocks = [b]
         self.is_array = False
@@ -288,6 +293,7 @@ class ArraySymbol(IdentifierSymbol):
         return s
 
 class TagSymbol(Symbol):
+    id = 0
     """docstring for IdentifierSymbol."""
 
     def __init__(self, type):
@@ -295,9 +301,14 @@ class TagSymbol(Symbol):
         self.kind = SymbolKind.TAG
         self.type = type
         self.defind = None
+        self.id = TagSymbol.id
+        TagSymbol.id += 1
 
     def sub_type(self):
         # TODO: 暂时允许返回当前类型  int b = &a; int c = *b; 后面这种情况要报错
         if self.type.sub_type is None:
             return self.type
         return self.type.sub_type
+
+    def name(self):
+        return f't{self.id}'

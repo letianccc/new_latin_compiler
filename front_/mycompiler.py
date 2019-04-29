@@ -9,10 +9,11 @@ from front_.myenum import *
 import os
 from front_.emitor import Emit
 from front_.symbol_system import *
+from front_.optimizer import *
 from front_.node.AST import Node
 
 
-def compile(input_path):
+def compile(input_path, debug=False):
     f = open(input_path, 'r')
     code = f.read()
 
@@ -45,12 +46,36 @@ def compile(input_path):
 
     symbols = [f.symbol for f in functions]
 
+    if debug is True:
+        path = r'C:\code\new_latin_compiler\front_\input\test.ir'
+        write_ir(symbols, path)
+
+    opt = Optimizer(symbols)
+    opt.execute()
+
+    if debug is True:
+        path = r'C:\code\new_latin_compiler\front_\input\test_optimize.ir'
+        write_ir(symbols, path)
+
     e = Emit(symbols)
     e.execute()
     code = e.code
     # log(code)
     return code
 
+def write_ir(functions, path):
+    data = ''
+    for f in functions:
+        for b in f.blocks:
+            name = b.access_name()
+            data += f'{name}:\n'
+            irs = []
+            for ir in b.irs:
+                ir = ir.format()
+                if ir is not None:
+                    data += ir
+    with open(path, 'w') as f:
+        f.write(data)
 
 def check_function(function):
     f = function

@@ -1,40 +1,72 @@
 
 
-void access1() {
-	int a[10];
-	a[0] = 1;
-	int b = a[0];
-	int c = a[0] + 1;
-	printf("target 1: %d\n", a[0]);
-	printf("target 1: %d\n", b);
-	printf("target 2: %d\n", c);
+void swap1(short a, short b) {
+    short c;
+    c = a;
+    a = b;
+    b = c;
 }
 
-void access2() {
-	int a[10] = { 1, 2, 3, 4, 5, 6};
-	int i = 1;
-	int j = 1;
-	a[i + 1] = a[j + 2] + 1;
-	printf("target 5: %d\n", a[2]);
-
-	a[i + 1] = a[j + 2] + a[i];
-	printf("target 6: %d\n", a[2]);
-
+void swap2(short *a, short *b) {
+    short c;
+    c = *a;
+    *a = *b;
+    *b = c;
 }
 
-void init() {
-	int a[10] = {3, 4, 5, 6};
-	printf("target 3: %d\n", a[0]);
-	printf("target 4: %d\n", a[1]);
-	printf("target 5: %d\n", a[2]);
-	printf("target 6: %d\n", a[3]);
+void swap() {
+    short a = 70000;
+    short b = 80000;
+    swap1(a, b);
+    printf("target 4464\t: %d\n", a);
+    printf("target 14464\t: %d\n", b);
+    swap2(&a, &b);
+    printf("target 14464\t: %d\n", a);
+    printf("target 4464\t: %d\n", b);
+}
+
+void func1(short *a) {
+    printf("target 4464\t: %d\n", *a);
+}
+
+void pass_pointer() {
+    short a = 70000;
+    short *b = &a;
+    func1(b);
+}
+
+
+void mul_indirect_assign() {
+    short a = 70000;
+    short *b = &a;
+    short **c = &b;
+    printf("target 4464\t: %d\n", a);
+    printf("target 4464\t: %d\n", *b);
+    printf("target 4464\t: %d\n", **c);
+    **c = 80000;
+    printf("target 14464\t: %d\n", a);
+    printf("target 14464\t: %d\n", *b);
+    printf("target 14464\t: %d\n", **c);
+}
+
+void func() {
+    short a = 70000;
+    short *b = &a;
+    printf("target 4464\t: %d\n", a);
+    printf("target 4464\t: %d\n", *b);
+    int c = 80000;
+    *b = c;
+    printf("target 14464\t: %d\n", a);
+    printf("target 14464\t: %d\n", *b);
 }
 
 void main() {
+    func();
+    pass_pointer();
 
-	access1();
-	access2();
-	init();
+    swap();
 
-	getchar();
+    mul_indirect_assign();
+    getchar();
+
 }

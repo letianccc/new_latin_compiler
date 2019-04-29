@@ -65,6 +65,9 @@ class ArrayNode(Node):
         pos = f'{offset}(%esp, %ecx, {size})'
         return pos
 
+    def name(self):
+        return self.array.name()
+
 class CastNode(Node):
     def __init__(self, function, type, expression):
         super(CastNode, self).__init__()
@@ -236,7 +239,10 @@ class ArithNode(ExpressionNode):
         dst.defind = d
 
         k = self.operator
-        ir = ExprIR(k, dst, left, right)
+        if k is OperatorKind.ADD:
+            ir = AddIR(k, dst, left, right)
+        else:
+            ir = ExprIR(k, dst, left, right)
         self.function.gen_ir(ir)
         return dst
 
@@ -350,12 +356,3 @@ class ReturnNode(Node):
         src = self.translate_type(t, src)
         ir = ReturnIR(t, src)
         self.gen_ir(ir)
-
-# class ArrayNode(Node):
-#     def __init__(self, variable, index):
-#         self.variable = variable
-#         self.index = index
-#
-# class Array_Node(Node):
-#     def __init__(self, array):
-#         self.array = array

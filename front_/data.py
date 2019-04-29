@@ -86,3 +86,25 @@ not_map = {
     OperatorKind.AND: OperatorKind.OR,
     OperatorKind.OR: OperatorKind.AND,
 }
+
+operator_format = {
+    OperatorKind.EQUAL:     '==',
+    OperatorKind.UNEQUAL:   '!=',
+    OperatorKind.GREAT:     '>',
+    OperatorKind.GREAT_EQ:  '>=',
+    OperatorKind.LESS:      '<',
+    OperatorKind.LESS_EQ:    '<=',
+    OperatorKind.AND:        '&&',
+    OperatorKind.OR:        '||',
+    OperatorKind.ADD:       '+',
+    OperatorKind.SUB:       '-',
+    OperatorKind.MUL:       '*',
+    OperatorKind.DIV:       '/',
+    OperatorKind.ADDRESS_OF:'&',
+    OperatorKind.INDIRECTION:'*',
+    OperatorKind.ASSIGN:    '=',
+    OperatorKind.BITOR:     '|',
+    OperatorKind.BITXOR:    '^',
+    OperatorKind.BITAND:    '&',
+
+}

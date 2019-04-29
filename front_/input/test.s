@@ -1,143 +1,239 @@
 //by latin
 
     .text
-    .globl	_access1
-_access1:
+    .globl	_swap1
+_swap1:
     pushl	%ebp
     pushl	%ebx
     pushl	%esi
     pushl	%edi
     movl	%esp, %ebp
     andl	$-16, %esp
-    subl	$72, %esp
-    leal	32(%esp), %edx
-    movl	$0, %eax
-    movl	$10, %ecx
-    movl	%edx, %edi
-    rep	stosl
-    movl	$0, %ecx
-    movl	$1, %eax
-    movl	%eax, 32(%esp, %ecx, 4)
-    movl	$0, %ecx
-    movl	32(%esp, %ecx, 4), %eax
-    movl	%eax, 20(%esp)
-    movl	20(%esp), %eax
-    movl	%eax, 28(%esp)
-    movl	$0, %ecx
-    movl	32(%esp, %ecx, 4), %eax
-    movl	%eax, 16(%esp)
-    movl	16(%esp), %eax
-    movl	$1, %edx
-    addl	%edx, %eax
+    subl	$2, %esp
+    movswl	20(%ebp), %eax
+    movw	%ax, 0(%esp)
+    movswl	22(%ebp), %eax
+    movw	%ax, 20(%ebp)
+    movswl	0(%esp), %eax
+    movw	%ax, 22(%ebp)
+    movl	%ebp, %esp
+    popl	%edi
+    popl	%esi
+    popl	%ebx
+    popl	%ebp
+    ret
+    .text
+    .globl	_swap2
+_swap2:
+    pushl	%ebp
+    pushl	%ebx
+    pushl	%esi
+    pushl	%edi
+    movl	%esp, %ebp
+    andl	$-16, %esp
+    subl	$18, %esp
+    movl	20(%ebp), %eax
+    movl	(%eax), %eax
     movl	%eax, 12(%esp)
     movl	12(%esp), %eax
-    movl	%eax, 24(%esp)
-    movl	$0, %ecx
-    movl	32(%esp, %ecx, 4), %eax
+    movw	%ax, 16(%esp)
+    movl	20(%ebp), %eax
+    movl	(%eax), %eax
+    movl	%eax, 8(%esp)
+    movl	24(%ebp), %eax
+    movl	(%eax), %eax
+    movl	%eax, 4(%esp)
+    movl	20(%ebp), %eax
+    movl	4(%esp), %edx
+    movl	%edx, (%eax)
+    movl	24(%ebp), %eax
+    movl	(%eax), %eax
+    movl	%eax, 0(%esp)
+    movl	24(%ebp), %eax
+    movw	16(%esp), %dx
+    movswl	%dx, (%eax)
+    movl	%ebp, %esp
+    popl	%edi
+    popl	%esi
+    popl	%ebx
+    popl	%ebp
+    ret
+    .text
+    .globl	_swap
+_swap:
+    pushl	%ebp
+    pushl	%ebx
+    pushl	%esi
+    pushl	%edi
+    movl	%esp, %ebp
+    andl	$-16, %esp
+    subl	$20, %esp
+    movl	$70000, %eax
+    movw	%ax, 18(%esp)
+    movl	$80000, %eax
+    movw	%ax, 16(%esp)
+    movswl	18(%esp), %eax
+    movl	%eax, 0(%esp)
+    movswl	16(%esp), %eax
+    movl	%eax, 4(%esp)
+    call	_swap1
+    movl	$LC0, %eax
+    movl	%eax, 0(%esp)
+    movswl	18(%esp), %eax
+    movl	%eax, 4(%esp)
+    call	_printf
+    movl	$LC1, %eax
+    movl	%eax, 0(%esp)
+    movswl	16(%esp), %eax
+    movl	%eax, 4(%esp)
+    call	_printf
+    leal	18(%esp), %eax
+    movl	%eax, 12(%esp)
+    leal	16(%esp), %eax
+    movl	%eax, 8(%esp)
+    movl	12(%esp), %eax
+    movl	%eax, 0(%esp)
+    movl	8(%esp), %eax
+    movl	%eax, 4(%esp)
+    call	_swap2
+    movl	$LC1, %eax
+    movl	%eax, 0(%esp)
+    movswl	18(%esp), %eax
+    movl	%eax, 4(%esp)
+    call	_printf
+    movl	$LC0, %eax
+    movl	%eax, 0(%esp)
+    movswl	16(%esp), %eax
+    movl	%eax, 4(%esp)
+    call	_printf
+    movl	%ebp, %esp
+    popl	%edi
+    popl	%esi
+    popl	%ebx
+    popl	%ebp
+    ret
+    .text
+    .globl	_func1
+_func1:
+    pushl	%ebp
+    pushl	%ebx
+    pushl	%esi
+    pushl	%edi
+    movl	%esp, %ebp
+    andl	$-16, %esp
+    subl	$12, %esp
+    movl	20(%ebp), %eax
+    movl	(%eax), %eax
     movl	%eax, 8(%esp)
     movl	$LC0, %eax
     movl	%eax, 0(%esp)
     movl	8(%esp), %eax
     movl	%eax, 4(%esp)
     call	_printf
+    movl	%ebp, %esp
+    popl	%edi
+    popl	%esi
+    popl	%ebx
+    popl	%ebp
+    ret
+    .text
+    .globl	_pass_pointer
+_pass_pointer:
+    pushl	%ebp
+    pushl	%ebx
+    pushl	%esi
+    pushl	%edi
+    movl	%esp, %ebp
+    andl	$-16, %esp
+    subl	$14, %esp
+    movl	$70000, %eax
+    movw	%ax, 12(%esp)
+    leal	12(%esp), %eax
+    movl	%eax, 4(%esp)
+    movl	4(%esp), %eax
+    movl	%eax, 8(%esp)
+    movl	8(%esp), %eax
+    movl	%eax, 0(%esp)
+    call	_func1
+    movl	%ebp, %esp
+    popl	%edi
+    popl	%esi
+    popl	%ebx
+    popl	%ebp
+    ret
+    .text
+    .globl	_mul_indirect_assign
+_mul_indirect_assign:
+    pushl	%ebp
+    pushl	%ebx
+    pushl	%esi
+    pushl	%edi
+    movl	%esp, %ebp
+    andl	$-16, %esp
+    subl	$58, %esp
+    movl	$70000, %eax
+    movw	%ax, 56(%esp)
+    leal	56(%esp), %eax
+    movl	%eax, 44(%esp)
+    movl	44(%esp), %eax
+    movl	%eax, 52(%esp)
+    leal	52(%esp), %eax
+    movl	%eax, 40(%esp)
+    movl	40(%esp), %eax
+    movl	%eax, 48(%esp)
+    movl	$LC0, %eax
+    movl	%eax, 0(%esp)
+    movswl	56(%esp), %eax
+    movl	%eax, 4(%esp)
+    call	_printf
+    movl	52(%esp), %eax
+    movl	(%eax), %eax
+    movl	%eax, 36(%esp)
+    movl	$LC0, %eax
+    movl	%eax, 0(%esp)
+    movl	36(%esp), %eax
+    movl	%eax, 4(%esp)
+    call	_printf
+    movl	48(%esp), %eax
+    movl	(%eax), %eax
+    movl	%eax, 32(%esp)
+    movl	32(%esp), %eax
+    movl	(%eax), %eax
+    movl	%eax, 28(%esp)
     movl	$LC0, %eax
     movl	%eax, 0(%esp)
     movl	28(%esp), %eax
     movl	%eax, 4(%esp)
     call	_printf
-    movl	$LC1, %eax
-    movl	%eax, 0(%esp)
-    movl	24(%esp), %eax
-    movl	%eax, 4(%esp)
-    call	_printf
-    movl	%ebp, %esp
-    popl	%edi
-    popl	%esi
-    popl	%ebx
-    popl	%ebp
-    ret
-    .text
-    .globl	_access2
-_access2:
-    pushl	%ebp
-    pushl	%ebx
-    pushl	%esi
-    pushl	%edi
-    movl	%esp, %ebp
-    andl	$-16, %esp
-    subl	$100, %esp
-    leal	60(%esp), %edx
-    movl	$0, %eax
-    movl	$10, %ecx
-    movl	%edx, %edi
-    rep	stosl
-    movl	$1, %eax
-    movl	%eax, 60(%esp)
-    movl	$2, %eax
-    movl	%eax, 64(%esp)
-    movl	$3, %eax
-    movl	%eax, 68(%esp)
-    movl	$4, %eax
-    movl	%eax, 72(%esp)
-    movl	$5, %eax
-    movl	%eax, 76(%esp)
-    movl	$6, %eax
-    movl	%eax, 80(%esp)
-    movl	$1, %eax
-    movl	%eax, 56(%esp)
-    movl	$1, %eax
-    movl	%eax, 52(%esp)
-    movl	52(%esp), %eax
-    movl	$2, %edx
-    addl	%edx, %eax
-    movl	%eax, 48(%esp)
-    movl	48(%esp), %ecx
-    movl	60(%esp, %ecx, 4), %eax
-    movl	%eax, 44(%esp)
-    movl	44(%esp), %eax
-    movl	$1, %edx
-    addl	%edx, %eax
-    movl	%eax, 40(%esp)
-    movl	56(%esp), %eax
-    movl	$1, %edx
-    addl	%edx, %eax
-    movl	%eax, 36(%esp)
-    movl	36(%esp), %ecx
-    movl	40(%esp), %eax
-    movl	%eax, 60(%esp, %ecx, 4)
-    movl	$2, %ecx
-    movl	60(%esp, %ecx, 4), %eax
-    movl	%eax, 32(%esp)
-    movl	$LC2, %eax
-    movl	%eax, 0(%esp)
-    movl	32(%esp), %eax
-    movl	%eax, 4(%esp)
-    call	_printf
-    movl	52(%esp), %eax
-    movl	$2, %edx
-    addl	%edx, %eax
-    movl	%eax, 28(%esp)
-    movl	28(%esp), %ecx
-    movl	60(%esp, %ecx, 4), %eax
+    movl	48(%esp), %eax
+    movl	(%eax), %eax
     movl	%eax, 24(%esp)
-    movl	56(%esp), %ecx
-    movl	60(%esp, %ecx, 4), %eax
+    movl	24(%esp), %eax
+    movl	(%eax), %eax
     movl	%eax, 20(%esp)
     movl	24(%esp), %eax
-    movl	20(%esp), %edx
-    addl	%edx, %eax
+    movl	$80000, %edx
+    movl	%edx, (%eax)
+    movl	$LC1, %eax
+    movl	%eax, 0(%esp)
+    movswl	56(%esp), %eax
+    movl	%eax, 4(%esp)
+    call	_printf
+    movl	52(%esp), %eax
+    movl	(%eax), %eax
     movl	%eax, 16(%esp)
-    movl	56(%esp), %eax
-    movl	$1, %edx
-    addl	%edx, %eax
-    movl	%eax, 12(%esp)
-    movl	12(%esp), %ecx
+    movl	$LC1, %eax
+    movl	%eax, 0(%esp)
     movl	16(%esp), %eax
-    movl	%eax, 60(%esp, %ecx, 4)
-    movl	$2, %ecx
-    movl	60(%esp, %ecx, 4), %eax
+    movl	%eax, 4(%esp)
+    call	_printf
+    movl	48(%esp), %eax
+    movl	(%eax), %eax
+    movl	%eax, 12(%esp)
+    movl	12(%esp), %eax
+    movl	(%eax), %eax
     movl	%eax, 8(%esp)
-    movl	$LC3, %eax
+    movl	$LC1, %eax
     movl	%eax, 0(%esp)
     movl	8(%esp), %eax
     movl	%eax, 4(%esp)
@@ -149,56 +245,51 @@ _access2:
     popl	%ebp
     ret
     .text
-    .globl	_init
-_init:
+    .globl	_func
+_func:
     pushl	%ebp
     pushl	%ebx
     pushl	%esi
     pushl	%edi
     movl	%esp, %ebp
     andl	$-16, %esp
-    subl	$64, %esp
-    leal	24(%esp), %edx
-    movl	$0, %eax
-    movl	$10, %ecx
-    movl	%edx, %edi
-    rep	stosl
-    movl	$3, %eax
-    movl	%eax, 24(%esp)
-    movl	$4, %eax
-    movl	%eax, 28(%esp)
-    movl	$5, %eax
-    movl	%eax, 32(%esp)
-    movl	$6, %eax
-    movl	%eax, 36(%esp)
-    movl	$0, %ecx
-    movl	24(%esp, %ecx, 4), %eax
+    subl	$34, %esp
+    movl	$70000, %eax
+    movw	%ax, 32(%esp)
+    leal	32(%esp), %eax
     movl	%eax, 20(%esp)
-    movl	$LC4, %eax
-    movl	%eax, 0(%esp)
     movl	20(%esp), %eax
+    movl	%eax, 28(%esp)
+    movl	$LC0, %eax
+    movl	%eax, 0(%esp)
+    movswl	32(%esp), %eax
     movl	%eax, 4(%esp)
     call	_printf
-    movl	$1, %ecx
-    movl	24(%esp, %ecx, 4), %eax
+    movl	28(%esp), %eax
+    movl	(%eax), %eax
     movl	%eax, 16(%esp)
-    movl	$LC5, %eax
+    movl	$LC0, %eax
     movl	%eax, 0(%esp)
     movl	16(%esp), %eax
     movl	%eax, 4(%esp)
     call	_printf
-    movl	$2, %ecx
-    movl	24(%esp, %ecx, 4), %eax
+    movl	$80000, %eax
+    movl	%eax, 24(%esp)
+    movl	28(%esp), %eax
+    movl	(%eax), %eax
     movl	%eax, 12(%esp)
-    movl	$LC2, %eax
+    movl	28(%esp), %eax
+    movl	24(%esp), %edx
+    movl	%edx, (%eax)
+    movl	$LC1, %eax
     movl	%eax, 0(%esp)
-    movl	12(%esp), %eax
+    movswl	32(%esp), %eax
     movl	%eax, 4(%esp)
     call	_printf
-    movl	$3, %ecx
-    movl	24(%esp, %ecx, 4), %eax
+    movl	28(%esp), %eax
+    movl	(%eax), %eax
     movl	%eax, 8(%esp)
-    movl	$LC3, %eax
+    movl	$LC1, %eax
     movl	%eax, 0(%esp)
     movl	8(%esp), %eax
     movl	%eax, 4(%esp)
@@ -219,9 +310,10 @@ _main:
     movl	%esp, %ebp
     andl	$-16, %esp
     subl	$0, %esp
-    call	_access1
-    call	_access2
-    call	_init
+    call	_func
+    call	_pass_pointer
+    call	_swap
+    call	_mul_indirect_assign
     call	_getchar
     movl	%ebp, %esp
     popl	%edi
@@ -230,14 +322,6 @@ _main:
     popl	%ebp
     ret
 LC0:
-    .string	"target 1: %d\n"
+    .string	"target 4464\t: %d\n"
 LC1:
-    .string	"target 2: %d\n"
-LC2:
-    .string	"target 5: %d\n"
-LC3:
-    .string	"target 6: %d\n"
-LC4:
-    .string	"target 3: %d\n"
-LC5:
-    .string	"target 4: %d\n"
+    .string	"target 14464\t: %d\n"

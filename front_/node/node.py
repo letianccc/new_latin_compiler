@@ -99,7 +99,7 @@ class Node(object):
             dst = destination
             index = dst.index_expression.gen()
             # self.gen_assign_core(RegSystem.ECX, index)
-            ir = AssignAssignIR(dst, index, src)
+            ir = ArrayAssignIR(dst, index, src)
             self.gen_ir(ir)
             return
         else:

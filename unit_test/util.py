@@ -26,10 +26,6 @@ def filepaths(test_dir):
     os.chdir(old)
     return ps
 
-def write_code(cfile, sfile):
-    code = compile(cfile)
-    with open(sfile, 'w') as f:
-        f.write(code)
 
 def test_sfile(tmp_path, refer_path):
     if os.stat(refer_path).st_size == 0:

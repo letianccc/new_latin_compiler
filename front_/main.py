@@ -20,6 +20,9 @@ def _main_():
     out = execute_sfile(spath, exe_path)
     print(out)
 
-
+def write_code(cfile, sfile):
+    code = compile(cfile, True)
+    with open(sfile, 'w') as f:
+        f.write(code)
 
 _main_()

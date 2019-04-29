@@ -51,6 +51,7 @@ class Emit(object):
                     name = f'L{index}'
                     b.set_access_name(name)
                     index += 1
+                
 
 
     def allocate_float(self):
