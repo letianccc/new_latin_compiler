@@ -1,37 +1,70 @@
+_identity:
+	a	= 1
+	t0	= a * 0
+	b1	= t0
+	t1	= a * 1
+	b2	= t1
+	t2	= 0 - a
+	b3	= t2
+	t3	= a - 0
+	b4	= t3
+	t4	= 0 + a
+	b5	= t4
+	t5	= a + 0
+	b6	= t5
+	t6	= 0 * a
+	b7	= t6
+	t7	= 1 * a
+	b8	= t7
+	call	printf ("target 0 : %d\n",b1)
+	call	printf ("target 1 : %d\n",b2)
+	call	printf ("target -1: %d\n",b3)
+	call	printf ("target 1 : %d\n",b4)
+	call	printf ("target 1 : %d\n",b5)
+	call	printf ("target 1 : %d\n",b6)
+	call	printf ("target 0 : %d\n",b7)
+	call	printf ("target 1 : %d\n",b8)
 _add_constant_folding:
-	t0	= 1 + 1
-	ai	= t0
+	t8	= 1 + 1
+	ai	= t8
 	call	printf ("target 2: %d\n",ai)
-	t1	= 1 + 1
-	as	= t1
+	t9	= 1 + 1
+	as	= t9
 	call	printf ("target 2: %d\n",as)
-	t2	= 1.5 + 1
-	ad	= t2
+	t10	= 1.5 + 1
+	ad	= t10
 	call	printf ("target 2.5: %f\n",ad)
 _sub_constant_folding:
-	t3	= 3 - 1
-	ai	= t3
+	t11	= 3 - 1
+	ai	= t11
 	call	printf ("target 2: %d\n",ai)
-	t4	= 3 - 1
-	as	= t4
+	t12	= 3 - 1
+	as	= t12
 	call	printf ("target 2: %d\n",as)
-	t5	= 3.5 - 1
-	ad	= t5
+	t13	= 3.5 - 1
+	ad	= t13
 	call	printf ("target 2.5: %f\n",ad)
 _mul_constant_folding:
-	t6	= 2 * 1
-	ai	= t6
+	t14	= 2 * 1
+	ai	= t14
 	call	printf ("target 2: %d\n",ai)
-	t7	= 2 * 1
-	as	= t7
+	t15	= 2 * 1
+	as	= t15
 	call	printf ("target 2: %d\n",as)
-	t8	= 2.5 * 1
-	ad	= t8
+	t16	= 2.5 * 1
+	ad	= t16
 	call	printf ("target 2.5: %f\n",ad)
 _constant_folding:
 	call	add_constant_folding ()
 	call	sub_constant_folding ()
 	call	mul_constant_folding ()
+_reduction:
+	a	= 1
+	t17	= a * 2
+	b	= t17
+	call	printf ("target 2: %d\n",b)
 _main:
 	call	constant_folding ()
+	call	reduction ()
+	call	identity ()
 	call	getchar ()

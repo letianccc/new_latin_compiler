@@ -266,7 +266,7 @@ class ArithNode(ExpressionNode):
             OperatorKind.MUL: MulIR,
         }
         IR = map[op]
-        ir = IR(op, dst, left, right)
+        ir = IR(dst, left, right)
         self.function.gen_ir(ir)
         return dst
 

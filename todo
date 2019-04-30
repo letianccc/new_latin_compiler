@@ -4,8 +4,7 @@
 
 当前：
 
-
-强度削弱  代数恒等式变换
+公共子表达式
 
 对中间代码进行优化
 
@@ -31,7 +30,7 @@ branch_template gen_for_kinds gen_assign_node 可以进一步重构
 
 intconst 的double 区域
 
-
+ExprIR 是否需要使用new函数
 
 double int  arith
 

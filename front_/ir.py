@@ -153,6 +153,14 @@ class ExprIR(IR):
         self.destination = destination
         self.type = TypeSystem.max_type(self.left.type, self.right.type)
 
+    def format(self):
+        left = self.left.name()
+        right = self.right.name()
+        dst = self.destination.name()
+        op = operator_format[self.kind]
+        return f'\t{dst}\t= {left} {op} {right}\n'
+
+class ArithIR(ExprIR):
     def match_constant(self, operand, value):
         if operand.match(SymbolKind.INTCONST, SymbolKind.DOUBLECONST):
             if operand.value == value:
@@ -176,14 +184,10 @@ class ExprIR(IR):
         ir = AssignIR(dst, s)
         return ir
 
-    def format(self):
-        left = self.left.name()
-        right = self.right.name()
-        dst = self.destination.name()
-        op = operator_format[self.kind]
-        return f'\t{dst}\t= {left} {op} {right}\n'
+class AddIR(ArithIR):
+    def __init__(self, destination, left, right):
+        super(AddIR, self).__init__(OperatorKind.ADD, destination, left, right)
 
-class AddIR(ExprIR):
     def optimize(self):
         # TODO: 可以放到父类中
         ir = self.identity_optimize()
@@ -207,8 +211,10 @@ class AddIR(ExprIR):
             ir = AssignIR(self.destination, target)
         return ir
 
+class SubIR(ArithIR):
+    def __init__(self, destination, left, right):
+        super(SubIR, self).__init__(OperatorKind.SUB, destination, left, right)
 
-class SubIR(ExprIR):
     def optimize(self):
         ir = self.identity_optimize()
         if ir is not None:
@@ -230,13 +236,19 @@ class SubIR(ExprIR):
             ir = MinusIR(dst, right)
         return ir
 
-class MulIR(ExprIR):
+class MulIR(ArithIR):
+    def __init__(self, destination, left, right):
+        super(MulIR, self).__init__(OperatorKind.MUL, destination, left, right)
+
     def optimize(self):
         ir = self.identity_optimize()
         if ir is not None:
             return ir
         if SymbolSystem.is_numeric(self.left) and SymbolSystem.is_numeric(self.right):
             ir = self.constant_folding(_operator.mul)
+            return ir
+        ir = self.reduction()
+        if ir is not None:
             return ir
         return self
 
@@ -251,6 +263,19 @@ class MulIR(ExprIR):
             target = right
         if target is not None:
             ir = AssignIR(self.destination, target)
+        return ir
+
+    def reduction(self):
+        left = self.left
+        right = self.right
+        ir = None
+        target = None
+        if self.match_constant(left, '2'):
+            target = right
+        elif self.match_constant(right, '2'):
+            target = left
+        if target is not None:
+            ir = AddIR(self.destination, target, target)
         return ir
 
 class UnaryIR(IR):
