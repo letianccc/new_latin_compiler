@@ -202,11 +202,6 @@ class ConstantSymbol(Symbol):
         self.value = value
         self.__access_name = f'${self.value}'
 
-    def access_name(self):
-        return self.__access_name
-
-    def set_access_name(self, name):
-        self.__access_name = name
 
 class IntSymbol(ConstantSymbol):
     """docstring for ConstantSymbol."""
@@ -225,6 +220,9 @@ class IntSymbol(ConstantSymbol):
                 s = DoubleSymbol(self.value)
                 SymbolSystem.add(s)
         return s
+
+    def access_name(self):
+        return f'${self.value}'
 
 class DoubleSymbol(ConstantSymbol):
     """docstring for ConstantSymbol."""
@@ -249,6 +247,12 @@ class DoubleSymbol(ConstantSymbol):
         n = double_value.split('.')
         i = n[0]
         return i
+
+    def access_name(self):
+        return self.__access_name
+
+    def set_access_name(self, name):
+        self.__access_name = name
 
 class IdentifierSymbol(Symbol):
     """docstring for IdentifierSymbol."""

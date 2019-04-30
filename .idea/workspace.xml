@@ -6,12 +6,16 @@
       <change beforePath="$PROJECT_DIR$/front_/input/hello.c" beforeDir="false" afterPath="$PROJECT_DIR$/front_/input/hello.c" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/front_/input/hello.s" beforeDir="false" afterPath="$PROJECT_DIR$/front_/input/hello.s" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/front_/input/test.c" beforeDir="false" afterPath="$PROJECT_DIR$/front_/input/test.c" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/front_/input/test.exe" beforeDir="false" afterPath="$PROJECT_DIR$/front_/input/test.exe" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/front_/input/test.ir" beforeDir="false" afterPath="$PROJECT_DIR$/front_/input/test.ir" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/front_/input/test.s" beforeDir="false" afterPath="$PROJECT_DIR$/front_/input/test.s" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/front_/input/test_optimize.ir" beforeDir="false" afterPath="$PROJECT_DIR$/front_/input/test_optimize.ir" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/front_/ir.py" beforeDir="false" afterPath="$PROJECT_DIR$/front_/ir.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/front_/node/AST.py" beforeDir="false" afterPath="$PROJECT_DIR$/front_/node/AST.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/front_/symbol_system.py" beforeDir="false" afterPath="$PROJECT_DIR$/front_/symbol_system.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/front_/token_.py" beforeDir="false" afterPath="$PROJECT_DIR$/front_/token_.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/test.py" beforeDir="false" afterPath="$PROJECT_DIR$/test.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/unit_test/example/tmp.exe" beforeDir="false" afterPath="$PROJECT_DIR$/unit_test/example/tmp.exe" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/unit_test/example/tmp.s" beforeDir="false" afterPath="$PROJECT_DIR$/unit_test/example/tmp.s" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -21,10 +25,10 @@
   </component>
   <component name="CoverageDataManager">
     <SUITE FILE_PATH="coverage/new_latin_compiler$expression_node.coverage" NAME="expression_node Coverage Results" MODIFIED="1555554933876" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/front_/node" />
-    <SUITE FILE_PATH="coverage/new_latin_compiler$main.coverage" NAME="main Coverage Results" MODIFIED="1556592121879" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/front_" />
+    <SUITE FILE_PATH="coverage/new_latin_compiler$main.coverage" NAME="main Coverage Results" MODIFIED="1556596324251" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/front_" />
     <SUITE FILE_PATH="coverage/new_latin_compiler$main__1_.coverage" NAME="main Coverage Results" MODIFIED="1554908653705" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/front_" />
-    <SUITE FILE_PATH="coverage/new_latin_compiler$test.coverage" NAME="test Coverage Results" MODIFIED="1556590051956" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
-    <SUITE FILE_PATH="coverage/new_latin_compiler$main_1_.coverage" NAME="main(1) Coverage Results" MODIFIED="1556591255930" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/unit_test" />
+    <SUITE FILE_PATH="coverage/new_latin_compiler$test.coverage" NAME="test Coverage Results" MODIFIED="1556594715924" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/new_latin_compiler$main_1_.coverage" NAME="main(1) Coverage Results" MODIFIED="1556596337892" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/unit_test" />
   </component>
   <component name="DatabaseView">
     <option name="SHOW_INTERMEDIATE" value="true" />
@@ -42,6 +46,18 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
+      <file pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/front_/node/AST.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state>
+              <caret lean-forward="true" />
+              <folding>
+                <element signature="e#1#26#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/front_/mycompiler.py">
           <provider selected="true" editor-type-id="text-editor">
@@ -81,31 +97,19 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/test.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="110">
-              <caret line="5" column="13" selection-start-line="5" selection-start-column="13" selection-end-line="5" selection-end-column="13" />
+            <state relative-caret-position="22">
+              <caret line="1" column="12" selection-start-line="1" selection-start-column="12" selection-end-line="1" selection-end-column="12" />
             </state>
           </provider>
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/unit_test/main.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="123">
-              <caret line="40" column="13" selection-start-line="40" selection-start-column="13" selection-end-line="40" selection-end-column="13" />
-              <folding>
-                <element signature="e#290#710#0" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/front_/ir.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="56">
-              <caret line="209" selection-start-line="209" selection-end-line="209" />
+            <state relative-caret-position="51">
+              <caret line="229" selection-start-line="229" selection-end-line="229" />
               <folding>
-                <element signature="e#2#29#0" expanded="true" />
+                <element signature="e#2#34#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -114,8 +118,11 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/front_/symbol_system.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="64">
-              <caret line="25" selection-start-line="25" selection-end-line="25" />
+            <state relative-caret-position="29">
+              <caret line="223" column="26" lean-forward="true" selection-start-line="223" selection-start-column="26" selection-end-line="223" selection-end-column="26" />
+              <folding>
+                <element signature="e#1#28#0" expanded="true" />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -135,8 +142,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/front_/emitor.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="62">
-              <caret line="219" selection-start-line="219" selection-end-line="219" />
+            <state relative-caret-position="51">
+              <caret line="186" column="26" selection-start-line="186" selection-start-column="26" selection-end-line="186" selection-end-column="26" />
             </state>
           </provider>
         </entry>
@@ -202,10 +209,8 @@
         <option value="$PROJECT_DIR$/unit_test/util.py" />
         <option value="$PROJECT_DIR$/front_/field.py" />
         <option value="$PROJECT_DIR$/front_/token_.py" />
-        <option value="$PROJECT_DIR$/front_/symbol_system.py" />
         <option value="$PROJECT_DIR$/front_/reg_system.py" />
         <option value="$PROJECT_DIR$/front_/memory.py" />
-        <option value="$PROJECT_DIR$/front_/node/AST.py" />
         <option value="$PROJECT_DIR$/front_/myenum.py" />
         <option value="$PROJECT_DIR$/unit_test/main.py" />
         <option value="$PROJECT_DIR$/front_/emitor.py" />
@@ -215,6 +220,8 @@
         <option value="$PROJECT_DIR$/front_/node/expression_node.py" />
         <option value="$PROJECT_DIR$/front_/ir.py" />
         <option value="$PROJECT_DIR$/test.py" />
+        <option value="$PROJECT_DIR$/front_/symbol_system.py" />
+        <option value="$PROJECT_DIR$/front_/node/AST.py" />
       </list>
     </option>
   </component>
@@ -277,7 +284,7 @@
       </list>
     </option>
   </component>
-  <component name="RunManager" selected="Python.main">
+  <component name="RunManager" selected="Python.main(1)">
     <configuration name="expression_node" type="PythonConfigurationType" factoryName="Python" temporary="true">
       <module name="new_latin_compiler" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -374,8 +381,8 @@
     </list>
     <recent_temporary>
       <list>
-        <item itemvalue="Python.main" />
         <item itemvalue="Python.main(1)" />
+        <item itemvalue="Python.main" />
         <item itemvalue="Python.test" />
         <item itemvalue="Python.expression_node" />
         <item itemvalue="Python.expression_node" />
@@ -398,7 +405,7 @@
       <workItem from="1555227288457" duration="695000" />
       <workItem from="1555228058242" duration="45345000" />
       <workItem from="1555458603770" duration="72590000" />
-      <workItem from="1556436941029" duration="27914000" />
+      <workItem from="1556436941029" duration="31295000" />
     </task>
     <task id="LOCAL-00001" summary="增加利用exe文件进行测试的逻辑">
       <created>1555136202150</created>
@@ -460,7 +467,7 @@
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="220177000" />
+    <option name="totallyTimeSpent" value="223558000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -473,14 +480,13 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="-7" y="-7" width="1295" height="695" extended-state="6" />
-    <editor active="true" />
     <layout>
       <window_info content_ui="combo" id="Project" order="0" sideWeight="0.4991119" visible="true" weight="0.2392886" />
       <window_info id="Structure" order="1" sideWeight="0.5008881" side_tool="true" weight="0.16087309" />
       <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" />
-      <window_info active="true" anchor="bottom" id="Run" order="2" sideWeight="0.4995958" visible="true" weight="0.60923624" />
+      <window_info active="true" anchor="bottom" id="Run" order="2" sideWeight="0.4995958" visible="true" weight="0.55772644" />
       <window_info anchor="bottom" id="Debug" order="3" weight="0.4991119" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
@@ -608,12 +614,12 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/front_/node/AST.py</url>
-          <line>182</line>
+          <line>183</line>
           <option name="timeStamp" value="84" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/front_/node/AST.py</url>
-          <line>178</line>
+          <line>179</line>
           <option name="timeStamp" value="85" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
@@ -725,16 +731,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/front_/node/AST.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="5896">
-          <caret line="273" selection-start-line="273" selection-end-line="273" />
-          <folding>
-            <element signature="e#1#26#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$USER_HOME$/AppData/Local/Programs/Python/Python37/Lib/enum.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="2156">
@@ -819,33 +815,46 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/front_/emitor.py">
+    <entry file="file://$PROJECT_DIR$/front_/ir.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="62">
-          <caret line="219" selection-start-line="219" selection-end-line="219" />
+        <state relative-caret-position="51">
+          <caret line="229" selection-start-line="229" selection-end-line="229" />
+          <folding>
+            <element signature="e#2#34#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/test.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="110">
-          <caret line="5" column="13" selection-start-line="5" selection-start-column="13" selection-end-line="5" selection-end-column="13" />
+        <state relative-caret-position="22">
+          <caret line="1" column="12" selection-start-line="1" selection-start-column="12" selection-end-line="1" selection-end-column="12" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/front_/symbol_system.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="64">
-          <caret line="25" selection-start-line="25" selection-end-line="25" />
+        <state relative-caret-position="29">
+          <caret line="223" column="26" lean-forward="true" selection-start-line="223" selection-start-column="26" selection-end-line="223" selection-end-column="26" />
+          <folding>
+            <element signature="e#1#28#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/front_/ir.py">
+    <entry file="file://$PROJECT_DIR$/front_/emitor.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="56">
-          <caret line="209" selection-start-line="209" selection-end-line="209" />
+        <state relative-caret-position="51">
+          <caret line="186" column="26" selection-start-line="186" selection-start-column="26" selection-end-line="186" selection-end-column="26" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/front_/node/AST.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state>
+          <caret lean-forward="true" />
           <folding>
-            <element signature="e#2#29#0" expanded="true" />
+            <element signature="e#1#26#0" expanded="true" />
           </folding>
         </state>
       </provider>

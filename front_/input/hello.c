@@ -3,8 +3,9 @@
 
 void main() {
 
-
-	double ad = 1 + 1.0;
+	int ai = -1;
+	printf("%d\n", ai);
+	double ad = -1;
 	printf("%f\n", ad);
 
     getchar();

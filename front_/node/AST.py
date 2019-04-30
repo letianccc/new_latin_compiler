@@ -5,6 +5,7 @@ from front_.symbol_system import *
 from front_.memory import *
 from front_.node.node import Node
 from front_.defind import *
+from front_.ir import *
 
 
 

@@ -4,7 +4,7 @@ from front_.type_system import *
 from front_.data import *
 from front_.symbol_system import *
 from front_.block import *
-
+import operator as _operator
 
 class IR:
     def __init__(self):
@@ -159,6 +159,23 @@ class ExprIR(IR):
                 return True
         return False
 
+    def constant_folding(self, operator):
+        left = self.left.value
+        right = self.right.value
+        dst = self.destination
+        t = dst.type
+        if t.match(TypeKind.DOUBLE):
+            k = SymbolKind.DOUBLECONST
+            cast = float
+        else:
+            k = SymbolKind.INTCONST
+            cast = int
+        v = operator(cast(left), cast(right))
+        v = str(v)
+        s = SymbolSystem.find_add(k, t.kind, v)
+        ir = AssignIR(dst, s)
+        return ir
+
     def format(self):
         left = self.left.name()
         right = self.right.name()
@@ -168,65 +185,72 @@ class ExprIR(IR):
 
 class AddIR(ExprIR):
     def optimize(self):
+        # TODO: 可以放到父类中
+        ir = self.identity_optimize()
+        if ir is not None:
+            return ir
+        if SymbolSystem.is_numeric(self.left) and SymbolSystem.is_numeric(self.right):
+            ir = self.constant_folding(_operator.add)
+            return ir
+        return self
+
+    def identity_optimize(self):
         left = self.left
         right = self.right
-        dst = self.destination
-        ir = self
-        use = None
+        target = None
+        ir = None
         if self.match_constant(left, '0'):
-            use = right
+            target = right
         if self.match_constant(right, '0'):
-            use = left
-        if use is not None:
-            ir = AssignIR(self.destination, use)
-            return ir
-        # 常量合并
-        if SymbolSystem.is_numeric(left) and SymbolSystem.is_numeric(right):
-            t = dst.type
-            if t.match(TypeKind.DOUBLE):
-                k = SymbolKind.DOUBLECONST
-                v = float(left.value) + float(right.value)
-            else:
-                k = SymbolKind.INTCONST
-                v = int(left.value) + int(right.value)
-            v = str(v)
-            s = SymbolSystem.find_add(k, t.kind, v)
-            ir = AssignIR(self.destination, s)
+            target = left
+        if target is not None:
+            ir = AssignIR(self.destination, target)
         return ir
+
 
 class SubIR(ExprIR):
     def optimize(self):
+        ir = self.identity_optimize()
+        if ir is not None:
+            return ir
+        if SymbolSystem.is_numeric(self.left) and SymbolSystem.is_numeric(self.right):
+            ir = self.constant_folding(_operator.sub)
+            return ir
+        return self
+
+    def identity_optimize(self):
         left = self.left
         right = self.right
-        ir = self
+        dst = self.destination
+        ir = None
         if self.match_constant(right, '0'):
-            ir = AssignIR(self.destination, left)
+            ir = AssignIR(dst, left)
         elif self.match_constant(left, '0'):
-            ir = MinusIR(self.destination, right)
+            # TODO: 可以直接返回一个取负后的constant symbol
+            ir = MinusIR(dst, right)
         return ir
 
 class MulIR(ExprIR):
     def optimize(self):
+        ir = self.identity_optimize()
+        if ir is not None:
+            return ir
+        if SymbolSystem.is_numeric(self.left) and SymbolSystem.is_numeric(self.right):
+            ir = self.constant_folding(_operator.mul)
+            return ir
+        return self
+
+    def identity_optimize(self):
         left = self.left
         right = self.right
-        ir = self
-        # dst = src * 0 or 0 * src
-        use = None
-        if self.match_constant(left, '0'):
-            use = left
-        elif self.match_constant(right, '0'):
-            use = right
-        if use is not None:
-            ir = AssignIR(self.destination, use)
-            return ir
-        # dst = src * 1 or 1 * src
-        if self.match_constant(left, '1'):
-            use = right
-        if self.match_constant(right, '1'):
-            use = left
-        if use is not None:
-            ir = AssignIR(self.destination, use)
-            return ir
+        ir = None
+        target = None
+        if self.match_constant(left, '0') or self.match_constant(right, '1'):
+            target = left
+        elif self.match_constant(right, '0') or self.match_constant(left, '1'):
+            target = right
+        if target is not None:
+            ir = AssignIR(self.destination, target)
         return ir
 
 class UnaryIR(IR):
