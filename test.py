@@ -1,4 +1,6 @@
-a = '0.4'
-af = int(a)
-b = 0.0
-print(a, af, a == af, af == b, a == b)
+a = 1.0
+b = 1
+c = a + b
+d = str(c)
+print(c, d)
+print(float(d))

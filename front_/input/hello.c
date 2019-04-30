@@ -4,9 +4,8 @@
 void main() {
 
 
-	double ad = 1;
-	double bd = -ad;
-	printf("%f\n", bd);
+	double ad = 1 + 1.0;
+	printf("%f\n", ad);
 
     getchar();
 

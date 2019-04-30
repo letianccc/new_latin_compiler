@@ -1,36 +1,10 @@
 
 
-from front_.myenum import *
 from front_.type_system import *
 from front_.data import *
+from front_.symbol_system import *
+from front_.block import *
 
-
-class Block:
-    id = 0
-    # id_pool = 0
-    def __init__(self, kind=BlockKind.GENERAL):
-        # self.statements = stmts
-        # self.id = Block.id_pool
-        # Block.id_pool += 1
-        self.irs = []
-        self.kind = kind
-        self.symbol = None
-        # self.index = None
-        self.__access_name = None
-        self.id = 0
-        Block.id += 1
-
-    def add_ir(self, ir):
-        self.irs.append(ir)
-
-    def access_name(self):
-        return self.__access_name
-
-    def set_access_name(self, access_name):
-        self.__access_name = access_name
-
-    def name(self):
-        return f'B{str(self.id)}'
 
 class IR:
     def __init__(self):
@@ -196,6 +170,7 @@ class AddIR(ExprIR):
     def optimize(self):
         left = self.left
         right = self.right
+        dst = self.destination
         ir = self
         use = None
         if self.match_constant(left, '0'):
@@ -204,6 +179,19 @@ class AddIR(ExprIR):
             use = left
         if use is not None:
             ir = AssignIR(self.destination, use)
+            return ir
+        # 常量合并
+        if SymbolSystem.is_numeric(left) and SymbolSystem.is_numeric(right):
+            t = dst.type
+            if t.match(TypeKind.DOUBLE):
+                k = SymbolKind.DOUBLECONST
+                v = float(left.value) + float(right.value)
+            else:
+                k = SymbolKind.INTCONST
+                v = int(left.value) + int(right.value)
+            v = str(v)
+            s = SymbolSystem.find_add(k, t.kind, v)
+            ir = AssignIR(self.destination, s)
         return ir
 
 class SubIR(ExprIR):

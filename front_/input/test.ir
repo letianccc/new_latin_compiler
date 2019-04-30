@@ -1,27 +1,13 @@
+_constant_folding:
+	t0	= 1 + 1
+	ai	= t0
+	call	printf ("target 2: %d\n",ai)
+	t1	= 1 + 1
+	as	= t1
+	call	printf ("target 2: %d\n",as)
+	t2	= 1 + 1
+	ad	= t2
+	call	printf ("target 2: %f\n",ad)
 _main:
-	a	= 1
-	t0	= a * 0
-	b1	= t0
-	t1	= a * 1
-	b2	= t1
-	t2	= 0 - a
-	b3	= t2
-	t3	= a - 0
-	b4	= t3
-	t4	= 0 + a
-	b5	= t4
-	t5	= a + 0
-	b6	= t5
-	t6	= 0 * a
-	b7	= t6
-	t7	= 1 * a
-	b8	= t7
-	call	printf ("target 0 : %d\n",b1)
-	call	printf ("target 1 : %d\n",b2)
-	call	printf ("target -1: %d\n",b3)
-	call	printf ("target 1 : %d\n",b4)
-	call	printf ("target 1 : %d\n",b5)
-	call	printf ("target 1 : %d\n",b6)
-	call	printf ("target 0 : %d\n",b7)
-	call	printf ("target 1 : %d\n",b8)
+	call	constant_folding ()
 	call	getchar ()

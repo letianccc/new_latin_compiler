@@ -1,8 +1,8 @@
 
 from front_.myenum import *
 from front_.field import *
-from front_.ir import *
 from front_.type_system import *
+from front_.block import *
 
 class SymbolSystem(object):
     identifiers = None
@@ -17,6 +17,19 @@ class SymbolSystem(object):
             symbols = cls.identifiers
             cls.debug_id.append(symbol)
         symbols.add(symbol)
+
+    @classmethod
+    def find_add(cls, kind, type, value):
+        s = cls.find_symbol(kind, value, type)
+        if s is None:
+            if kind is SymbolKind.INTCONST:
+                s = IntSymbol(value)
+            elif kind is SymbolKind.DOUBLECONST:
+                s = DoubleSymbol(value)
+            else:
+                raise Exception
+            SymbolSystem.add(s)
+        return s
 
     @classmethod
     def find_symbol(cls, kind, value, type=None, level_kind=None):

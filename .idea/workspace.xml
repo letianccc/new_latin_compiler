@@ -3,12 +3,13 @@
   <component name="ChangeListManager">
     <list default="true" id="b1dbd57b-b472-49a9-8b6a-0d663c99e023" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/front_/input/hello.c" beforeDir="false" afterPath="$PROJECT_DIR$/front_/input/hello.c" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/front_/input/hello.s" beforeDir="false" afterPath="$PROJECT_DIR$/front_/input/hello.s" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/front_/input/test.c" beforeDir="false" afterPath="$PROJECT_DIR$/front_/input/test.c" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/front_/input/test.exe" beforeDir="false" afterPath="$PROJECT_DIR$/front_/input/test.exe" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/front_/input/test.ir" beforeDir="false" afterPath="$PROJECT_DIR$/front_/input/test.ir" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/front_/input/test.s" beforeDir="false" afterPath="$PROJECT_DIR$/front_/input/test.s" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/front_/input/test_optimize.ir" beforeDir="false" afterPath="$PROJECT_DIR$/front_/input/test_optimize.ir" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/front_/ir.py" beforeDir="false" afterPath="$PROJECT_DIR$/front_/ir.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/front_/symbol_system.py" beforeDir="false" afterPath="$PROJECT_DIR$/front_/symbol_system.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/front_/token_.py" beforeDir="false" afterPath="$PROJECT_DIR$/front_/token_.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/test.py" beforeDir="false" afterPath="$PROJECT_DIR$/test.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/unit_test/example/tmp.exe" beforeDir="false" afterPath="$PROJECT_DIR$/unit_test/example/tmp.exe" afterDir="false" />
     </list>
@@ -20,10 +21,10 @@
   </component>
   <component name="CoverageDataManager">
     <SUITE FILE_PATH="coverage/new_latin_compiler$expression_node.coverage" NAME="expression_node Coverage Results" MODIFIED="1555554933876" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/front_/node" />
-    <SUITE FILE_PATH="coverage/new_latin_compiler$main.coverage" NAME="main Coverage Results" MODIFIED="1556551909663" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/front_" />
+    <SUITE FILE_PATH="coverage/new_latin_compiler$main.coverage" NAME="main Coverage Results" MODIFIED="1556592121879" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/front_" />
     <SUITE FILE_PATH="coverage/new_latin_compiler$main__1_.coverage" NAME="main Coverage Results" MODIFIED="1554908653705" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/front_" />
-    <SUITE FILE_PATH="coverage/new_latin_compiler$test.coverage" NAME="test Coverage Results" MODIFIED="1556551323259" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
-    <SUITE FILE_PATH="coverage/new_latin_compiler$main_1_.coverage" NAME="main(1) Coverage Results" MODIFIED="1556551997578" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/unit_test" />
+    <SUITE FILE_PATH="coverage/new_latin_compiler$test.coverage" NAME="test Coverage Results" MODIFIED="1556590051956" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/new_latin_compiler$main_1_.coverage" NAME="main(1) Coverage Results" MODIFIED="1556591255930" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/unit_test" />
   </component>
   <component name="DatabaseView">
     <option name="SHOW_INTERMEDIATE" value="true" />
@@ -77,11 +78,11 @@
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="true">
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/test.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="66">
-              <caret line="3" column="38" lean-forward="true" selection-start-line="3" selection-start-column="38" selection-end-line="3" selection-end-column="38" />
+            <state relative-caret-position="110">
+              <caret line="5" column="13" selection-start-line="5" selection-start-column="13" selection-end-line="5" selection-end-column="13" />
             </state>
           </provider>
         </entry>
@@ -98,14 +99,23 @@
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="false">
+      <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/front_/ir.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="128">
-              <caret line="261" column="21" selection-start-line="261" selection-start-column="21" selection-end-line="261" selection-end-column="21" />
+            <state relative-caret-position="56">
+              <caret line="209" selection-start-line="209" selection-end-line="209" />
               <folding>
                 <element signature="e#2#29#0" expanded="true" />
               </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/front_/symbol_system.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="64">
+              <caret line="25" selection-start-line="25" selection-end-line="25" />
             </state>
           </provider>
         </entry>
@@ -127,18 +137,6 @@
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="62">
               <caret line="219" selection-start-line="219" selection-end-line="219" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/unit_test/util.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="550">
-              <caret line="28" selection-start-line="28" selection-end-line="28" />
-              <folding>
-                <element signature="e#2#11#0" expanded="true" />
-              </folding>
             </state>
           </provider>
         </entry>
@@ -279,7 +277,7 @@
       </list>
     </option>
   </component>
-  <component name="RunManager" selected="Python.main(1)">
+  <component name="RunManager" selected="Python.main">
     <configuration name="expression_node" type="PythonConfigurationType" factoryName="Python" temporary="true">
       <module name="new_latin_compiler" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -376,8 +374,8 @@
     </list>
     <recent_temporary>
       <list>
-        <item itemvalue="Python.main(1)" />
         <item itemvalue="Python.main" />
+        <item itemvalue="Python.main(1)" />
         <item itemvalue="Python.test" />
         <item itemvalue="Python.expression_node" />
         <item itemvalue="Python.expression_node" />
@@ -400,7 +398,7 @@
       <workItem from="1555227288457" duration="695000" />
       <workItem from="1555228058242" duration="45345000" />
       <workItem from="1555458603770" duration="72590000" />
-      <workItem from="1556436941029" duration="24625000" />
+      <workItem from="1556436941029" duration="27914000" />
     </task>
     <task id="LOCAL-00001" summary="增加利用exe文件进行测试的逻辑">
       <created>1555136202150</created>
@@ -462,7 +460,7 @@
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="216888000" />
+    <option name="totallyTimeSpent" value="220177000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -751,13 +749,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/front_/symbol_system.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="2090">
-          <caret line="98" selection-start-line="98" selection-end-line="98" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/unit_test/util.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="550">
@@ -828,16 +819,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/front_/ir.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="128">
-          <caret line="261" column="21" selection-start-line="261" selection-start-column="21" selection-end-line="261" selection-end-column="21" />
-          <folding>
-            <element signature="e#2#29#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/front_/emitor.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="62">
@@ -847,8 +828,25 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/test.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="66">
-          <caret line="3" column="38" lean-forward="true" selection-start-line="3" selection-start-column="38" selection-end-line="3" selection-end-column="38" />
+        <state relative-caret-position="110">
+          <caret line="5" column="13" selection-start-line="5" selection-start-column="13" selection-end-line="5" selection-end-column="13" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/front_/symbol_system.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="64">
+          <caret line="25" selection-start-line="25" selection-end-line="25" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/front_/ir.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="56">
+          <caret line="209" selection-start-line="209" selection-end-line="209" />
+          <folding>
+            <element signature="e#2#29#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
