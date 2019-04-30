@@ -38,10 +38,11 @@ def test_all():
     check_exefile = True
     # check_sfile = True
     check_sfile = False
+    check_ir = True
     for cfile, sfile in paths:
         
         try:
-            assert_file(test_dir, cfile, sfile, check_exefile, check_sfile)
+            assert_file(test_dir, cfile, sfile, check_exefile, check_sfile, check_ir)
         except Exception as e:
             path = os.path.relpath(cfile, test_dir)
             log(path)

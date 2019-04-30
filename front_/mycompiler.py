@@ -13,7 +13,7 @@ from front_.optimizer import *
 from front_.node.AST import Node
 
 
-def compile(input_path, debug=False):
+def compile(input_path, spath, irpath):
     f = open(input_path, 'r')
     code = f.read()
 
@@ -47,21 +47,24 @@ def compile(input_path, debug=False):
     symbols = [f.symbol for f in functions]
 
 
-    if debug is True:
-        path = r'C:\code\new_latin_compiler\front_\input\test.ir'
-        write_ir(symbols, path)
+
 
     opt = Optimizer(symbols)
     opt.execute()
 
-    if debug is True:
-        path = r'C:\code\new_latin_compiler\front_\input\test_optimize.ir'
-        write_ir(symbols, path)
+    if irpath is not None:
+        write_ir(symbols, irpath)
+
 
     e = Emit(symbols)
     e.execute()
     code = e.code
     # log(code)
+
+    if spath is not None:
+        with open(spath, 'w') as f:
+            f.write(code)
+
     return code
 
 def write_ir(functions, path):

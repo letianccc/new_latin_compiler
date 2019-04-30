@@ -1,0 +1,6 @@
+_main:
+	a	= 1
+	t0	:= a + a
+	b	= t0
+	call printf ("target 2: %d\n",b)
+	call getchar ()

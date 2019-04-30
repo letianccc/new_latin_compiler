@@ -1,0 +1,35 @@
+_add_constant_folding:
+	t0	= 2
+	ai	= t0
+	call printf ("target 2: %d\n",ai)
+	t1	= 2
+	as	= t1
+	call printf ("target 2: %d\n",as)
+	t2	= 2.5
+	ad	= t2
+	call printf ("target 2.5: %f\n",ad)
+_sub_constant_folding:
+	t3	= 2
+	ai	= t3
+	call printf ("target 2: %d\n",ai)
+	t4	= 2
+	as	= t4
+	call printf ("target 2: %d\n",as)
+	t5	= 2.5
+	ad	= t5
+	call printf ("target 2.5: %f\n",ad)
+_mul_constant_folding:
+	t6	= 2
+	ai	= t6
+	call printf ("target 2: %d\n",ai)
+	t7	= 2
+	as	= t7
+	call printf ("target 2: %d\n",as)
+	t8	= 2.5
+	ad	= t8
+	call printf ("target 2.5: %f\n",ad)
+_main:
+	call add_constant_folding ()
+	call sub_constant_folding ()
+	call mul_constant_folding ()
+	call getchar ()

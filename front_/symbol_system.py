@@ -77,6 +77,8 @@ class SymbolSystem(object):
         StringSymbol.init()
         cls.identifiers = IdentifierField()
         cls.__literals = GlobalField()
+        TagSymbol.id = 0
+        Block.id = 0
 
         s = IntSymbol('1')
         SymbolSystem.add(s)

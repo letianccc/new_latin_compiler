@@ -46,18 +46,25 @@ def assert_lines(mybuffer, refer_buffer):
             log(f'{index}: code  ({line})')
             raise Exception
 
-def assert_file(test_dir, cpath, refer_spath, check_exefile, check_sfile):
+def assert_file(test_dir, cpath, refer_spath, check_exefile, check_sfile, check_irfile):
     # log(cpath)
-    tmp_spath = fr'{test_dir}\tmp.s'
-    exe_path = tmp_spath[:-2]
     out_refer = cpath[:-1] + 'out'
-    tmpout_path = fr'{test_dir}\tmp.out'
+    ir_refer = cpath[:-1] + 'ir'
+    prefix = fr'{test_dir}\tmp'
+    tmp_spath = None
+    tmp_irpath = None
+    exe_path = prefix
+    tmp_spath = prefix + '.s'
+    if os.path.isfile(ir_refer):
+        tmp_irpath = prefix + '.ir'
 
-    code = compile(cpath)
+    code = compile(cpath, tmp_spath, tmp_irpath)
     if code == '':
         return
-    with open(tmp_spath, 'w') as f:
-        f.write(code)
+
+    exist = os.path.isfile(ir_refer)
+    if check_irfile and exist:
+        test_sfile(tmp_irpath, ir_refer)
 
     exist = os.path.isfile(out_refer)
     if check_exefile and exist:

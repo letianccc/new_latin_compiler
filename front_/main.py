@@ -15,14 +15,11 @@ def _main_():
     source_dir = r'C:\code\new_latin_compiler\front_\input'
     cpath = fr'{source_dir}\test.c'
     spath = fr'{source_dir}\test.s'
+    irpath = fr'{source_dir}\test.ir'
     exe_path = spath[:-2]
-    write_code(cpath, spath)
+    compile(cpath, spath, irpath)
     out = execute_sfile(spath, exe_path)
     print(out)
 
-def write_code(cfile, sfile):
-    code = compile(cfile, True)
-    with open(sfile, 'w') as f:
-        f.write(code)
 
 _main_()
