@@ -1,5 +1,6 @@
 
 
+from front_.common_expression import *
 
 
 class Optimizer(object):
@@ -17,3 +18,4 @@ class Optimizer(object):
                     ir = ir.optimize()
                     irs.append(ir)
                 b.irs = irs
+                common_expression.clear()

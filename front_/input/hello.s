@@ -2,8 +2,6 @@
 	.text
 	.def	___main;	.scl	2;	.type	32;	.endef
 	.section .rdata,"dr"
-LC0:
-	.ascii "%d\12\0"
 LC2:
 	.ascii "%f\12\0"
 	.text
@@ -15,13 +13,11 @@ _main:
 	andl	$-16, %esp
 	subl	$32, %esp
 	call	___main
-	movl	$-1, 28(%esp)
-	movl	28(%esp), %eax
-	movl	%eax, 4(%esp)
-	movl	$LC0, (%esp)
-	call	_printf
 	fld1
-	fchs
+	fstpl	24(%esp)
+	fldl	24(%esp)
+	fild	$5
+	faddp	%st, %st(1)
 	fstpl	16(%esp)
 	fldl	16(%esp)
 	fstpl	4(%esp)
@@ -31,6 +27,11 @@ _main:
 	nop
 	leave
 	ret
+	.section .rdata,"dr"
+	.align 8
+LC1:
+	.long	0
+	.long	1073741824
 	.ident	"GCC: (MinGW.org GCC-8.2.0-3) 8.2.0"
 	.def	_printf;	.scl	2;	.type	32;	.endef
 	.def	_getchar;	.scl	2;	.type	32;	.endef

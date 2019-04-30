@@ -4,7 +4,10 @@ from front_.type_system import *
 from front_.data import *
 from front_.symbol_system import *
 from front_.block import *
+from front_.common_expression import *
 import operator as _operator
+import hashlib
+
 
 class IR:
     def __init__(self):
@@ -41,7 +44,7 @@ class ArrayInitialIR(IR):
             values.append(v.name())
         values = ",".join(values)
         init = '{' + values + '}'
-        return f'\t{self.array.name()}[]\t= {init}\n'
+        return f'\t{self.array.name()}[]\t:= {init}\n'
 
 class ArrayIR(IR):
     def __init__(self, destination, array, index):
@@ -56,7 +59,7 @@ class ArrayIR(IR):
         dst = self.destination.name()
         array = self.array.name()
         index = self.index.name()
-        return f'\t{dst}\t= {array}[{index}]\n'
+        return f'\t{dst}\t:= {array}[{index}]\n'
 
 class ConditionalJumpIR(IR):
     def __init__(self, operator, left, right, block):
@@ -96,7 +99,7 @@ class CastIR(IR):
         type = dst.type.name()
         dst = dst.name()
         src = self.source.name()
-        return f'\t{dst}\t= ({type}) {src}\n'
+        return f'\t{dst}\t:= ({type}) {src}\n'
 
 class ReturnIR(IR):
     def __init__(self, type, operand):
@@ -114,6 +117,12 @@ class AssignIR(IR):
         self.kind = OperatorKind.ASSIGN
         self.destination = destination
         self.source = source
+
+
+    def optimize(self):
+        self.destination.add_define(self)
+        self.source.add_use(self)
+        return self
 
     def format(self):
         dst = self.destination.name()
@@ -158,9 +167,52 @@ class ExprIR(IR):
         right = self.right.name()
         dst = self.destination.name()
         op = operator_format[self.kind]
-        return f'\t{dst}\t= {left} {op} {right}\n'
+        return f'\t{dst}\t:= {left} {op} {right}\n'
+
+    @property
+    def id(self):
+        array = [self.left.name(), self.right.name(), self.kind.name]
+        array.sort()
+        s = ''.join(array)
+        bytes = s.encode()
+        h = hashlib.md5(bytes).hexdigest()
+        return h
 
 class ArithIR(ExprIR):
+    def optimize(self):
+        ir = self.identity_optimize()
+        if ir is not None:
+            return ir
+        if SymbolSystem.is_numeric(self.left) and SymbolSystem.is_numeric(self.right):
+            ir = self.constant_folding(self.operator_function)
+            return ir
+        ir = self.reduction()
+        if ir is not None:
+            ir = ir.optimize()
+            return ir
+        ir = self.common_expression_optimize()
+        if ir is not None:
+            ir.optimize()
+            return ir
+        self.set_data_flow()
+        return self
+
+    def set_data_flow(self):
+        dst = self.destination
+        dst.add_define(self)
+        self.left.add_use(self)
+        self.right.add_use(self)
+        common_expression[self.id] = dst
+
+
+    def common_expression_optimize(self):
+        target = common_expression.get(self.id)
+        if target is not None:
+            ir = AssignIR(self.destination, target)
+
+            return ir
+        return None
+
     def match_constant(self, operand, value):
         if operand.match(SymbolKind.INTCONST, SymbolKind.DOUBLECONST):
             if operand.value == value:
@@ -184,19 +236,13 @@ class ArithIR(ExprIR):
         ir = AssignIR(dst, s)
         return ir
 
+    def reduction(self):
+        return None
+
 class AddIR(ArithIR):
     def __init__(self, destination, left, right):
         super(AddIR, self).__init__(OperatorKind.ADD, destination, left, right)
-
-    def optimize(self):
-        # TODO: 可以放到父类中
-        ir = self.identity_optimize()
-        if ir is not None:
-            return ir
-        if SymbolSystem.is_numeric(self.left) and SymbolSystem.is_numeric(self.right):
-            ir = self.constant_folding(_operator.add)
-            return ir
-        return self
+        self.operator_function = _operator.add
 
     def identity_optimize(self):
         left = self.left
@@ -214,15 +260,7 @@ class AddIR(ArithIR):
 class SubIR(ArithIR):
     def __init__(self, destination, left, right):
         super(SubIR, self).__init__(OperatorKind.SUB, destination, left, right)
-
-    def optimize(self):
-        ir = self.identity_optimize()
-        if ir is not None:
-            return ir
-        if SymbolSystem.is_numeric(self.left) and SymbolSystem.is_numeric(self.right):
-            ir = self.constant_folding(_operator.sub)
-            return ir
-        return self
+        self.operator_function = _operator.sub
 
     def identity_optimize(self):
         left = self.left
@@ -236,21 +274,19 @@ class SubIR(ArithIR):
             ir = MinusIR(dst, right)
         return ir
 
+    @property
+    def id(self):
+        # 操作数顺序不可变
+        array = [self.left.name(), self.right.name(), self.kind.name]
+        s = ''.join(array)
+        bytes = s.encode()
+        h = hashlib.md5(bytes).hexdigest()
+        return h
+
 class MulIR(ArithIR):
     def __init__(self, destination, left, right):
         super(MulIR, self).__init__(OperatorKind.MUL, destination, left, right)
-
-    def optimize(self):
-        ir = self.identity_optimize()
-        if ir is not None:
-            return ir
-        if SymbolSystem.is_numeric(self.left) and SymbolSystem.is_numeric(self.right):
-            ir = self.constant_folding(_operator.mul)
-            return ir
-        ir = self.reduction()
-        if ir is not None:
-            return ir
-        return self
+        self.operator_function = _operator.mul
 
     def identity_optimize(self):
         left = self.left
@@ -292,7 +328,7 @@ class UnaryIR(IR):
             op = '&'
         elif self.kind is OperatorKind.INDIRECTION:
             op = '*'
-        return f'\t{dst}\t= {op} {src}\n'
+        return f'\t{dst}\t:= {op} {src}\n'
 
 class MinusIR(IR):
     def __init__(self, destination, operand):
@@ -304,7 +340,7 @@ class MinusIR(IR):
     def format(self):
         dst = self.destination.name()
         src = self.operand.name()
-        return f'\t{dst}\t= -{src}\n'
+        return f'\t{dst}\t:= -{src}\n'
 
 class CallIR(IR):
     """docstring for CallIR."""
@@ -321,4 +357,9 @@ class CallIR(IR):
         for v in self.params:
             params.append(v.name())
         params = ",".join(params)
-        return f'\tcall\t{self.function.value} ({params})\n'
+        dst = self.destination
+        if self.destination is None:
+            return f'\tcall {self.function.value} ({params})\n'
+        else:
+            dst = dst.name()
+            return f'\t{dst}\t:= call {self.function.value} ({params})\n'

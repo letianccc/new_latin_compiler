@@ -3,6 +3,7 @@ from front_.myenum import *
 from front_.field import *
 from front_.type_system import *
 from front_.block import *
+from front_.common_expression import *
 
 class SymbolSystem(object):
     identifiers = None
@@ -123,6 +124,23 @@ class Symbol(object):
     def name(self):
         return self.value
 
+    def defind_symbol(self, ir):
+        self.defind = ir
+        for use in self.use:
+            common_expression.pop(use.id)
+        self.use.clear()
+        # op  增加use
+        ir.left.use.append(ir)
+        ir.right.use.append(ir)
+        common_expression[self.id] = self
+
+    def add_use(self, ir):
+        ...
+
+    def add_define(self, ir):
+        ...
+
+
 # TODO: function 应该继承 id
 class FunctionSymbol(Symbol):
     """docstring for FunctionSymbol."""
@@ -143,9 +161,9 @@ class FunctionSymbol(Symbol):
         self.strings = []
         # TODO: local 和 array 最好分开
         self.locals = []
-        b = Block(BlockKind.FUNCTION)
         name = f'_{self.value}'
-        b.set_access_name(name)
+        b = Block(name)
+        # b.set_access_name(name)
         self.cur_block = b
         self.blocks = [b]
         self.is_array = False
@@ -202,7 +220,6 @@ class ConstantSymbol(Symbol):
         self.value = value
         self.__access_name = f'${self.value}'
 
-
 class IntSymbol(ConstantSymbol):
     """docstring for ConstantSymbol."""
 
@@ -214,6 +231,7 @@ class IntSymbol(ConstantSymbol):
 
     def translate_type(self, type):
         s = self
+        # TODO: 用find_add 复用
         if type.match(TypeKind.DOUBLE):
             s = SymbolSystem.find_symbol(SymbolKind.DOUBLECONST, self.value, TypeKind.DOUBLE)
             if s is None:
@@ -266,6 +284,8 @@ class IdentifierSymbol(Symbol):
         self.is_formal_param = False
         self.__access_name = None
         self.is_array = False
+        self.defind = None
+        self.use = []
 
     def sub_type(self):
         # TODO: sub_type  考虑放到PointerSymbol里面
@@ -320,6 +340,7 @@ class TagSymbol(Symbol):
         self.defind = None
         self.id = TagSymbol.id
         TagSymbol.id += 1
+        self.use = []
 
     def sub_type(self):
         # TODO: 暂时允许返回当前类型  int b = &a; int c = *b; 后面这种情况要报错
@@ -329,3 +350,13 @@ class TagSymbol(Symbol):
 
     def name(self):
         return f't{self.id}'
+
+    def add_use(self, ir):
+        self.use.append(ir)
+
+    def add_define(self, ir):
+        dst = self
+        dst.defind = ir
+        for use in dst.use:
+            common_expression.pop(use.id)
+        dst.use.clear()

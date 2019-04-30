@@ -45,7 +45,7 @@ def compile(input_path, debug=False):
 
 
     symbols = [f.symbol for f in functions]
-    
+
 
     if debug is True:
         path = r'C:\code\new_latin_compiler\front_\input\test.ir'
@@ -68,9 +68,8 @@ def write_ir(functions, path):
     data = ''
     for f in functions:
         for b in f.blocks:
-            name = b.access_name()
+            name = b.name()
             data += f'{name}:\n'
-            irs = []
             for ir in b.irs:
                 ir = ir.format()
                 if ir is not None:

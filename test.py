@@ -1,2 +1,3 @@
-cast = float
-print(cast(1))
+a = {'a':1}
+a.clear()
+print(a)

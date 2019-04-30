@@ -3,10 +3,9 @@
 
 void main() {
 
-	int ai = -1;
-	printf("%d\n", ai);
-	double ad = -1;
-	printf("%f\n", ad);
+	double a1 = 1;
+	double b = a1 + 2;
+	printf("%f\n", b);
 
     getchar();
 
