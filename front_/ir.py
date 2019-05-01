@@ -118,7 +118,6 @@ class AssignIR(IR):
         self.destination = destination
         self.source = source
 
-
     def optimize(self):
         self.destination.add_define(self)
         self.source.add_use(self)

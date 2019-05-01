@@ -30,11 +30,6 @@ class Reg(object):
     def gen(self):
         return self
 
-    def use(self):
-        self.leisure = False
-
-    def free(self):
-        self.leisure = True
 
 
 class RegSystem(object):
@@ -59,14 +54,3 @@ class RegSystem(object):
         elif kind is RegKind.DX:
             r = cls.DX if size == 2 else cls.EDX
         return r
-
-    @classmethod
-    def free_reg(cls, size):
-        # 目前size为2返回AX  为0或4返回EAX
-        if size == 8:
-            return cls.ST
-        for reg in cls.regs:
-            if size == reg.size and reg.leisure is True:
-                reg.use()
-                return reg
-        raise Exception

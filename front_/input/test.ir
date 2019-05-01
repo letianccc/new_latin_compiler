@@ -1,29 +1,20 @@
-_identity:
-	a	= 1
-	t0	= 0
-	b1	= t0
-	t1	= a
-	b2	= t1
-	t2	:= -a
-	b3	= t6
-	t3	= a
-	b4	= t3
-	t4	= a
-	b5	= t4
-	t5	= a
-	b6	= t5
-	t6	= 0
-	b7	= t6
-	t7	= a
-	b8	= t7
-	call printf ("target 0 : %d\n",b1)
-	call printf ("target 1 : %d\n",b2)
-	call printf ("target -1: %d\n",b3)
-	call printf ("target 1 : %d\n",b4)
-	call printf ("target 1 : %d\n",b5)
-	call printf ("target 1 : %d\n",b6)
-	call printf ("target 0 : %d\n",b7)
-	call printf ("target 1 : %d\n",b8)
 _main:
-	call identity ()
+	a	= 2
+	if a != 2 goto B2
+B0:
+	b	= 1
+	goto B1
+B2:
+	b	= 0
+B1:
+	if a != 2 goto B5
+B6:
+	if a <= 1 goto B5
+B3:
+	a	= 1
+	goto B4
+B5:
+	a	= 0
+B4:
+	call printf ("target 1: %d\n",a)
 	call getchar ()

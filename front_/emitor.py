@@ -326,10 +326,16 @@ class FunctionEmit(object):
         # interget 包括short int
         # cmp 第二个操作数（右边） 不能是常量
         size = 4
-        left = RegSystem.free_reg(size)
-        right = RegSystem.free_reg(size)
-        self.emit_mov(left, ir.left)
-        self.emit_mov(right, ir.right)
+        left = ir.left
+        right = ir.right
+        # 操作数如果为short 可能需要使用cmps  这里统一放到exx中，使用cmpl
+        ax = RegSystem.reg(RegKind.AX, size)
+        dx = RegSystem.reg(RegKind.DX, size)
+        self.emit_mov(ax, left)
+        self.emit_mov(dx, right)
+        left = ax
+        right = dx
+
         left_addr = left.access_name()
         right_addr = right.access_name()
         b = ir.block.access_name()
@@ -338,8 +344,7 @@ class FunctionEmit(object):
         code += f'    cmpl\t{right_addr}, {left_addr}\n'
         code += f'    {jump_operator} {b}\n'
         self.emit_code(code)
-        left.free()
-        right.free()
+
 
     def emit_array_assign(self, ir):
         src = ir.source
@@ -392,8 +397,8 @@ class FunctionEmit(object):
 
     def emit_integer_arith(self, ir):
         size = 4
-        reg1 = RegSystem.free_reg(size)
-        reg2 = RegSystem.free_reg(size)
+        reg1 = RegSystem.EAX
+        reg2 = RegSystem.EDX
         self.emit_mov(reg1, ir.left)
         self.emit_mov(reg2, ir.right)
         m = {
@@ -407,9 +412,7 @@ class FunctionEmit(object):
         addr2 = reg2.access_name()
         code = f'    {op}\t{addr2}, {addr1}\n'
         self.emit_code(code)
-        reg2.free()
         self.emit_mov(ir.destination, reg1)
-        reg1.free()
 
     def emit_double_arith(self, ir):
         self.load_float(ir.right)
