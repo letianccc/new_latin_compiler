@@ -4,6 +4,20 @@
 
 当前：
 
+x = a && b && c && d && e && f
+y = a && b && c && d && e
+
+t1 = a && b
+t2 = t1 && c
+t3 = t2 && d
+t4 = t3 && e
+t5 = t4 && f
+
+t6 = t1
+t7 = t2
+t8 = t3
+t9 = t4
+
 公共子表达式
 
 对中间代码进行优化
@@ -28,7 +42,7 @@ branch_template gen_for_kinds gen_assign_node 可以进一步重构
 5
 待做：
 
-声明但未初始化的值 使用前 check 
+声明但未初始化的值 使用前 check
 
 intconst 的double 区域
 

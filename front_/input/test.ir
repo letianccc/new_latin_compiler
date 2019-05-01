@@ -1,20 +1,9 @@
 _main:
-	a	= 2
-	if a != 2 goto B2
-B0:
-	b	= 1
-	goto B1
-B2:
-	b	= 0
-B1:
-	if a != 2 goto B5
-B6:
-	if a <= 1 goto B5
-B3:
-	a	= 1
-	goto B4
-B5:
-	a	= 0
-B4:
-	call printf ("target 1: %d\n",a)
+	a[]	:= {1}
+	t0	:= & a
+	b	= t0
+	t1	:= -1
+	b[0]	= t1
+	t2	:= a[0]
+	call printf ("target -1: %d\n",t2)
 	call getchar ()

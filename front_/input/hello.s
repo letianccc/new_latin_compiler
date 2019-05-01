@@ -14,13 +14,14 @@ _main:
 	subl	$32, %esp
 	call	___main
 	movl	$2, 28(%esp)
-	cmpl	$0, 28(%esp)
-	je	L2
-	movl	$1, 28(%esp)
-	jmp	L3
-L2:
-	movl	$0, 28(%esp)
-L3:
+	cmpl	$2, 28(%esp)
+	sete	%al
+	movzbl	%al, %eax
+	movl	%eax, 24(%esp)
+	cmpl	$2, 28(%esp)
+	sete	%al
+	movzbl	%al, %eax
+	movl	%eax, 20(%esp)
 	movl	28(%esp), %eax
 	movl	%eax, 4(%esp)
 	movl	$LC0, (%esp)

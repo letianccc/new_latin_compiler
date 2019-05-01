@@ -327,6 +327,7 @@ class CompareNode(ExpressionNode):
             left, right = self.translate_type(type, left, right)
 
         k = self.operator
+
         ir = ConditionalJumpIR(k, left, right, true_block)
         self.gen_ir(ir)
 
