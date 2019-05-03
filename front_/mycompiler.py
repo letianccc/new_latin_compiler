@@ -14,7 +14,7 @@ from front_.node.AST import Node
 
 
 def compile(input_path, spath, irpath):
-    f = open(input_path, 'r')
+    f = open(input_path, 'r', encoding='utf-8')
     code = f.read()
 
     TypeSystem.init()

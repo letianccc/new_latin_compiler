@@ -1,11 +1,16 @@
 
 
-
+void sort(int *a) {
+    a[1] = 111;
+}
 
 void main() {
-    int a[5] = {1};
-    int *b = &a;
-    b[0] = -1;
-    printf("target -1: %d\n", a[0]);
+    int arr[10] = {3,5,1,7,4,9,6,8,10,4};
+    sort(arr);
+    int i;
+    int len = 10;
+    for (i=0; i<len; i=i+1) {
+		printf ("%d\n", arr[i]);
+	}
 	getchar();
 }

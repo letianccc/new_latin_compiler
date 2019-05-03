@@ -1,9 +1,17 @@
+_sort:
+	a[1]	= 111
 _main:
-	a[]	:= {1}
-	t0	:= & a
-	b	= t0
-	t1	:= -1
-	b[0]	= t1
-	t2	:= a[0]
-	call printf ("target -1: %d\n",t2)
+	arr[]	:= {3,5,1,7,4,9,6,8,10,4}
+	call sort (arr)
+	len	= 10
+	i	= 0
+B0:
+	if i >= len goto B2
+B1:
+	t0	:= arr[i]
+	call printf ("%d\n",t0)
+	t1	:= i + 1
+	i	= t1
+	goto B0
+B2:
 	call getchar ()

@@ -103,6 +103,7 @@ class Emit(object):
                     sp -= size
                     name = f'{sp}(%esp)'
                     local.set_access_name(name)
+                    local.offset = sp
             # 为中间变量分配偏移
             for tag in func.tags:
                 sp -= tag.type.size
@@ -114,6 +115,7 @@ class Emit(object):
             for p in func.params:
                 name = f'{offset}(%ebp)'
                 p.set_access_name(name)
+                p.offset = offset
                 offset += p.type.size
 
     def stack_space(self, function):

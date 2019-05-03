@@ -240,11 +240,14 @@ class ArithNode(ExpressionNode):
         self.kind = NodeKind.ARITH
         self.operator = operator
         self.function = function
+        # emit 中 call_space() 会使用到self.type  应该去掉这个属性
+        self.type = None
 
     def check(self):
         super().check()
         self.left = self.left.check()
         self.right = self.right.check()
+        self.type = TypeSystem.max_type(self.left.type, self.right.type)
         return self
 
     def gen(self):
